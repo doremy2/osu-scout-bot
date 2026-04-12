@@ -1,3 +1,5 @@
+# analysis.py
+
 import json
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -355,14 +357,7 @@ def _recommended_bans(
         confidence_score = {"High": 3, "Medium": 2, "Low": 1, "Very Low": 0}[row["confidence"]]
         edge_score = row["edge"] if row["edge"] is not None else 0
 
-        scored_rows.append(
-            (
-                advantage_score,
-                confidence_score,
-                edge_score,
-                row["label"],
-            )
-        )
+        scored_rows.append((advantage_score, confidence_score, edge_score, row["label"]))
 
     scored_rows.sort(reverse=True)
 
@@ -458,4 +453,4 @@ def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
             player2: bans_vs_2,
         },
     }
-    
+

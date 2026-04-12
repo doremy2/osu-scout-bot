@@ -241,8 +241,15 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
     ]
 
     top_slot_rows = [
-        row for row in result["slot_comparisons"] if row["winner"] != "Tie"
-    ][:6]
+        row
+        for row in result["slot_comparisons"]
+        if row["winner"] != "Tie" and row["advantage"] in {"Strong", "Lean"}
+    ][:5]
+
+    if not top_slot_rows:
+        top_slot_rows = [
+            row for row in result["slot_comparisons"] if row["winner"] != "Tie"
+        ][:5]
 
     slot_lines = [
         _format_slot_compare_line(row, player1, player2) for row in top_slot_rows
@@ -281,7 +288,7 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
     )
 
     embed.add_field(name="Mod Edge", value="\n".join(mod_lines), inline=False)
-    embed.add_field(name="Top Slot Edge", value="\n".join(slot_lines), inline=False)
+    embed.add_field(name="Key Slot Edge", value="\n".join(slot_lines), inline=False)
     embed.add_field(name=f"{player1} Comfort", value=comfort_1, inline=True)
     embed.add_field(name=f"{player2} Comfort", value=comfort_2, inline=True)
     embed.add_field(
@@ -292,6 +299,8 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
         ),
         inline=False,
     )
+
+    embed.set_footer(text="Strong/Lean edges are weighted by score, winrate, accuracy, and sample size.")
 
     await interaction.response.send_message(embed=embed)
 
