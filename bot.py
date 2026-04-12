@@ -61,37 +61,21 @@ def _format_slot_group(slot_stats: dict, mod: str) -> str:
     return "\n".join(lines)
 
 
-def _format_mod_compare_line(row: dict, player1: str, player2: str) -> str:
-    p1 = row["player1"]
-    p2 = row["player2"]
+def _format_wr(value):
+    return f"{value}%" if value != "N/A" else "-"
 
-    p1_wr = p1["winrate"] if p1["winrate"] != "N/A" else "-"
-    p2_wr = p2["winrate"] if p2["winrate"] != "N/A" else "-"
 
-    if row["winner"] == "Tie":
-        return f"{row['label']}: Close | {p1_wr}% vs {p2_wr}%"
-
+def _format_key_pick_line(row: dict, player1: str, player2: str) -> str:
     return (
-        f"{row['label']}: {row['winner']} "
-        f"({row['advantage']}, {row['confidence']}) | "
-        f"{p1_wr}% vs {p2_wr}%"
+        f"{row['slot']}: {player1} | "
+        f"{_format_score(row['player1_score'])} vs {_format_score(row['player2_score'])}"
     )
 
 
-def _format_slot_compare_line(row: dict, player1: str, player2: str) -> str:
-    p1 = row["player1"]
-    p2 = row["player2"]
-
-    p1_score = _format_score(p1["avg_score"]) if p1["matches"] else "-"
-    p2_score = _format_score(p2["avg_score"]) if p2["matches"] else "-"
-
-    if row["winner"] == "Tie":
-        return f"{row['label']}: Close | {p1_score} vs {p2_score}"
-
+def _format_slot_winrate_line(row: dict, player1: str, player2: str) -> str:
     return (
-        f"{row['label']}: {row['winner']} "
-        f"({row['advantage']}, {row['confidence']}) | "
-        f"{p1_score} vs {p2_score}"
+        f"{row['slot']}: {player1} vs {player2} | "
+        f"{_format_wr(row['player1_winrate'])} vs {_format_wr(row['player2_winrate'])}"
     )
 
 
@@ -99,10 +83,20 @@ def _format_comfort_picks(picks: list[dict]) -> str:
     if not picks:
         return "N/A"
 
-    return "\n".join(
-        f"{pick['slot']}: {_format_score(pick['avg_score'])} | {pick['winrate']}% | {pick['matches']}x"
-        for pick in picks
-    )
+    lines = []
+    for pick in picks:
+        star = (
+            f"{pick['avg_star_rating']}★"
+            if pick["avg_star_rating"] != "N/A"
+            else "N/A★"
+        )
+        lines.append(
+            f"{pick['slot']}: {_format_score(pick['avg_score'])} | "
+            f"{pick['avg_accuracy']}% | {star}"
+        )
+
+    return "\n".join(lines)
+
 
 
 @bot.tree.command(name="scout", description="Scout an osu tournament player")
@@ -235,31 +229,31 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
     p1 = result["player1"]
     p2 = result["player2"]
 
-    mod_lines = [
-        _format_mod_compare_line(row, player1, player2)
-        for row in result["mod_comparisons"]
-    ]
+    key_pick_rows = result["key_picks"][:3]
+    key_picks_text = (
+        "\n".join(_format_key_pick_line(row, player1, player2) for row in key_pick_rows)
+        if key_pick_rows
+        else f"No clear score-gap picks for {player1}"
+    )
 
-    top_slot_rows = [
-        row
-        for row in result["slot_comparisons"]
-        if row["winner"] != "Tie" and row["advantage"] in {"Strong", "Lean"}
-    ][:5]
-
-    if not top_slot_rows:
-        top_slot_rows = [
-            row for row in result["slot_comparisons"] if row["winner"] != "Tie"
-        ][:5]
-
-    slot_lines = [
-        _format_slot_compare_line(row, player1, player2) for row in top_slot_rows
-    ] or ["No decisive slot edges"]
-
-    bans_vs_1 = ", ".join(result["recommended_bans"][player1]) or "N/A"
-    bans_vs_2 = ", ".join(result["recommended_bans"][player2]) or "N/A"
+    slot_winrates_text = "\n".join(
+        _format_slot_winrate_line(row, player1, player2)
+        for row in result["slot_winrates"]
+    )
 
     comfort_1 = _format_comfort_picks(result["comfort_picks"][player1])
     comfort_2 = _format_comfort_picks(result["comfort_picks"][player2])
+
+    bans = result["recommended_bans"]
+    bans_text = (
+        "\n".join(
+            f"{row['slot']}: ban vs {player2} | "
+            f"{_format_score(row['player1_score'])} vs {_format_score(row['player2_score'])}"
+            for row in bans
+        )
+        if bans
+        else f"No clear bans needed vs {player2}"
+    )
 
     embed = discord.Embed(
         title=f"Compare: {player1} vs {player2}",
@@ -287,24 +281,16 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
         inline=True,
     )
 
-    embed.add_field(name="Mod Edge", value="\n".join(mod_lines), inline=False)
-    embed.add_field(name="Key Slot Edge", value="\n".join(slot_lines), inline=False)
+    embed.add_field(name="Key Picks", value=key_picks_text, inline=False)
+    embed.add_field(name="Slot Winrates", value=slot_winrates_text, inline=False)
     embed.add_field(name=f"{player1} Comfort", value=comfort_1, inline=True)
     embed.add_field(name=f"{player2} Comfort", value=comfort_2, inline=True)
-    embed.add_field(
-        name="Recommended Bans",
-        value=(
-            f"Ban vs {player1}: {bans_vs_1}\n"
-            f"Ban vs {player2}: {bans_vs_2}"
-        ),
-        inline=False,
-    )
+    embed.add_field(name="Recommended Bans", value=bans_text, inline=False)
 
-    embed.set_footer(text="Strong/Lean edges are weighted by score, winrate, accuracy, and sample size.")
+    embed.set_footer(text=f"Perspective: {player1} is treated as the drafting player.")
 
     await interaction.response.send_message(embed=embed)
-
-
+    
 if not TOKEN:
     raise ValueError("DISCORD_TOKEN is missing")
 
