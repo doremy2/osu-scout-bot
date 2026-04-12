@@ -1,12 +1,12 @@
 #analysis.py
-import json
+from storage import fetch_all_matches, fetch_player_matches
 
 from collections import defaultdict
 from datetime import datetime, timedelta
-from pathlib import Path
+
 from typing import Any
 
-DATA_PATH = Path("data/matches.json")
+
 
 SLOT_GROUPS = {
     "NM": ["NM1", "NM2", "NM3", "NM4", "NM5", "NM6"],
@@ -21,8 +21,7 @@ ALL_MODS = list(SLOT_GROUPS.keys())
 
 
 def load_matches() -> list[dict[str, Any]]:
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return fetch_all_matches()
 
 
 def parse_date(date_str: str) -> datetime:
@@ -30,13 +29,7 @@ def parse_date(date_str: str) -> datetime:
 
 
 def get_player_matches(username: str) -> list[dict[str, Any]]:
-    matches = load_matches()
-    player_matches = [
-        m for m in matches
-        if m["player"].strip().lower() == username.strip().lower()
-    ]
-    player_matches.sort(key=lambda x: x["date"], reverse=True)
-    return player_matches
+    return fetch_player_matches(username)
 
 
 def get_recent_matches(username: str, limit: int = 5) -> list[dict[str, Any]]:
