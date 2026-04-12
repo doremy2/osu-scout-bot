@@ -98,6 +98,28 @@ def _format_comfort_picks(picks: list[dict]) -> str:
 
     return "\n".join(lines)
 
+def _format_wr_display(value):
+    return f"{value}%" if isinstance(value, (int, float)) else "N/A"
+
+def _has_meaningful_winrates(rows: list[dict]) -> bool:
+    return any(
+        row["player1_winrate"] != "N/A" or row["player2_winrate"] != "N/A"
+        for row in rows
+    )
+
+
+def _format_accuracy_edge_line(row: dict, player1: str, player2: str) -> str:
+    return (
+        f"{row['slot']}: {player1} | "
+        f"{row['player1_accuracy']}% vs {row['player2_accuracy']}%"
+    )
+
+def _format_wr_display(value):
+    return f"{value}%" if isinstance(value, (int, float)) else "N/A"
+
+
+def _format_performance_score_display(value):
+    return str(value) if isinstance(value, (int, float)) else "N/A"
 
 
 @bot.tree.command(name="scout", description="Scout an osu tournament player")
@@ -119,12 +141,21 @@ async def scout(interaction: discord.Interaction, username: str):
     slot_stats = summary["slot_stats_90"]
 
     recent_text = "\n".join(
-        f"{m['result'][0].upper()} vs {m['opponent']} | {m['slot']} | {_format_score(m['score'])}"
+        f"{(m.get('result') or '?')[0].upper()} vs {m.get('opponent') or 'Unknown'} | {m['slot']} | {_format_score(m['score'])}"
         for m in recent_matches
     ) or "No recent matches"
 
-    strengths_text = "\n".join(f"{mod}: {wr}%" for mod, wr in strengths) or "N/A"
-    weaknesses_text = "\n".join(f"{mod}: {wr}%" for mod, wr in weaknesses) or "N/A"
+    strengths_text = "\n".join(
+        f"{mod}: {wr}%"
+        for mod, wr in strengths
+        if wr != "N/A"
+    ) or "N/A"
+
+    weaknesses_text = "\n".join(
+        f"{mod}: {wr}%"
+        for mod, wr in weaknesses
+        if wr != "N/A"
+    ) or "N/A"
 
     slot_lines = []
     for slot, stats in slot_stats.items():
@@ -133,20 +164,30 @@ async def scout(interaction: discord.Interaction, username: str):
 
     slot_lines.sort(key=lambda x: x[1], reverse=True)
     slot_text = "\n".join(
-        f"{slot}: {_format_score(score)} ({wr}%)" for slot, score, wr in slot_lines[:8]
+        f"{slot}: {_format_score(score)} ({wr if wr != 'N/A' else 'N/A'}%)"
+        if wr != "N/A"
+        else f"{slot}: {_format_score(score)} (N/A)"
+        for slot, score, wr in slot_lines[:8]
     ) or "No data"
 
     weakest_mod = weaknesses[0][0] if weaknesses else "Unknown"
     best_mod = strengths[0][0] if strengths else "Unknown"
 
-    if summary["overall_winrate"] >= 70:
-        color = discord.Color.green()
-    elif summary["overall_winrate"] >= 40:
-        color = discord.Color.orange()
+    overall_wr = summary["overall_winrate"]
+    if isinstance(overall_wr, (int, float)):
+        if overall_wr >= 70:
+            color = discord.Color.green()
+        elif overall_wr >= 40:
+            color = discord.Color.orange()
+        else:
+            color = discord.Color.red()
     else:
-        color = discord.Color.red()
+        color = discord.Color.blurple()
 
-    embed = discord.Embed(title=f"Scouting Report: {username}", color=color)
+    embed = discord.Embed(
+        title=f"Scouting Report: {username}",
+        color=color,
+    )
 
     embed.add_field(
         name="Ratings",
@@ -174,10 +215,16 @@ async def scout(interaction: discord.Interaction, username: str):
     )
 
     embed.set_footer(
-        text=f"WR: {summary['overall_winrate']}% | Consistency: {summary['consistency']}"
+    text=(
+        f"Maps: {summary['total_maps_played']} | "
+        f"Map WR: {_format_wr_display(summary['map_winrate'])} | "
+        f"Match WR: {_format_wr_display(summary['match_winrate'])} | "
+        f"Performance Score: {_format_performance_score_display(summary['avg_performance_score'])}"
     )
+)
 
     await interaction.response.send_message(embed=embed)
+
 
 
 @bot.tree.command(name="slots", description="Show full slot performance for a player")
@@ -192,20 +239,41 @@ async def slots(interaction: discord.Interaction, username: str):
         )
         return
 
+    rows = [
+        (slot, stats)
+        for slot, stats in slot_stats.items()
+        if stats["matches"] > 0
+    ]
+
+    if not rows:
+        await interaction.response.send_message(
+            f"No slot data found for **{username}**.",
+            ephemeral=True,
+        )
+        return
+
     embed = discord.Embed(
         title=f"Slot Performance: {username}",
-        description="Last 90 days",
+        description="Recent imported data",
         color=discord.Color.blurple(),
     )
 
-    for mod in ["NM", "HD", "HR", "DT", "FM"]:
+    chunk_size = 8
+    lines = [
+        _format_stat_line(slot, stats)
+        for slot, stats in rows
+    ]
+
+    for index in range(0, len(lines), chunk_size):
+        chunk = "\n".join(lines[index:index + chunk_size])
         embed.add_field(
-            name=mod,
-            value=_format_slot_group(slot_stats, mod),
+            name=f"Slots {index // chunk_size + 1}",
+            value=chunk,
             inline=False,
         )
 
     await interaction.response.send_message(embed=embed)
+
 
 
 @bot.tree.command(name="compare", description="Compare two osu tournament players")
@@ -237,9 +305,11 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
         else f"No clear score-gap picks for {player1}"
     )
 
+    slot_winrates = result["slot_winrates"]
+    has_meaningful_winrates = _has_meaningful_winrates(slot_winrates)
     slot_winrates_text = "\n".join(
         _format_slot_winrate_line(row, player1, player2)
-        for row in result["slot_winrates"]
+        for row in slot_winrates
     )
 
     comfort_1 = _format_comfort_picks(result["comfort_picks"][player1])
@@ -265,30 +335,36 @@ async def compare(interaction: discord.Interaction, player1: str, player2: str):
     embed.add_field(
         name=player1,
         value=(
-            f"WR: {p1['overall_winrate']}%\n"
-            f"Consistency: {p1['consistency']}\n"
-            f"Matches: {p1['total_matches']}"
-        ),
+    f"Maps Played: {p1['total_maps_played']}\n"
+    f"Map WR: {_format_wr_display(p1['map_winrate'])}\n"
+    f"Match WR: {_format_wr_display(p1['match_winrate'])}\n"
+    f"Performance Score: {_format_performance_score_display(p1['avg_performance_score'])}"
+),
         inline=True,
     )
 
     embed.add_field(
         name=player2,
         value=(
-            f"WR: {p2['overall_winrate']}%\n"
-            f"Consistency: {p2['consistency']}\n"
-            f"Matches: {p2['total_matches']}"
-        ),
+    f"Maps Played: {p2['total_maps_played']}\n"
+    f"Map WR: {_format_wr_display(p2['map_winrate'])}\n"
+    f"Match WR: {_format_wr_display(p2['match_winrate'])}\n"
+    f"Performance Score: {_format_performance_score_display(p2['avg_performance_score'])}"
+),
         inline=True,
     )
 
     embed.add_field(name="Key Picks", value=key_picks_text, inline=False)
-    embed.add_field(name="Slot Winrates", value=slot_winrates_text, inline=False)
+
+    if has_meaningful_winrates:
+        embed.add_field(name="Slot Winrates", value=slot_winrates_text, inline=False)
+
     embed.add_field(name=f"{player1} Comfort", value=comfort_1, inline=True)
     embed.add_field(name=f"{player2} Comfort", value=comfort_2, inline=True)
     embed.add_field(name="Recommended Bans", value=bans_text, inline=False)
 
-    embed.set_footer(text=f"Perspective: {player1} is treated as the drafting player.")
+    mode_label = "Leaderboard mode" if not has_meaningful_winrates else "Result mode"
+    embed.set_footer(text=f"{mode_label} | Perspective: {player1} is treated as the drafting player.")
 
     await interaction.response.send_message(embed=embed)
     

@@ -1,4 +1,6 @@
-#analysis.py
+import statistics
+
+
 from storage import fetch_all_matches, fetch_player_matches
 
 from collections import defaultdict
@@ -19,13 +21,57 @@ SLOT_GROUPS = {
 ALL_SLOTS = [slot for slots in SLOT_GROUPS.values() for slot in slots]
 ALL_MODS = list(SLOT_GROUPS.keys())
 
+MOD_ORDER = {
+    "NM": 0,
+    "HD": 1,
+    "HR": 2,
+    "DT": 3,
+    "FM": 4,
+    "TB": 5,
+}
+
+
+def _slot_prefix(slot: str) -> str:
+    return "".join(ch for ch in slot if ch.isalpha()).upper()
+
+
+def _slot_number(slot: str) -> int:
+    digits = "".join(ch for ch in slot if ch.isdigit())
+    return int(digits) if digits else 999
+
+
+def _slot_sort_key(slot: str) -> tuple[int, int, str]:
+    prefix = _slot_prefix(slot)
+    return (MOD_ORDER.get(prefix, 99), _slot_number(slot), slot)
+
+
+def get_all_slots(matches: list[dict[str, Any]] | None = None) -> list[str]:
+    slots = set(ALL_SLOTS)
+    if matches:
+        for match in matches:
+            slot = (match.get("slot") or "").strip()
+            if slot:
+                slots.add(slot)
+    return sorted(slots, key=_slot_sort_key)
+
+
+def _observed_slots_from_stats(*slot_stats_dicts: dict[str, dict[str, Any]]) -> list[str]:
+    slots: set[str] = set()
+    for slot_stats in slot_stats_dicts:
+        for slot, stats in slot_stats.items():
+            if stats.get("matches", 0) > 0:
+                slots.add(slot)
+    return sorted(slots, key=_slot_sort_key)
 
 def load_matches() -> list[dict[str, Any]]:
     return fetch_all_matches()
 
 
-def parse_date(date_str: str) -> datetime:
+def parse_date(date_str: str | None) -> datetime | None:
+    if not date_str:
+        return None
     return datetime.strptime(date_str, "%Y-%m-%d")
+
 
 
 def get_player_matches(username: str) -> list[dict[str, Any]]:
@@ -41,9 +87,20 @@ def get_matches_last_n_days(username: str, days: int = 90) -> list[dict[str, Any
     if not matches:
         return []
 
-    newest_date = max(parse_date(m["date"]) for m in matches)
+    dated_matches = [m for m in matches if parse_date(m.get("date")) is not None]
+
+
+    if not dated_matches:
+        return matches
+
+    newest_date = max(parse_date(m["date"]) for m in dated_matches)
     cutoff = newest_date - timedelta(days=days)
-    return [m for m in matches if parse_date(m["date"]) >= cutoff]
+
+    return [
+        m for m in dated_matches
+        if parse_date(m["date"]) >= cutoff
+    ]
+
 
 
 def _empty_stat() -> dict[str, Any]:
@@ -56,11 +113,15 @@ def _empty_stat() -> dict[str, Any]:
     }
 
 
-def build_slot_stats(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+def build_slot_stats(
+    matches: list[dict[str, Any]],
+    slots: list[str] | None = None,
+) -> dict[str, dict[str, Any]]:
     slot_stats = defaultdict(
         lambda: {
             "total": 0,
             "wins": 0,
+            "scored_results": 0,
             "score_sum": 0,
             "acc_sum": 0.0,
             "star_sum": 0.0,
@@ -70,18 +131,26 @@ def build_slot_stats(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
 
     for match in matches:
         slot = match["slot"]
+        result_value = (match.get("result") or "").lower()
+
         slot_stats[slot]["total"] += 1
-        slot_stats[slot]["wins"] += 1 if match["result"].lower() == "win" else 0
         slot_stats[slot]["score_sum"] += match["score"]
         slot_stats[slot]["acc_sum"] += match["accuracy"]
+
+        if result_value in {"win", "loss"}:
+            slot_stats[slot]["scored_results"] += 1
+            if result_value == "win":
+                slot_stats[slot]["wins"] += 1
 
         star_rating = match.get("star_rating")
         if isinstance(star_rating, (int, float)):
             slot_stats[slot]["star_sum"] += star_rating
             slot_stats[slot]["star_count"] += 1
 
+    ordered_slots = slots or get_all_slots(matches)
+
     result: dict[str, dict[str, Any]] = {}
-    for slot in ALL_SLOTS:
+    for slot in ordered_slots:
         stats = slot_stats.get(slot)
         if not stats or stats["total"] == 0:
             result[slot] = _empty_stat()
@@ -94,28 +163,48 @@ def build_slot_stats(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
             else "N/A"
         )
 
+        winrate = (
+            round((stats["wins"] / stats["scored_results"]) * 100, 1)
+            if stats["scored_results"] > 0
+            else "N/A"
+        )
+
         result[slot] = {
             "avg_score": round(stats["score_sum"] / total),
             "avg_accuracy": round(stats["acc_sum"] / total, 2),
             "avg_star_rating": avg_star_rating,
-            "winrate": round((stats["wins"] / total) * 100, 1),
+            "winrate": winrate,
             "matches": total,
         }
 
     return result
 
 
+
+
 def build_mod_stats(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     mod_stats = defaultdict(
-        lambda: {"total": 0, "wins": 0, "score_sum": 0, "acc_sum": 0.0}
+        lambda: {
+            "total": 0,
+            "wins": 0,
+            "scored_results": 0,
+            "score_sum": 0,
+            "acc_sum": 0.0,
+        }
     )
 
     for match in matches:
         mod = match["mod"]
+        result_value = (match.get("result") or "").lower()
+
         mod_stats[mod]["total"] += 1
-        mod_stats[mod]["wins"] += 1 if match["result"].lower() == "win" else 0
         mod_stats[mod]["score_sum"] += match["score"]
         mod_stats[mod]["acc_sum"] += match["accuracy"]
+
+        if result_value in {"win", "loss"}:
+            mod_stats[mod]["scored_results"] += 1
+            if result_value == "win":
+                mod_stats[mod]["wins"] += 1
 
     result: dict[str, dict[str, Any]] = {}
     for mod in ALL_MODS:
@@ -130,10 +219,16 @@ def build_mod_stats(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
             continue
 
         total = stats["total"]
+        winrate = (
+            round((stats["wins"] / stats["scored_results"]) * 100, 1)
+            if stats["scored_results"] > 0
+            else "N/A"
+        )
+
         result[mod] = {
             "avg_score": round(stats["score_sum"] / total),
             "avg_accuracy": round(stats["acc_sum"] / total, 2),
-            "winrate": round((stats["wins"] / total) * 100, 1),
+            "winrate": winrate,
             "matches": total,
         }
 
@@ -161,32 +256,137 @@ def get_strengths_and_weaknesses(
 
     return strengths, weaknesses
 
+def _format_numeric_or_na(value: float | str) -> float | str:
+    return round(value, 2) if isinstance(value, (int, float)) else "N/A"
+
+
+def _compute_map_winrate(matches: list[dict[str, Any]]) -> tuple[int, int, float | str]:
+    result_rows = [
+        m for m in matches
+        if (m.get("result") or "").lower() in {"win", "loss"}
+    ]
+    if not result_rows:
+        return 0, 0, "N/A"
+
+    wins = sum(1 for m in result_rows if (m.get("result") or "").lower() == "win")
+    total = len(result_rows)
+    return wins, total, round((wins / total) * 100, 1)
+
+
+def _compute_match_winrate(matches: list[dict[str, Any]]) -> tuple[int, int, float | str]:
+    # Future-ready:
+    # expects rows to optionally have match_result = "win" / "loss"
+    match_rows = [
+        m for m in matches
+        if (m.get("match_result") or "").lower() in {"win", "loss"}
+    ]
+    if not match_rows:
+        return 0, 0, "N/A"
+
+    wins = sum(1 for m in match_rows if (m.get("match_result") or "").lower() == "win")
+    total = len(match_rows)
+    return wins, total, round((wins / total) * 100, 1)
+
+
+def _build_slot_median_score_index(matches: list[dict[str, Any]]) -> dict[tuple[str | None, str | None, str], float]:
+    buckets: dict[tuple[str | None, str | None, str], list[int]] = defaultdict(list)
+
+    for match in matches:
+        score = match.get("score")
+        slot = match.get("slot")
+        if not isinstance(score, (int, float)) or not slot:
+            continue
+
+        key = (
+            match.get("event"),
+            match.get("stage"),
+            slot,
+        )
+        buckets[key].append(int(score))
+
+    return {
+        key: float(statistics.median(values))
+        for key, values in buckets.items()
+        if values
+    }
+
+def _compute_avg_performance_score(player_matches: list[dict[str, Any]]) -> float | str:
+    if not player_matches:
+        return "N/A"
+
+    all_matches = load_matches()
+    median_index = _build_slot_median_score_index(all_matches)
+
+    ratios: list[float] = []
+
+    for match in player_matches:
+        score = match.get("score")
+        slot = match.get("slot")
+        if not isinstance(score, (int, float)) or not slot:
+            continue
+
+        key = (
+            match.get("event"),
+            match.get("stage"),
+            slot,
+        )
+        median_score = median_index.get(key)
+        if not median_score or median_score <= 0:
+            continue
+
+        ratios.append(float(score) / float(median_score))
+
+    if not ratios:
+        return "N/A"
+
+    return round(sum(ratios) / len(ratios), 2)
+
 
 def get_overall_summary(username: str) -> dict[str, Any] | None:
     matches = get_player_matches(username)
     if not matches:
         return None
 
-    total = len(matches)
-    wins = sum(1 for m in matches if m["result"].lower() == "win")
-    overall_winrate = round((wins / total) * 100, 1) if total else 0
+    total_maps_played = len(matches)
 
-    if overall_winrate >= 70:
-        consistency = "High"
-    elif overall_winrate >= 40:
-        consistency = "Medium"
+    map_wins, maps_with_results, map_winrate = _compute_map_winrate(matches)
+    match_wins, matches_with_results, match_winrate = _compute_match_winrate(matches)
+    avg_performance_score = _compute_avg_performance_score(matches)
+
+    # overall_winrate remains for compatibility with old formatting logic.
+    # Prefer true match WR if available, otherwise fall back to map WR.
+    if isinstance(match_winrate, (int, float)):
+        overall_winrate: float | str = match_winrate
+    elif isinstance(map_winrate, (int, float)):
+        overall_winrate = map_winrate
     else:
-        consistency = "Low"
+        overall_winrate = "N/A"
+
+    if isinstance(overall_winrate, (int, float)):
+        if overall_winrate >= 70:
+            consistency = "High"
+        elif overall_winrate >= 40:
+            consistency = "Medium"
+        else:
+            consistency = "Low"
+    else:
+        consistency = "Unknown"
 
     recent_90 = get_matches_last_n_days(username, 90)
-    slot_stats_90 = build_slot_stats(recent_90)
+    slot_stats_90 = build_slot_stats(recent_90, slots=get_all_slots(recent_90))
     mod_stats_90 = build_mod_stats(recent_90)
     strengths, weaknesses = get_strengths_and_weaknesses(mod_stats_90)
 
     return {
         "player": username,
-        "total_matches": total,
-        "wins": wins,
+        "total_maps_played": total_maps_played,
+        "map_wins": map_wins,
+        "maps_with_results": maps_with_results,
+        "map_winrate": map_winrate,
+        "match_wins": match_wins,
+        "matches_with_results": matches_with_results,
+        "match_winrate": match_winrate,
+        "avg_performance_score": avg_performance_score,
         "overall_winrate": overall_winrate,
         "consistency": consistency,
         "recent_matches": get_recent_matches(username, 5),
@@ -202,11 +402,12 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
     }
 
 
+
 def get_full_slot_summary(username: str) -> dict[str, dict[str, Any]] | None:
     matches_90 = get_matches_last_n_days(username, 90)
     if not matches_90:
         return None
-    return build_slot_stats(matches_90)
+    return build_slot_stats(matches_90, slots=get_all_slots(matches_90))
 
 
 def _has_data(stats: dict[str, Any]) -> bool:
@@ -246,12 +447,13 @@ def _build_key_picks(
     player2: str,
     slot_stats_1: dict[str, dict[str, Any]],
     slot_stats_2: dict[str, dict[str, Any]],
+    slots: list[str],
 ) -> list[dict[str, Any]]:
     picks: list[dict[str, Any]] = []
 
-    for slot in ALL_SLOTS:
-        p1 = slot_stats_1[slot]
-        p2 = slot_stats_2[slot]
+    for slot in slots:
+        p1 = slot_stats_1.get(slot, _empty_stat())
+        p2 = slot_stats_2.get(slot, _empty_stat())
 
         if not _has_data(p1) or not _has_data(p2):
             continue
@@ -276,18 +478,20 @@ def _build_key_picks(
     return picks
 
 
+
 def _build_recommended_bans(
     player1: str,
     player2: str,
     slot_stats_1: dict[str, dict[str, Any]],
     slot_stats_2: dict[str, dict[str, Any]],
+    slots: list[str],
     limit: int = 2,
 ) -> list[dict[str, Any]]:
     bans: list[dict[str, Any]] = []
 
-    for slot in ALL_SLOTS:
-        p1 = slot_stats_1[slot]
-        p2 = slot_stats_2[slot]
+    for slot in slots:
+        p1 = slot_stats_1.get(slot, _empty_stat())
+        p2 = slot_stats_2.get(slot, _empty_stat())
 
         if not _has_data(p1) or not _has_data(p2):
             continue
@@ -313,12 +517,16 @@ def _build_recommended_bans(
 def _build_slot_winrates(
     slot_stats_1: dict[str, dict[str, Any]],
     slot_stats_2: dict[str, dict[str, Any]],
+    slots: list[str],
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
 
-    for slot in ALL_SLOTS:
-        p1 = slot_stats_1[slot]
-        p2 = slot_stats_2[slot]
+    for slot in slots:
+        p1 = slot_stats_1.get(slot, _empty_stat())
+        p2 = slot_stats_2.get(slot, _empty_stat())
+
+        if not _has_data(p1) and not _has_data(p2):
+            continue
 
         rows.append(
             {
@@ -331,6 +539,42 @@ def _build_slot_winrates(
     return rows
 
 
+def _build_accuracy_edges(
+    player1: str,
+    player2: str,
+    slot_stats_1: dict[str, dict[str, Any]],
+    slot_stats_2: dict[str, dict[str, Any]],
+    slots: list[str],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+
+    for slot in slots:
+        p1 = slot_stats_1.get(slot, _empty_stat())
+        p2 = slot_stats_2.get(slot, _empty_stat())
+
+        if not _has_data(p1) or not _has_data(p2):
+            continue
+        if p1["avg_accuracy"] == "N/A" or p2["avg_accuracy"] == "N/A":
+            continue
+
+        acc_gap = p1["avg_accuracy"] - p2["avg_accuracy"]
+        if acc_gap <= 0:
+            continue
+
+        rows.append(
+            {
+                "slot": slot,
+                "winner": player1,
+                "player1_accuracy": p1["avg_accuracy"],
+                "player2_accuracy": p2["avg_accuracy"],
+                "accuracy_gap": round(acc_gap, 2),
+            }
+        )
+
+    rows.sort(key=lambda x: x["accuracy_gap"], reverse=True)
+    return rows
+
+
 def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
     summary1 = get_overall_summary(player1)
     summary2 = get_overall_summary(player2)
@@ -340,9 +584,12 @@ def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
 
     slot_stats_1 = summary1["slot_stats_90"]
     slot_stats_2 = summary2["slot_stats_90"]
+    observed_slots = _observed_slots_from_stats(slot_stats_1, slot_stats_2)
 
-    key_picks = _build_key_picks(player1, player2, slot_stats_1, slot_stats_2)
-    slot_winrates = _build_slot_winrates(slot_stats_1, slot_stats_2)
+    key_picks = _build_key_picks(player1, player2, slot_stats_1, slot_stats_2, observed_slots)
+    slot_winrates = _build_slot_winrates(slot_stats_1, slot_stats_2, observed_slots)
+    accuracy_edges = _build_accuracy_edges(player1, player2, slot_stats_1, slot_stats_2, observed_slots)
+
     comfort_picks_1 = _top_comfort_picks(slot_stats_1, limit=3)
     comfort_picks_2 = _top_comfort_picks(slot_stats_2, limit=3)
     recommended_bans = _build_recommended_bans(
@@ -350,18 +597,22 @@ def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
         player2,
         slot_stats_1,
         slot_stats_2,
+        observed_slots,
         limit=2,
     )
 
     return {
         "player1": summary1,
         "player2": summary2,
+        "slots": observed_slots,
         "key_picks": key_picks,
         "slot_winrates": slot_winrates,
+        "accuracy_edges": accuracy_edges,
         "comfort_picks": {
             player1: comfort_picks_1,
             player2: comfort_picks_2,
         },
         "recommended_bans": recommended_bans,
     }
+
 
