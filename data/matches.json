@@ -1,0 +1,86 @@
+[
+  {
+    "player": "hieu",
+    "opponent": "playerA",
+    "event": "ROMAI Week 3",
+    "source": "ROMAI",
+    "date": "2026-04-01",
+    "mod": "NM",
+    "slot": "NM1",
+    "score": 500000,
+    "accuracy": 97.4,
+    "result": "win"
+  },
+  {
+    "player": "hieu",
+    "opponent": "playerB",
+    "event": "ROMAI Week 4",
+    "source": "ROMAI",
+    "date": "2026-04-03",
+    "mod": "NM",
+    "slot": "NM2",
+    "score": 300000,
+    "accuracy": 95.2,
+    "result": "loss"
+  },
+  {
+    "player": "hieu",
+    "opponent": "playerC",
+    "event": "Spring Cup",
+    "source": "Tournament",
+    "date": "2026-03-28",
+    "mod": "HD",
+    "slot": "HD2",
+    "score": 380000,
+    "accuracy": 92.9,
+    "result": "loss"
+  },
+  {
+    "player": "hieu",
+    "opponent": "playerD",
+    "event": "ROMAI Week 2",
+    "source": "ROMAI",
+    "date": "2026-03-14",
+    "mod": "DT",
+    "slot": "DT1",
+    "score": 610000,
+    "accuracy": 97.0,
+    "result": "win"
+  },
+{
+  "player": "playerx",
+  "opponent": "aaa",
+  "event": "ROMAI Week 3",
+  "source": "ROMAI",
+  "date": "2026-04-02",
+  "mod": "NM",
+  "slot": "NM1",
+  "score": 470000,
+  "accuracy": 96.8,
+  "result": "loss"
+},
+{
+  "player": "playerx",
+  "opponent": "bbb",
+  "event": "ROMAI Week 4",
+  "source": "ROMAI",
+  "date": "2026-04-04",
+  "mod": "HD",
+  "slot": "HD2",
+  "score": 410000,
+  "accuracy": 94.8,
+  "result": "win"
+},
+{
+  "player": "playerx",
+  "opponent": "ccc",
+  "event": "Spring Cup",
+  "source": "Tournament",
+  "date": "2026-03-29",
+  "mod": "DT",
+  "slot": "DT1",
+  "score": 590000,
+  "accuracy": 96.4,
+  "result": "loss"
+}
+]
