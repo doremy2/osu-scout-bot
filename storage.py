@@ -45,6 +45,62 @@ CREATE_INDEXES_SQL = [
     "CREATE INDEX IF NOT EXISTS idx_matches_source ON matches(source);",
 ]
 
+CREATE_PLAYER_SCORES_TABLE_SQL = """
+CREATE TABLE IF NOT EXISTS player_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player TEXT NOT NULL,
+    player_team TEXT,
+    event TEXT NOT NULL,
+    stage TEXT,
+    source TEXT NOT NULL,
+    rank INTEGER,
+    pscore REAL,
+    played_count INTEGER,
+    played_total INTEGER,
+    counted_count INTEGER,
+    counted_total INTEGER,
+    avg_score INTEGER,
+    avg_accuracy REAL,
+    highest_slot TEXT,
+    highest_score INTEGER,
+    import_batch TEXT NOT NULL,
+    UNIQUE(player, event, stage, source)
+);
+"""
+
+CREATE_PLAYER_SCORES_INDEXES_SQL = [
+    "CREATE INDEX IF NOT EXISTS idx_player_scores_player ON player_scores(player);",
+    "CREATE INDEX IF NOT EXISTS idx_player_scores_event ON player_scores(event, stage);",
+]
+
+# tournament_matches stores match-level (BO9/BO11/BO13) rows. One row per
+# (team, opponent, stage, match_index) so we can later join two complementary
+# scorelines into a single resolved match if we recover opponent linking.
+CREATE_TOURNAMENT_MATCHES_TABLE_SQL = """
+CREATE TABLE IF NOT EXISTS tournament_matches (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event TEXT NOT NULL,
+    stage TEXT,
+    source TEXT NOT NULL,
+    team TEXT NOT NULL,
+    team_code TEXT,
+    opponent_team TEXT,
+    team_score INTEGER,
+    opponent_score INTEGER,
+    result TEXT,
+    match_link TEXT,
+    match_index INTEGER,
+    date TEXT,
+    import_batch TEXT NOT NULL,
+    fingerprint TEXT NOT NULL UNIQUE
+);
+"""
+
+CREATE_TOURNAMENT_MATCHES_INDEXES_SQL = [
+    "CREATE INDEX IF NOT EXISTS idx_tm_team ON tournament_matches(team);",
+    "CREATE INDEX IF NOT EXISTS idx_tm_event ON tournament_matches(event, stage);",
+]
+
 UPSERT_MATCH_SQL = """
 INSERT INTO matches (
     player,
@@ -211,6 +267,15 @@ def init_db() -> None:
         connection.execute(CREATE_MATCHES_TABLE_SQL)
         for statement in CREATE_INDEXES_SQL:
             connection.execute(statement)
+
+        connection.execute(CREATE_PLAYER_SCORES_TABLE_SQL)
+        for statement in CREATE_PLAYER_SCORES_INDEXES_SQL:
+            connection.execute(statement)
+
+        connection.execute(CREATE_TOURNAMENT_MATCHES_TABLE_SQL)
+        for statement in CREATE_TOURNAMENT_MATCHES_INDEXES_SQL:
+            connection.execute(statement)
+
         connection.commit()
 
 
@@ -402,6 +467,172 @@ def update_enrichment_for_map(
         cursor = connection.execute(query, params)
         connection.commit()
         return cursor.rowcount
+
+
+# ============================================================
+# player_scores: real Performance Score values per player per round
+# ============================================================
+
+UPSERT_PLAYER_SCORE_SQL = """
+INSERT INTO player_scores (
+    player, player_team, event, stage, source, rank, pscore,
+    played_count, played_total, counted_count, counted_total,
+    avg_score, avg_accuracy, highest_slot, highest_score, import_batch
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(player, event, stage, source) DO UPDATE SET
+    player_team = excluded.player_team,
+    rank = excluded.rank,
+    pscore = excluded.pscore,
+    played_count = excluded.played_count,
+    played_total = excluded.played_total,
+    counted_count = excluded.counted_count,
+    counted_total = excluded.counted_total,
+    avg_score = excluded.avg_score,
+    avg_accuracy = excluded.avg_accuracy,
+    highest_slot = excluded.highest_slot,
+    highest_score = excluded.highest_score,
+    import_batch = excluded.import_batch;
+"""
+
+
+def insert_player_scores(rows: Iterable[dict[str, Any]]) -> int:
+    init_db()
+    import_batch = _utc_now_iso()
+    values = [
+        (
+            _clean_text(row.get("player")),
+            _clean_text(row.get("player_team")),
+            _clean_text(row.get("event")),
+            _clean_text(row.get("stage")),
+            _clean_text(row.get("source")) or "manual",
+            _to_int(row.get("rank")),
+            (float(row["pscore"]) if row.get("pscore") is not None else None),
+            _to_int(row.get("played_count")),
+            _to_int(row.get("played_total")),
+            _to_int(row.get("counted_count")),
+            _to_int(row.get("counted_total")),
+            _to_int(row.get("avg_score")),
+            _to_float(row.get("avg_accuracy")),
+            _clean_text(row.get("highest_slot")),
+            _to_int(row.get("highest_score")),
+            import_batch,
+        )
+        for row in rows
+        if _clean_text(row.get("player")) and _clean_text(row.get("event"))
+    ]
+    with get_connection() as connection:
+        connection.executemany(UPSERT_PLAYER_SCORE_SQL, values)
+        connection.commit()
+    return len(values)
+
+
+def fetch_player_scores(username: str) -> list[dict[str, Any]]:
+    """Return all per-round Performance Score rows for one player, newest
+    rounds first (best-effort: by id desc, since these CSVs have no date)."""
+    init_db()
+    query = """
+    SELECT *
+    FROM player_scores
+    WHERE lower(trim(player)) = lower(trim(?))
+    ORDER BY id DESC
+    """
+    with get_connection() as connection:
+        rows = connection.execute(query, (username,)).fetchall()
+    return [dict(row) for row in rows]
+
+
+# ============================================================
+# tournament_matches: match-level (BO9/BO11/BO13) rows
+# ============================================================
+
+def _build_tournament_match_fingerprint(row: dict[str, Any]) -> str:
+    parts = [
+        row.get("event") or "",
+        row.get("stage") or "",
+        row.get("source") or "",
+        row.get("team") or "",
+        row.get("team_code") or "",
+        str(row.get("team_score") or ""),
+        str(row.get("opponent_score") or ""),
+        str(row.get("match_index") or ""),
+    ]
+    return hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()
+
+
+UPSERT_TOURNAMENT_MATCH_SQL = """
+INSERT INTO tournament_matches (
+    event, stage, source, team, team_code, opponent_team,
+    team_score, opponent_score, result, match_link, match_index,
+    date, import_batch, fingerprint
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(fingerprint) DO UPDATE SET
+    opponent_team = COALESCE(excluded.opponent_team, tournament_matches.opponent_team),
+    match_link = COALESCE(excluded.match_link, tournament_matches.match_link),
+    date = COALESCE(excluded.date, tournament_matches.date),
+    import_batch = excluded.import_batch;
+"""
+
+
+def insert_tournament_matches(rows: Iterable[dict[str, Any]]) -> int:
+    init_db()
+    import_batch = _utc_now_iso()
+    values = []
+    for row in rows:
+        if not _clean_text(row.get("team")) or not _clean_text(row.get("event")):
+            continue
+        fingerprint = _build_tournament_match_fingerprint(row)
+        values.append(
+            (
+                _clean_text(row.get("event")),
+                _clean_text(row.get("stage")),
+                _clean_text(row.get("source")) or "manual",
+                _clean_text(row.get("team")),
+                _clean_text(row.get("team_code")),
+                _clean_text(row.get("opponent_team")),
+                _to_int(row.get("team_score")),
+                _to_int(row.get("opponent_score")),
+                _clean_text(row.get("result")) or "unknown",
+                _clean_text(row.get("match_link")),
+                _to_int(row.get("match_index")),
+                _clean_text(row.get("date")),
+                import_batch,
+                fingerprint,
+            )
+        )
+    with get_connection() as connection:
+        connection.executemany(UPSERT_TOURNAMENT_MATCH_SQL, values)
+        connection.commit()
+    return len(values)
+
+
+def fetch_player_tournament_matches(username: str, limit: int = 5) -> list[dict[str, Any]]:
+    """Return match-level rows that involve the player's team(s).
+
+    We don't have a true players-by-team table, so we discover the player's
+    teams by joining against the map-level `matches` table on player name.
+    Anything that team played in tournament_matches counts as a match the
+    player participated in. Newest rounds first; falls back to id-order
+    when dates are missing (which is the common case for OWC CSVs).
+    """
+    init_db()
+    query = """
+    WITH player_teams AS (
+        SELECT DISTINCT player_team
+        FROM matches
+        WHERE lower(trim(player)) = lower(trim(?))
+          AND player_team IS NOT NULL
+          AND TRIM(player_team) <> ''
+    )
+    SELECT tm.*
+    FROM tournament_matches tm
+    WHERE tm.team_code IN (SELECT player_team FROM player_teams)
+       OR tm.team       IN (SELECT player_team FROM player_teams)
+    ORDER BY tm.date DESC, tm.id DESC
+    LIMIT ?
+    """
+    with get_connection() as connection:
+        rows = connection.execute(query, (username, limit)).fetchall()
+    return [dict(row) for row in rows]
 
 
 def export_all_matches_to_json(output_path: str | Path) -> Path:

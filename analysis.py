@@ -1,7 +1,12 @@
 import statistics
 
 
-from storage import fetch_all_matches, fetch_player_matches
+from storage import (
+    fetch_all_matches,
+    fetch_player_matches,
+    fetch_player_scores,
+    fetch_player_tournament_matches,
+)
 
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -113,13 +118,29 @@ def get_recent_match_history(username: str, limit: int = 5) -> list[dict[str, An
             "date": "2026-04-01",           # optional
         }
 
-    Currently no importer in the project produces match-level rows
-    (OWC CSV is leaderboard-only), so this returns []. Once a match-level
-    table or importer exists (ROMAI / Elitebotix / Skillissue / a future
-    `matches` SQLite table), wire it in here and the /scout embed will
-    automatically start showing real match history.
+    Reads from the `tournament_matches` table, which the OWC Team Stats
+    importer populates. OWC is a team tournament, so for now "opponent"
+    here means the opposing team (e.g. "USA"). Once player-level result
+    sources land (ROMAI / Elitebotix / Skillissue), they can write into
+    the same table with real player opponents and this function will
+    transparently start returning richer rows.
     """
-    return []
+    rows = fetch_player_tournament_matches(username, limit=limit)
+    history: list[dict[str, Any]] = []
+    for row in rows:
+        history.append(
+            {
+                "opponent": row.get("opponent_team") or "Unknown",
+                "player_score": row.get("team_score"),
+                "opponent_score": row.get("opponent_score"),
+                "result": row.get("result"),
+                "match_link": row.get("match_link"),
+                "event": row.get("event"),
+                "stage": row.get("stage"),
+                "date": row.get("date"),
+            }
+        )
+    return history
 
 
 def get_matches_last_n_days(username: str, days: int = 90) -> list[dict[str, Any]]:
@@ -350,6 +371,19 @@ def _build_slot_median_score_index(matches: list[dict[str, Any]]) -> dict[tuple[
         if values
     }
 
+def _lookup_real_pscore(username: str) -> float | str:
+    """If a Performance Scores importer has loaded official pscore values
+    for this player, return their average across rounds. Returns 'N/A' if
+    no real pscore rows exist."""
+    rows = fetch_player_scores(username)
+    if not rows:
+        return "N/A"
+    values = [row["pscore"] for row in rows if isinstance(row.get("pscore"), (int, float))]
+    if not values:
+        return "N/A"
+    return round(sum(values) / len(values), 3)
+
+
 def _compute_avg_performance_score(player_matches: list[dict[str, Any]]) -> float | str:
     if not player_matches:
         return "N/A"
@@ -391,7 +425,14 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
 
     map_wins, maps_with_results, map_winrate = _compute_map_winrate(matches)
     match_wins, matches_with_results, match_winrate = _compute_match_winrate(matches)
-    avg_performance_score = _compute_avg_performance_score(matches)
+
+    # Prefer the real pscore values from the imported Performance Scores
+    # sheets when they exist; fall back to the median-ratio proxy otherwise.
+    real_pscore = _lookup_real_pscore(username)
+    if isinstance(real_pscore, (int, float)):
+        avg_performance_score: float | str = real_pscore
+    else:
+        avg_performance_score = _compute_avg_performance_score(matches)
 
     # overall_winrate remains for compatibility with old formatting logic.
     # Prefer true match WR if available, otherwise fall back to map WR.
