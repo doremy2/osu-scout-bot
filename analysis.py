@@ -78,8 +78,48 @@ def get_player_matches(username: str) -> list[dict[str, Any]]:
     return fetch_player_matches(username)
 
 
-def get_recent_matches(username: str, limit: int = 5) -> list[dict[str, Any]]:
+def get_recent_maps(username: str, limit: int = 5) -> list[dict[str, Any]]:
+    """Return the player's most recent MAP-level rows.
+
+    A "map" here means a single beatmap played inside some match. This is
+    NOT the same as a match (a full BO9/BO11/BO13 series). For match-level
+    history use get_recent_match_history().
+    """
     return get_player_matches(username)[:limit]
+
+
+# Kept as an alias so older callers / tests don't break, but new code should
+# use get_recent_maps() because these are individual maps, not matches.
+def get_recent_matches(username: str, limit: int = 5) -> list[dict[str, Any]]:
+    return get_recent_maps(username, limit)
+
+
+def get_recent_match_history(username: str, limit: int = 5) -> list[dict[str, Any]]:
+    """Return the player's most recent MATCH-level history.
+
+    A "match" here is a full series (e.g. BO9, BO11, BO13) between two
+    players or two teams, with a final score like "5-0" and ideally a link
+    back to the source match (osu! match page, ROMAI page, etc.).
+
+    Expected row shape (when real data is available):
+        {
+            "opponent": "playerX",
+            "player_score": 5,
+            "opponent_score": 0,
+            "result": "win" | "loss",
+            "match_link": "https://...",   # optional
+            "event": "OWC 2025",            # optional
+            "stage": "Grand Finals",        # optional
+            "date": "2026-04-01",           # optional
+        }
+
+    Currently no importer in the project produces match-level rows
+    (OWC CSV is leaderboard-only), so this returns []. Once a match-level
+    table or importer exists (ROMAI / Elitebotix / Skillissue / a future
+    `matches` SQLite table), wire it in here and the /scout embed will
+    automatically start showing real match history.
+    """
+    return []
 
 
 def get_matches_last_n_days(username: str, days: int = 90) -> list[dict[str, Any]]:
@@ -389,7 +429,9 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
         "avg_performance_score": avg_performance_score,
         "overall_winrate": overall_winrate,
         "consistency": consistency,
-        "recent_matches": get_recent_matches(username, 5),
+        "recent_matches": get_recent_maps(username, 5),  # legacy: map rows
+        "recent_maps": get_recent_maps(username, 5),
+        "recent_match_history": get_recent_match_history(username, 5),
         "slot_stats_90": slot_stats_90,
         "mod_stats_90": mod_stats_90,
         "strengths": strengths,

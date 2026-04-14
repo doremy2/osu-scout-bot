@@ -126,6 +126,28 @@ def _summary_is_leaderboard_mode(summary: dict) -> bool:
     )
 
 
+def _format_recent_match_history(history: list[dict], player: str) -> str:
+    """Render true match-level history (full series), not individual maps."""
+    if not history:
+        return "No match data yet"
+
+    lines = []
+    for row in history:
+        opponent = row.get("opponent") or "Unknown"
+        p_score = row.get("player_score")
+        o_score = row.get("opponent_score")
+        if isinstance(p_score, int) and isinstance(o_score, int):
+            score_str = f"{p_score}-{o_score}"
+        else:
+            score_str = "?"
+
+        link = row.get("match_link")
+        base = f"{player} vs {opponent} | {score_str}"
+        lines.append(f"{base} | {link}" if link else base)
+
+    return "\n".join(lines)
+
+
 def _format_overview_block(summary: dict) -> str:
     return (
         f"Maps Played: {summary['total_maps_played']}\n"
@@ -150,18 +172,23 @@ async def scout(interaction: discord.Interaction, username: str):
         return
 
     ratings = summary["ratings"]
-    recent_matches = summary["recent_matches"]
+    recent_maps = summary["recent_maps"]
+    recent_match_history = summary["recent_match_history"]
     strengths = summary["strengths"]
     weaknesses = summary["weaknesses"]
     slot_stats = summary["slot_stats_90"]
 
     leaderboard_mode = _summary_is_leaderboard_mode(summary)
 
-    # Recent matches
-    recent_text = "\n".join(
+    # Recent matches = full series (BO9/BO11/BO13) with final score and link.
+    # This is intentionally separate from "recent maps" below.
+    recent_matches_text = _format_recent_match_history(recent_match_history, username)
+
+    # Recent maps = individual map rows the player played inside any match.
+    recent_maps_text = "\n".join(
         f"{(m.get('result') or '?')[0].upper()} vs {m.get('opponent') or 'Unknown'} | {m['slot']} | {_format_score(m['score'])}"
-        for m in recent_matches
-    ) or "No recent matches"
+        for m in recent_maps
+    ) or "No recent maps"
 
     # Top slots (dynamic, driven by whatever slots the player has data in)
     slot_lines = []
@@ -214,7 +241,8 @@ async def scout(interaction: discord.Interaction, username: str):
         inline=False,
     )
 
-    embed.add_field(name="Recent Matches", value=recent_text, inline=False)
+    embed.add_field(name="Recent Matches", value=recent_matches_text, inline=False)
+    embed.add_field(name="Recent Maps", value=recent_maps_text, inline=False)
     embed.add_field(name="Top Slots (Last 90d)", value=slot_text, inline=False)
 
     # Strengths / weaknesses / draft advice only make sense when we actually

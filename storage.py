@@ -82,8 +82,8 @@ ON CONFLICT(fingerprint) DO UPDATE SET
     score = excluded.score,
     accuracy = excluded.accuracy,
     result = excluded.result,
-    star_rating = excluded.star_rating,
-    beatmap_id = excluded.beatmap_id,
+    star_rating = COALESCE(excluded.star_rating, matches.star_rating),
+    beatmap_id = COALESCE(excluded.beatmap_id, matches.beatmap_id),
     map_name = excluded.map_name,
     player_team = excluded.player_team,
     opponent_team = excluded.opponent_team,
@@ -332,6 +332,76 @@ def fetch_player_matches(username: str) -> list[dict[str, Any]]:
     with get_connection() as connection:
         rows = connection.execute(query, (username,)).fetchall()
     return [dict(row) for row in rows]
+
+
+def fetch_unenriched_map_keys() -> list[dict[str, Any]]:
+    """Return distinct (event, stage, slot, map_name) groups that still
+    need beatmap_id / star_rating enrichment.
+
+    Used by importers/osu_api.py so we only call the osu! API once per
+    unique map instead of once per row.
+    """
+    init_db()
+    query = """
+    SELECT
+        event,
+        stage,
+        slot,
+        map_name,
+        COUNT(*) AS row_count
+    FROM matches
+    WHERE map_name IS NOT NULL
+      AND TRIM(map_name) <> ''
+      AND (beatmap_id IS NULL OR star_rating IS NULL)
+    GROUP BY event, stage, slot, map_name
+    ORDER BY event, stage, slot, map_name
+    """
+    with get_connection() as connection:
+        rows = connection.execute(query).fetchall()
+    return [dict(row) for row in rows]
+
+
+def update_enrichment_for_map(
+    *,
+    event: str | None,
+    stage: str | None,
+    slot: str | None,
+    map_name: str | None,
+    beatmap_id: int | None,
+    star_rating: float | None,
+) -> int:
+    """Write enriched beatmap_id / star_rating back to all rows that share
+    the same (event, stage, slot, map_name) key. Returns rows updated.
+
+    Only fills NULLs — never overwrites existing values, so this is safe
+    to re-run.
+    """
+    init_db()
+    query = """
+    UPDATE matches
+    SET
+        beatmap_id = COALESCE(beatmap_id, ?),
+        star_rating = COALESCE(star_rating, ?)
+    WHERE map_name IS ?
+      AND (event IS ? OR (event IS NULL AND ? IS NULL))
+      AND (stage IS ? OR (stage IS NULL AND ? IS NULL))
+      AND (slot IS ? OR (slot IS NULL AND ? IS NULL))
+    """
+    # SQLite's `IS` handles NULL equality, but we still pass NULL-safe
+    # comparisons explicitly for event/stage/slot so a NULL stage matches
+    # a NULL stage row.
+    params = (
+        beatmap_id,
+        star_rating,
+        map_name,
+        event, event,
+        stage, stage,
+        slot, slot,
+    )
+    with get_connection() as connection:
+        cursor = connection.execute(query, params)
+        connection.commit()
+        return cursor.rowcount
 
 
 def export_all_matches_to_json(output_path: str | Path) -> Path:
