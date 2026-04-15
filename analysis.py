@@ -35,6 +35,20 @@ MOD_ORDER = {
     "TB": 5,
 }
 
+STAGE_ORDER = {
+    "Group Stage": 1,
+    "Round of 16": 2,
+    "Quarterfinals": 3,
+    "Semifinals": 4,
+    "Finals": 5,
+    "Grand Finals": 6,
+}
+
+
+def _stage_rank(stage: str | None) -> int:
+    if not stage:
+        return 0
+    return STAGE_ORDER.get(stage, 0)
 
 def _slot_prefix(slot: str) -> str:
     return "".join(ch for ch in slot if ch.isalpha()).upper()
@@ -125,9 +139,22 @@ def get_recent_match_history(username: str, limit: int = 5) -> list[dict[str, An
     the same table with real player opponents and this function will
     transparently start returning richer rows.
     """
-    rows = fetch_player_tournament_matches(username, limit=limit)
+    rows = fetch_player_tournament_matches(username, limit=100)
+    if not rows:
+        return []
+
+    def sort_key(row: dict[str, Any]):
+        parsed_date = parse_date(row.get("date"))
+        return (
+            parsed_date or datetime.min,
+            _stage_rank(row.get("stage")),
+            int(row.get("match_index") or 0),
+        )
+
+    rows.sort(key=sort_key, reverse=True)
+
     history: list[dict[str, Any]] = []
-    for row in rows:
+    for row in rows[:limit]:
         history.append(
             {
                 "opponent": row.get("opponent_team_name")
