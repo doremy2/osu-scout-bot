@@ -133,7 +133,12 @@ def _format_recent_match_history(history: list[dict], player: str) -> str:
 
     lines = []
     for row in history:
-        opponent = row.get("opponent") or "Unknown"
+        opponent = (
+            row.get("opponent_team_name")
+            or row.get("opponent_team")
+            or row.get("opponent")
+            or "Unknown"
+        )
         p_score = row.get("player_score")
         o_score = row.get("opponent_score")
         if isinstance(p_score, int) and isinstance(o_score, int):

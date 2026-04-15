@@ -1,21 +1,38 @@
-"""osu! API v2 client + name-based beatmap enrichment.
+"""osu! API v2 client + name-based beatmap enrichment + multiplayer match fetch.
 
-This module is a METADATA enrichment source, not a tournament data source.
-It takes existing rows in the SQLite DB that have a `map_name` but no
-`beatmap_id` / `star_rating`, looks them up against the osu! API by name,
-and writes the resolved metadata back.
+This module has two distinct roles:
 
-Why name-based: the OWC CSV format we currently import has no beatmap ID
-and no beatmap URL, only a human-readable map name. Once a future source
-gives us real beatmap IDs we should prefer those (`get_beatmap(id)`) and
-fall back to name search only when needed.
+  1. METADATA enrichment source (original role)
+     It takes existing rows in the SQLite DB that have a `map_name` but no
+     `beatmap_id` / `star_rating`, looks them up against the osu! API by
+     name, and writes the resolved metadata back.
+
+  2. TOURNAMENT MATCH-DETAIL source (new, OWC 2025 layered ingestion)
+     Given an osu! multiplayer match id (from a match link like
+     https://osu.ppy.sh/community/matches/123456789), call /matches/{id}
+     and return a fully-structured `Match` with every map played,
+     per-player scores, winning team, acc, mods, etc.
+
+     This is what unlocks real Map WR, Match WR, per-map opponent info,
+     and canonical beatmap IDs (with star ratings) without touching a
+     single CSV. Consumers: importers/owc_wiki.py -> scripts/sync_owc_2025.py.
+
+Why name-based beatmap search still exists: the OWC leaderboard CSV format
+has no beatmap ID, only a human-readable map name. Once the match-detail
+path is wired in end to end, it supplants name-based search entirely for
+tournament data; name search stays as a fallback for stray CSV rows.
 
 Usage:
-    from importers.osu_api import OsuApiClient, enrich_database
+    from importers.osu_api import OsuApiClient, enrich_database, parse_match_id
 
     client = OsuApiClient.from_env()
+
+    # Metadata enrichment (existing behavior)
     stats = enrich_database(client, dry_run=False)
-    print(stats)
+
+    # Multiplayer match fetch (new)
+    match = client.get_match(123456789)
+    print(match.team_scores, len(match.games))
 
 Environment variables:
     OSU_CLIENT_ID
@@ -56,8 +73,80 @@ class BeatmapMatch:
     creator: str | None = None
 
 
+@dataclass
+class MatchScore:
+    """One player's score on one map in a multiplayer match."""
+    user_id: int
+    username: str | None
+    score: int
+    accuracy: float
+    max_combo: int
+    mods: list[str]
+    team: str | None      # 'red' / 'blue' / None for headtohead
+    passed: bool
+    slot: int | None      # lobby slot, not mappool slot
+
+
+@dataclass
+class MatchGame:
+    """One map played within a multiplayer match."""
+    game_id: int
+    beatmap_id: int | None
+    beatmap_title: str | None
+    beatmap_version: str | None
+    star_rating: float | None
+    mode: str | None
+    scoring_type: str | None
+    team_type: str | None
+    mods: list[str]
+    start_time: str | None
+    end_time: str | None
+    scores: list[MatchScore]
+    winning_team: str | None      # 'red' / 'blue' / None
+    red_total: int
+    blue_total: int
+
+
+@dataclass
+class Match:
+    """Full multiplayer match (BO9/BO11/BO13) from /matches/{id}."""
+    match_id: int
+    name: str | None              # lobby name, e.g. 'OWC2025: (Poland) vs (United States)'
+    start_time: str | None
+    end_time: str | None
+    games: list[MatchGame]
+    red_score: int                # total maps won by red (derived)
+    blue_score: int               # total maps won by blue (derived)
+    users: dict[int, str]         # user_id -> username, for all seen players
+
+
 class OsuApiError(RuntimeError):
     pass
+
+
+# ---------- match-link helpers ----------
+
+_MATCH_LINK_RE = re.compile(
+    r"(?:https?://)?osu\.ppy\.sh/community/matches/(?P<id>\d+)",
+    re.IGNORECASE,
+)
+
+
+def parse_match_id(value: str | int | None) -> int | None:
+    """Accept a bare int, a match URL, or None; return the match_id."""
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    text = str(value).strip()
+    if not text:
+        return None
+    if text.isdigit():
+        return int(text)
+    m = _MATCH_LINK_RE.search(text)
+    if m:
+        return int(m.group("id"))
+    return None
 
 
 class OsuApiClient:
@@ -196,6 +285,105 @@ class OsuApiClient:
 
         return _pick_best_beatmap(beatmapsets, artist, title, difficulty)
 
+    # ---------- multiplayer match fetch ----------
+
+    def get_match(self, match_id: int | str) -> Match | None:
+        """Fetch a full multiplayer match from /matches/{id}.
+
+        The /matches endpoint is paginated (`events` array). Each page
+        returns up to ~100 events. A BO13 grand final with warmups +
+        chat + bans easily exceeds that, so we walk forward using the
+        `events[-1].id` as the `after` cursor until no new events come
+        back.
+
+        Returns a `Match` with every `game` event flattened into
+        `match.games`, plus a username lookup. Returns None on 404.
+        """
+        parsed_id = parse_match_id(match_id)
+        if parsed_id is None:
+            raise OsuApiError(f"Cannot parse match id from: {match_id!r}")
+
+        url = f"{OSU_API_BASE}/matches/{parsed_id}"
+
+        users: dict[int, str] = {}
+        games: list[MatchGame] = []
+        match_name: str | None = None
+        start_time: str | None = None
+        end_time: str | None = None
+
+        after: int | None = None
+        safety = 50  # hard cap to avoid runaway pagination
+
+        while safety > 0:
+            safety -= 1
+            params: dict[str, Any] = {"limit": 100}
+            if after is not None:
+                params["after"] = after
+
+            response = self._session.get(
+                url,
+                headers=self._auth_headers(),
+                params=params,
+                timeout=20,
+            )
+            time.sleep(self._request_delay)
+
+            if response.status_code == 404:
+                return None
+            if response.status_code != 200:
+                raise OsuApiError(
+                    f"GET match {parsed_id} -> {response.status_code} {response.text[:200]}"
+                )
+
+            payload = response.json() or {}
+
+            meta = payload.get("match") or {}
+            if match_name is None:
+                match_name = meta.get("name")
+            if start_time is None:
+                start_time = meta.get("start_time")
+            # end_time keeps getting refreshed as the match closes
+            if meta.get("end_time"):
+                end_time = meta.get("end_time")
+
+            for u in payload.get("users") or []:
+                uid = u.get("id")
+                if uid is not None:
+                    users[int(uid)] = u.get("username")
+
+            events = payload.get("events") or []
+            if not events:
+                break
+
+            for ev in events:
+                if ev.get("detail", {}).get("type") == "other" and ev.get("game"):
+                    game_obj = _build_match_game(ev["game"])
+                    if game_obj is not None:
+                        games.append(game_obj)
+
+            last_event_id = events[-1].get("id")
+            if last_event_id is None or (after is not None and last_event_id <= after):
+                break
+            after = int(last_event_id)
+
+            # Stop if we've caught up to the end of the event list.
+            if len(events) < 100:
+                break
+
+        red_score = sum(1 for g in games if g.winning_team == "red")
+        blue_score = sum(1 for g in games if g.winning_team == "blue")
+
+        return Match(
+            match_id=parsed_id,
+            name=match_name,
+            start_time=start_time,
+            end_time=end_time,
+            games=games,
+            red_score=red_score,
+            blue_score=blue_score,
+            users=users,
+        )
+
     def close(self) -> None:
         self._session.close()
 
@@ -305,6 +493,93 @@ def _pick_best_beatmap(
     if score < 60:
         return None
     return match
+
+
+# ---------- match parsing helpers ----------
+
+def _build_match_game(raw: dict[str, Any]) -> MatchGame | None:
+    """Convert a raw `game` block from /matches/{id} into a MatchGame."""
+    try:
+        game_id = int(raw.get("id"))
+    except (TypeError, ValueError):
+        return None
+
+    beatmap = raw.get("beatmap") or {}
+    beatmapset = beatmap.get("beatmapset") or {}
+
+    scores: list[MatchScore] = []
+    red_total = 0
+    blue_total = 0
+
+    for s in raw.get("scores") or []:
+        team = (s.get("match") or {}).get("team")
+        if team in ("", "none"):
+            team = None
+        passed = bool(s.get("passed", False))
+        try:
+            user_id = int(s.get("user_id") or 0)
+        except (TypeError, ValueError):
+            user_id = 0
+        try:
+            score_val = int(s.get("score") or 0)
+        except (TypeError, ValueError):
+            score_val = 0
+        try:
+            max_combo = int(s.get("max_combo") or 0)
+        except (TypeError, ValueError):
+            max_combo = 0
+
+        accuracy = float(s.get("accuracy") or 0.0)
+        if accuracy <= 1.0:
+            # API returns 0.0-1.0; convert to percent for consistency
+            accuracy *= 100.0
+
+        mods_raw = s.get("mods") or []
+        mods = [str(m) for m in mods_raw]
+
+        scores.append(
+            MatchScore(
+                user_id=user_id,
+                username=None,  # filled in at the Match layer via users map
+                score=score_val,
+                accuracy=accuracy,
+                max_combo=max_combo,
+                mods=mods,
+                team=team,
+                passed=passed,
+                slot=(s.get("match") or {}).get("slot"),
+            )
+        )
+
+        if passed and team == "red":
+            red_total += score_val
+        elif passed and team == "blue":
+            blue_total += score_val
+
+    if red_total > blue_total:
+        winning_team = "red"
+    elif blue_total > red_total:
+        winning_team = "blue"
+    else:
+        winning_team = None
+
+    return MatchGame(
+        game_id=game_id,
+        beatmap_id=int(beatmap.get("id")) if beatmap.get("id") is not None else None,
+        beatmap_title=beatmapset.get("title"),
+        beatmap_version=beatmap.get("version"),
+        star_rating=float(beatmap.get("difficulty_rating")) if beatmap.get("difficulty_rating") is not None else None,
+        mode=beatmap.get("mode"),
+        scoring_type=raw.get("scoring_type"),
+        team_type=raw.get("team_type"),
+        mods=[str(m) for m in (raw.get("mods") or [])],
+        start_time=raw.get("start_time"),
+        end_time=raw.get("end_time"),
+        scores=scores,
+        winning_team=winning_team,
+        red_total=red_total,
+        blue_total=blue_total,
+    )
 
 
 # ---------- enrichment driver ----------

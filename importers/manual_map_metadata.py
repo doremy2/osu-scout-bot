@@ -7,16 +7,17 @@ each tournament slot to the right osu! beatmap.
 
 Expected mapping CSV columns (header row required):
 
-    event,stage,slot,map_name,beatmap_id,star_rating
+    event,stage,slot,map_name,difficulty_name,beatmap_id,star_rating
 
-- event:        e.g. "OWC 2025"
-- stage:        e.g. "Finals", "Group Stage"
-- slot:         e.g. "NM1", "DT4", "TB"
-- map_name:     the exact "Artist - Title" string used in the leaderboard
-                CSV. Used to match rows when writing back.
-- beatmap_id:   integer osu! beatmap ID (required)
-- star_rating:  optional float; can be left blank and filled in later via
-                osu! API exact-ID enrichment.
+- event:           e.g. "OWC 2025"
+- stage:           e.g. "Finals", "Group Stage"
+- slot:            e.g. "NM1", "DT4", "TB"
+- map_name:        the exact "Artist - Title" string used in the leaderboard
+                   CSV. Used to match rows when writing back.
+- difficulty_name: optional, e.g. "Insane", "Extra", "Tournament"
+- beatmap_id:      integer osu! beatmap ID (required)
+- star_rating:     optional float; can be left blank and filled in later via
+                   osu! API exact-ID enrichment.
 
 Empty cells / blank lines are skipped. Re-running is safe (the storage
 layer's update only fills NULLs).
@@ -48,6 +49,7 @@ def parse_manual_map_metadata_csv(csv_path: str | Path) -> list[dict[str, Any]]:
             stage = _clean(raw.get("stage"))
             slot = _clean(raw.get("slot"))
             map_name = _clean(raw.get("map_name"))
+            difficulty_name = _clean(raw.get("difficulty_name"))
             beatmap_id_raw = _clean(raw.get("beatmap_id"))
             star_rating_raw = _clean(raw.get("star_rating"))
 
@@ -72,6 +74,7 @@ def parse_manual_map_metadata_csv(csv_path: str | Path) -> list[dict[str, Any]]:
                     "stage": stage,
                     "slot": slot,
                     "map_name": map_name,
+                    "difficulty_name": difficulty_name,
                     "beatmap_id": beatmap_id,
                     "star_rating": star_rating,
                 }
@@ -93,6 +96,7 @@ def apply_manual_map_metadata(rows: list[dict[str, Any]]) -> dict[str, int]:
             map_name=row["map_name"],
             beatmap_id=row["beatmap_id"],
             star_rating=row.get("star_rating"),
+            difficulty_name=row.get("difficulty_name"),
         )
         if updated:
             stats["rows_updated"] += updated

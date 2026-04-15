@@ -130,7 +130,13 @@ def get_recent_match_history(username: str, limit: int = 5) -> list[dict[str, An
     for row in rows:
         history.append(
             {
-                "opponent": row.get("opponent_team") or "Unknown",
+                "opponent": row.get("opponent_team_name")
+                    or row.get("opponent_team")
+                    or "Unknown",
+                "opponent_team": row.get("opponent_team"),
+                "opponent_team_name": row.get("opponent_team_name"),
+                "player_team": row.get("team_code") or row.get("team"),
+                "player_team_name": row.get("team_name"),
                 "player_score": row.get("team_score"),
                 "opponent_score": row.get("opponent_score"),
                 "result": row.get("result"),

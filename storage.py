@@ -30,11 +30,23 @@ CREATE TABLE IF NOT EXISTS matches (
     star_rating REAL,
     beatmap_id INTEGER,
     map_name TEXT,
+    difficulty_name TEXT,
     player_team TEXT,
     opponent_team TEXT,
     match_id TEXT,
     import_batch TEXT NOT NULL,
     fingerprint TEXT NOT NULL UNIQUE
+);
+"""
+
+# Teams metadata: small lookup so team_code ('US') can render as
+# team_name ('United States') in UI.
+CREATE_TEAMS_TABLE_SQL = """
+CREATE TABLE IF NOT EXISTS teams (
+    team_code TEXT PRIMARY KEY,
+    team_name TEXT NOT NULL,
+    event TEXT,
+    import_batch TEXT NOT NULL
 );
 """
 
@@ -119,12 +131,13 @@ INSERT INTO matches (
     star_rating,
     beatmap_id,
     map_name,
+    difficulty_name,
     player_team,
     opponent_team,
     match_id,
     import_batch,
     fingerprint
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(fingerprint) DO UPDATE SET
     opponent = excluded.opponent,
     event = excluded.event,
@@ -141,6 +154,7 @@ ON CONFLICT(fingerprint) DO UPDATE SET
     star_rating = COALESCE(excluded.star_rating, matches.star_rating),
     beatmap_id = COALESCE(excluded.beatmap_id, matches.beatmap_id),
     map_name = excluded.map_name,
+    difficulty_name = COALESCE(excluded.difficulty_name, matches.difficulty_name),
     player_team = excluded.player_team,
     opponent_team = excluded.opponent_team,
     match_id = excluded.match_id,
@@ -240,6 +254,7 @@ def normalize_match(
         "star_rating": _to_float(match.get("star_rating")),
         "beatmap_id": _to_int(match.get("beatmap_id")),
         "map_name": _clean_text(match.get("map_name")),
+        "difficulty_name": _clean_text(match.get("difficulty_name")),
         "player_team": _clean_text(match.get("player_team")),
         "opponent_team": _clean_text(match.get("opponent_team")),
         "match_id": _clean_text(match.get("match_id")),
@@ -262,11 +277,27 @@ def get_connection() -> sqlite3.Connection:
     return connection
 
 
+def _migrate_add_column_if_missing(
+    connection: sqlite3.Connection,
+    table: str,
+    column: str,
+    column_type: str,
+) -> None:
+    """Add a column if it's not already present. Used for lightweight
+    forward migrations on tables that predate new fields."""
+    existing = {row[1] for row in connection.execute(f"PRAGMA table_info({table})")}
+    if column not in existing:
+        connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
+
+
 def init_db() -> None:
     with get_connection() as connection:
         connection.execute(CREATE_MATCHES_TABLE_SQL)
         for statement in CREATE_INDEXES_SQL:
             connection.execute(statement)
+
+        # Lightweight forward-migrations.
+        _migrate_add_column_if_missing(connection, "matches", "difficulty_name", "TEXT")
 
         connection.execute(CREATE_PLAYER_SCORES_TABLE_SQL)
         for statement in CREATE_PLAYER_SCORES_INDEXES_SQL:
@@ -275,6 +306,8 @@ def init_db() -> None:
         connection.execute(CREATE_TOURNAMENT_MATCHES_TABLE_SQL)
         for statement in CREATE_TOURNAMENT_MATCHES_INDEXES_SQL:
             connection.execute(statement)
+
+        connection.execute(CREATE_TEAMS_TABLE_SQL)
 
         connection.commit()
 
@@ -316,6 +349,7 @@ def insert_matches(
             row["star_rating"],
             row["beatmap_id"],
             row["map_name"],
+            row["difficulty_name"],
             row["player_team"],
             row["opponent_team"],
             row["match_id"],
@@ -352,6 +386,7 @@ def fetch_all_matches() -> list[dict[str, Any]]:
         star_rating,
         beatmap_id,
         map_name,
+        difficulty_name,
         player_team,
         opponent_team,
         match_id,
@@ -385,6 +420,7 @@ def fetch_player_matches(username: str) -> list[dict[str, Any]]:
         star_rating,
         beatmap_id,
         map_name,
+        difficulty_name,
         player_team,
         opponent_team,
         match_id,
@@ -434,9 +470,11 @@ def update_enrichment_for_map(
     map_name: str | None,
     beatmap_id: int | None,
     star_rating: float | None,
+    difficulty_name: str | None = None,
 ) -> int:
-    """Write enriched beatmap_id / star_rating back to all rows that share
-    the same (event, stage, slot, map_name) key. Returns rows updated.
+    """Write enriched beatmap_id / star_rating / difficulty_name back to
+    all rows that share the same (event, stage, slot, map_name) key.
+    Returns rows updated.
 
     Only fills NULLs — never overwrites existing values, so this is safe
     to re-run.
@@ -446,18 +484,17 @@ def update_enrichment_for_map(
     UPDATE matches
     SET
         beatmap_id = COALESCE(beatmap_id, ?),
-        star_rating = COALESCE(star_rating, ?)
+        star_rating = COALESCE(star_rating, ?),
+        difficulty_name = COALESCE(difficulty_name, ?)
     WHERE map_name IS ?
       AND (event IS ? OR (event IS NULL AND ? IS NULL))
       AND (stage IS ? OR (stage IS NULL AND ? IS NULL))
       AND (slot IS ? OR (slot IS NULL AND ? IS NULL))
     """
-    # SQLite's `IS` handles NULL equality, but we still pass NULL-safe
-    # comparisons explicitly for event/stage/slot so a NULL stage matches
-    # a NULL stage row.
     params = (
         beatmap_id,
         star_rating,
+        difficulty_name,
         map_name,
         event, event,
         stage, stage,
@@ -467,6 +504,44 @@ def update_enrichment_for_map(
         cursor = connection.execute(query, params)
         connection.commit()
         return cursor.rowcount
+
+
+# ============================================================
+# teams: team_code -> team_name lookup
+# ============================================================
+
+UPSERT_TEAM_SQL = """
+INSERT INTO teams (team_code, team_name, event, import_batch)
+VALUES (?, ?, ?, ?)
+ON CONFLICT(team_code) DO UPDATE SET
+    team_name = excluded.team_name,
+    event = COALESCE(excluded.event, teams.event),
+    import_batch = excluded.import_batch;
+"""
+
+
+def insert_or_update_teams(rows: Iterable[dict[str, Any]]) -> int:
+    init_db()
+    import_batch = _utc_now_iso()
+    values = []
+    for row in rows:
+        team_code = _clean_text(row.get("team_code"))
+        team_name = _clean_text(row.get("team_name"))
+        if not team_code or not team_name:
+            continue
+        values.append((team_code, team_name, _clean_text(row.get("event")), import_batch))
+    with get_connection() as connection:
+        connection.executemany(UPSERT_TEAM_SQL, values)
+        connection.commit()
+    return len(values)
+
+
+def fetch_team_name_map() -> dict[str, str]:
+    """Return {team_code: team_name} for UI rendering."""
+    init_db()
+    with get_connection() as connection:
+        rows = connection.execute("SELECT team_code, team_name FROM teams").fetchall()
+    return {row["team_code"]: row["team_name"] for row in rows}
 
 
 # ============================================================
@@ -605,6 +680,84 @@ def insert_tournament_matches(rows: Iterable[dict[str, Any]]) -> int:
     return len(values)
 
 
+def backfill_tournament_match_metadata(
+    *,
+    event: str | None,
+    stage: str | None,
+    team_code: str | None,
+    match_index: int | None,
+    opponent_team: str | None = None,
+    match_link: str | None = None,
+    date: str | None = None,
+    team_score: int | None = None,
+    opponent_score: int | None = None,
+) -> int:
+    """Fill in opponent_team / match_link / date on an existing
+    tournament_matches row keyed by (event, stage, team_code, match_index).
+
+    If no row exists for that key but team_score+opponent_score are provided,
+    insert a new one. Used by the manual match metadata importer.
+    Only fills NULLs via COALESCE, so re-runs are safe.
+    """
+    init_db()
+    import_batch = _utc_now_iso()
+
+    with get_connection() as connection:
+        update_sql = """
+        UPDATE tournament_matches
+        SET
+            opponent_team = COALESCE(?, opponent_team),
+            match_link    = COALESCE(?, match_link),
+            date          = COALESCE(?, date),
+            import_batch  = ?
+        WHERE (event       IS ? OR (event       IS NULL AND ? IS NULL))
+          AND (stage       IS ? OR (stage       IS NULL AND ? IS NULL))
+          AND (team_code   IS ? OR (team_code   IS NULL AND ? IS NULL))
+          AND (match_index IS ? OR (match_index IS NULL AND ? IS NULL))
+        """
+        cursor = connection.execute(
+            update_sql,
+            (
+                opponent_team,
+                match_link,
+                date,
+                import_batch,
+                event, event,
+                stage, stage,
+                team_code, team_code,
+                match_index, match_index,
+            ),
+        )
+        updated = cursor.rowcount
+
+        if updated == 0 and team_score is not None and opponent_score is not None:
+            # No existing row; insert a fresh one so manual metadata can
+            # stand alone if Team Stats never covered this match.
+            row = {
+                "event": event,
+                "stage": stage,
+                "source": "manual_metadata",
+                "team": team_code,  # fallback: team column required, use code
+                "team_code": team_code,
+                "opponent_team": opponent_team,
+                "team_score": team_score,
+                "opponent_score": opponent_score,
+                "result": (
+                    "win" if (team_score or 0) > (opponent_score or 0)
+                    else "loss" if (team_score or 0) < (opponent_score or 0)
+                    else "draw"
+                ),
+                "match_link": match_link,
+                "match_index": match_index,
+                "date": date,
+            }
+            insert_tournament_matches([row])
+            updated = 1
+
+        connection.commit()
+        return updated
+
+
 def fetch_player_tournament_matches(username: str, limit: int = 5) -> list[dict[str, Any]]:
     """Return match-level rows that involve the player's team(s).
 
@@ -623,8 +776,13 @@ def fetch_player_tournament_matches(username: str, limit: int = 5) -> list[dict[
           AND player_team IS NOT NULL
           AND TRIM(player_team) <> ''
     )
-    SELECT tm.*
+    SELECT
+        tm.*,
+        own.team_name AS team_name,
+        opp.team_name AS opponent_team_name
     FROM tournament_matches tm
+    LEFT JOIN teams own ON own.team_code = tm.team_code
+    LEFT JOIN teams opp ON opp.team_code = tm.opponent_team
     WHERE tm.team_code IN (SELECT player_team FROM player_teams)
        OR tm.team       IN (SELECT player_team FROM player_teams)
     ORDER BY tm.date DESC, tm.id DESC
