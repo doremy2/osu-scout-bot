@@ -1,0 +1,302 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "year": 2020,
+  "total": 18,
+  "quality_counts": {
+    "partial": 18
+  },
+  "status_counts": {
+    "discovered": 18
+  },
+  "manual_review_count": 18,
+  "manual_review": [
+    {
+      "tournament_key": "6d35c0dd7ea33ce50b1f",
+      "tournament_name": "ATT 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ATT/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "1752daf482c974f49171",
+      "tournament_name": "CIC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "54b750297917993d175f",
+      "tournament_name": "CMC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CMC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "e9c7db259c58d880fca4",
+      "tournament_name": "CWC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "8a679d54d34566915284",
+      "tournament_name": "ICC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ef24f958e54e3787adac",
+      "tournament_name": "IDC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/IDC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "a3858f99dca22b677acd",
+      "tournament_name": "MCNC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/MCNC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6e48838e4522a9a8158e",
+      "tournament_name": "Mirai 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/Mirai/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "00672f3efc41caaf3ee9",
+      "tournament_name": "o!mAC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!mAC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "971c1ef411073d52ee29",
+      "tournament_name": "OIT 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "9e91d212fb6505ee316f",
+      "tournament_name": "otst! 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/otst!/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "9d3a5904f8ada5023395",
+      "tournament_name": "OWC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "3453093ebc59091a90a0",
+      "tournament_name": "RDOC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RDOC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "b9bd82696056b23224bf",
+      "tournament_name": "SEAC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SEAC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ddb14c36a8f502dc94d7",
+      "tournament_name": "SOL 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SOL/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6ed6cbaae06a1d238245",
+      "tournament_name": "TSC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TSC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "b6fa299b9e8c7d32e806",
+      "tournament_name": "TWC 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2020",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "7f6ceaf67392017989d5",
+      "tournament_name": "UCUP 2020",
+      "year": 2020,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2020",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

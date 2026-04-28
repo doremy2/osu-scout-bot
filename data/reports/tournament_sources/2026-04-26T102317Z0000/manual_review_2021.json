@@ -1,0 +1,254 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "year": 2021,
+  "total": 15,
+  "quality_counts": {
+    "partial": 15
+  },
+  "status_counts": {
+    "discovered": 15
+  },
+  "manual_review_count": 15,
+  "manual_review": [
+    {
+      "tournament_key": "408a54f0c19742e0b911",
+      "tournament_name": "3WC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/3WC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "bbe89c5c1208a6a93cd3",
+      "tournament_name": "4CWC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4CWC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "0f9c124bd00b1a55a031",
+      "tournament_name": "ATT 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ATT/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "0d7f3440f339c46d3529",
+      "tournament_name": "CIC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "095d6769c100f31ec6f9",
+      "tournament_name": "CWC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "94d7f4bbe0fa4e6cddbd",
+      "tournament_name": "ICC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "4551b96f1e2a0163221c",
+      "tournament_name": "MCNC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/MCNC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6635822f01313389a46e",
+      "tournament_name": "o!ET 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!ET/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "b163ab73840b3e96086c",
+      "tournament_name": "o!RT 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "4153dde5903e64581b8b",
+      "tournament_name": "OIT 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "c00b5ecd85810eb50884",
+      "tournament_name": "OWC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "7889f0e981c21fbf474c",
+      "tournament_name": "SS 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SS/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ee03b0692b1b985ee68d",
+      "tournament_name": "TWC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "1c48657d28407d74d8b8",
+      "tournament_name": "UCUP 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2021",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "f588a8f0f512b6508a53",
+      "tournament_name": "YSC 2021",
+      "year": 2021,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/YSC/2021",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

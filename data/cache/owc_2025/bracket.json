@@ -1,0 +1,685 @@
+{
+  "event": "OWC 2025",
+  "matches": [
+    {
+      "stage": "Grand Finals",
+      "match_id": 120062857,
+      "match_link": "https://osu.ppy.sh/community/matches/120062857",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Grand Finals",
+      "match_id": 120077197,
+      "match_link": "https://osu.ppy.sh/community/matches/120077197",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Grand Finals",
+      "match_id": 120078133,
+      "match_link": "https://osu.ppy.sh/community/matches/120078133",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Grand Finals",
+      "match_id": 120078716,
+      "match_link": "https://osu.ppy.sh/community/matches/120078716",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Finals",
+      "match_id": 120006218,
+      "match_link": "https://osu.ppy.sh/community/matches/120006218",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Finals",
+      "match_id": 120008210,
+      "match_link": "https://osu.ppy.sh/community/matches/120008210",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Finals",
+      "match_id": 120015136,
+      "match_link": "https://osu.ppy.sh/community/matches/120015136",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Finals",
+      "match_id": 120020776,
+      "match_link": "https://osu.ppy.sh/community/matches/120020776",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Finals",
+      "match_id": 120021463,
+      "match_link": "https://osu.ppy.sh/community/matches/120021463",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119951823,
+      "match_link": "https://osu.ppy.sh/community/matches/119951823",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119952773,
+      "match_link": "https://osu.ppy.sh/community/matches/119952773",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119954087,
+      "match_link": "https://osu.ppy.sh/community/matches/119954087",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119954473,
+      "match_link": "https://osu.ppy.sh/community/matches/119954473",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119959585,
+      "match_link": "https://osu.ppy.sh/community/matches/119959585",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119961432,
+      "match_link": "https://osu.ppy.sh/community/matches/119961432",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119962407,
+      "match_link": "https://osu.ppy.sh/community/matches/119962407",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Semifinals",
+      "match_id": 119964626,
+      "match_link": "https://osu.ppy.sh/community/matches/119964626",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119886429,
+      "match_link": "https://osu.ppy.sh/community/matches/119886429",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119891963,
+      "match_link": "https://osu.ppy.sh/community/matches/119891963",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119893306,
+      "match_link": "https://osu.ppy.sh/community/matches/119893306",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119893254,
+      "match_link": "https://osu.ppy.sh/community/matches/119893254",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119893634,
+      "match_link": "https://osu.ppy.sh/community/matches/119893634",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119894518,
+      "match_link": "https://osu.ppy.sh/community/matches/119894518",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119894490,
+      "match_link": "https://osu.ppy.sh/community/matches/119894490",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119895668,
+      "match_link": "https://osu.ppy.sh/community/matches/119895668",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119896209,
+      "match_link": "https://osu.ppy.sh/community/matches/119896209",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119896553,
+      "match_link": "https://osu.ppy.sh/community/matches/119896553",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119902383,
+      "match_link": "https://osu.ppy.sh/community/matches/119902383",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119902659,
+      "match_link": "https://osu.ppy.sh/community/matches/119902659",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119903989,
+      "match_link": "https://osu.ppy.sh/community/matches/119903989",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119904570,
+      "match_link": "https://osu.ppy.sh/community/matches/119904570",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119904521,
+      "match_link": "https://osu.ppy.sh/community/matches/119904521",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Quarterfinals",
+      "match_id": 119906662,
+      "match_link": "https://osu.ppy.sh/community/matches/119906662",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119831812,
+      "match_link": "https://osu.ppy.sh/community/matches/119831812",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119832663,
+      "match_link": "https://osu.ppy.sh/community/matches/119832663",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119834213,
+      "match_link": "https://osu.ppy.sh/community/matches/119834213",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119834569,
+      "match_link": "https://osu.ppy.sh/community/matches/119834569",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119834573,
+      "match_link": "https://osu.ppy.sh/community/matches/119834573",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119842597,
+      "match_link": "https://osu.ppy.sh/community/matches/119842597",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119842870,
+      "match_link": "https://osu.ppy.sh/community/matches/119842870",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119842823,
+      "match_link": "https://osu.ppy.sh/community/matches/119842823",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119843765,
+      "match_link": "https://osu.ppy.sh/community/matches/119843765",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119843979,
+      "match_link": "https://osu.ppy.sh/community/matches/119843979",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119844472,
+      "match_link": "https://osu.ppy.sh/community/matches/119844472",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119845095,
+      "match_link": "https://osu.ppy.sh/community/matches/119845095",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119846505,
+      "match_link": "https://osu.ppy.sh/community/matches/119846505",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119846783,
+      "match_link": "https://osu.ppy.sh/community/matches/119846783",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119846741,
+      "match_link": "https://osu.ppy.sh/community/matches/119846741",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Round of 16",
+      "match_id": 119847337,
+      "match_link": "https://osu.ppy.sh/community/matches/119847337",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119701959,
+      "match_link": "https://osu.ppy.sh/community/matches/119701959",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119709590,
+      "match_link": "https://osu.ppy.sh/community/matches/119709590",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119710881,
+      "match_link": "https://osu.ppy.sh/community/matches/119710881",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119712013,
+      "match_link": "https://osu.ppy.sh/community/matches/119712013",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119712591,
+      "match_link": "https://osu.ppy.sh/community/matches/119712591",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119713766,
+      "match_link": "https://osu.ppy.sh/community/matches/119713766",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119714427,
+      "match_link": "https://osu.ppy.sh/community/matches/119714427",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119719487,
+      "match_link": "https://osu.ppy.sh/community/matches/119719487",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119720145,
+      "match_link": "https://osu.ppy.sh/community/matches/119720145",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119720150,
+      "match_link": "https://osu.ppy.sh/community/matches/119720150",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119720537,
+      "match_link": "https://osu.ppy.sh/community/matches/119720537",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119720519,
+      "match_link": "https://osu.ppy.sh/community/matches/119720519",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119720976,
+      "match_link": "https://osu.ppy.sh/community/matches/119720976",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119721465,
+      "match_link": "https://osu.ppy.sh/community/matches/119721465",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119722602,
+      "match_link": "https://osu.ppy.sh/community/matches/119722602",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119723171,
+      "match_link": "https://osu.ppy.sh/community/matches/119723171",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119723169,
+      "match_link": "https://osu.ppy.sh/community/matches/119723169",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119723660,
+      "match_link": "https://osu.ppy.sh/community/matches/119723660",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119723640,
+      "match_link": "https://osu.ppy.sh/community/matches/119723640",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119723675,
+      "match_link": "https://osu.ppy.sh/community/matches/119723675",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119724770,
+      "match_link": "https://osu.ppy.sh/community/matches/119724770",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119760678,
+      "match_link": "https://osu.ppy.sh/community/matches/119760678",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119768390,
+      "match_link": "https://osu.ppy.sh/community/matches/119768390",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119768679,
+      "match_link": "https://osu.ppy.sh/community/matches/119768679",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119768654,
+      "match_link": "https://osu.ppy.sh/community/matches/119768654",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119769022,
+      "match_link": "https://osu.ppy.sh/community/matches/119769022",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119769529,
+      "match_link": "https://osu.ppy.sh/community/matches/119769529",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119769816,
+      "match_link": "https://osu.ppy.sh/community/matches/119769816",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119770650,
+      "match_link": "https://osu.ppy.sh/community/matches/119770650",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119770610,
+      "match_link": "https://osu.ppy.sh/community/matches/119770610",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119771221,
+      "match_link": "https://osu.ppy.sh/community/matches/119771221",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119771215,
+      "match_link": "https://osu.ppy.sh/community/matches/119771215",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119771875,
+      "match_link": "https://osu.ppy.sh/community/matches/119771875",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119771859,
+      "match_link": "https://osu.ppy.sh/community/matches/119771859",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119779391,
+      "match_link": "https://osu.ppy.sh/community/matches/119779391",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119779688,
+      "match_link": "https://osu.ppy.sh/community/matches/119779688",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119780784,
+      "match_link": "https://osu.ppy.sh/community/matches/119780784",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119781345,
+      "match_link": "https://osu.ppy.sh/community/matches/119781345",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119781605,
+      "match_link": "https://osu.ppy.sh/community/matches/119781605",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119781933,
+      "match_link": "https://osu.ppy.sh/community/matches/119781933",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119782489,
+      "match_link": "https://osu.ppy.sh/community/matches/119782489",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119783013,
+      "match_link": "https://osu.ppy.sh/community/matches/119783013",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119783074,
+      "match_link": "https://osu.ppy.sh/community/matches/119783074",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119783601,
+      "match_link": "https://osu.ppy.sh/community/matches/119783601",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119783585,
+      "match_link": "https://osu.ppy.sh/community/matches/119783585",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119784200,
+      "match_link": "https://osu.ppy.sh/community/matches/119784200",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119784197,
+      "match_link": "https://osu.ppy.sh/community/matches/119784197",
+      "score_a": null,
+      "score_b": null
+    },
+    {
+      "stage": "Group Stage",
+      "match_id": 119784965,
+      "match_link": "https://osu.ppy.sh/community/matches/119784965",
+      "score_a": null,
+      "score_b": null
+    }
+  ],
+  "mappool": []
+}

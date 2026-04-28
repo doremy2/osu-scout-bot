@@ -1,0 +1,127 @@
+{
+  "event": "3WC 2025",
+  "matches": 62,
+  "map_scores": 1672,
+  "players": 93,
+  "mappool": 100,
+  "placement_records": 3,
+  "missing_player_placements": 93,
+  "missing_timestamps": 0,
+  "duplicate_match_links": 0,
+  "broken_player_references": 0,
+  "broken_map_references": 0,
+  "slot_inferred_rows": 0,
+  "api_errors": 0,
+  "score_mismatches": 7,
+  "skipped_beatmaps": 3,
+  "details": {
+    "api_errors": [],
+    "score_mismatches": [
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117486446",
+        "match_kind": "match",
+        "derived_score": [
+          6,
+          1
+        ],
+        "official_score": [
+          7,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 42
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117495377",
+        "match_kind": "match",
+        "derived_score": [
+          1,
+          6
+        ],
+        "official_score": [
+          1,
+          7
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 42
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117414921",
+        "match_kind": "match",
+        "derived_score": [
+          6,
+          6
+        ],
+        "official_score": [
+          6,
+          7
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 72
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117423979",
+        "match_kind": "match",
+        "derived_score": [
+          5,
+          7
+        ],
+        "official_score": [
+          4,
+          7
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 72
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117347800",
+        "match_kind": "match",
+        "derived_score": [
+          6,
+          4
+        ],
+        "official_score": [
+          7,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 59
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117354497",
+        "match_kind": "match",
+        "derived_score": [
+          7,
+          6
+        ],
+        "official_score": [
+          6,
+          7
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 77
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/117281926",
+        "match_kind": "match",
+        "derived_score": [
+          7,
+          4
+        ],
+        "official_score": [
+          6,
+          5
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 65
+      }
+    ]
+  }
+}

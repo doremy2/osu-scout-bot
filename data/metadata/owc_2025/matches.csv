@@ -1,204 +1,191 @@
 event,stage,match_index,team_code,opponent_team_code,team_score,opponent_score,result,match_link,date
-
-
-OWC 2025,Group Stage,0,NO,AT,5,0,win,,
-OWC 2025,Group Stage,1,NO,CN,2,5,loss,,
-OWC 2025,Group Stage,2,NO,TH,5,0,win,,
-OWC 2025,Group Stage,0,AT,NO,0,5,loss,,
-OWC 2025,Group Stage,1,AT,TH,5,3,win,,
-OWC 2025,Group Stage,2,AT,CN,3,5,loss,,
-OWC 2025,Group Stage,0,CN,TH,5,1,win,,
-OWC 2025,Group Stage,1,CN,NO,5,2,win,,
-OWC 2025,Group Stage,2,CN,AT,5,3,win,,
-OWC 2025,Group Stage,0,TH,CN,1,5,loss,,
-OWC 2025,Group Stage,1,TH,AT,3,5,loss,,
-OWC 2025,Group Stage,2,TH,NO,0,5,loss,,
-
-OWC 2025,Group Stage,0,NZ,ID,5,0,win,,
-OWC 2025,Group Stage,1,NZ,RO,5,3,win,,
-OWC 2025,Group Stage,2,NZ,FI,5,2,win,,
-OWC 2025,Group Stage,0,ID,NZ,0,5,loss,,
-OWC 2025,Group Stage,1,ID,FI,5,2,win,,
-OWC 2025,Group Stage,2,ID,RO,1,5,loss,,
-OWC 2025,Group Stage,0,FI,RO,5,1,win,,
-OWC 2025,Group Stage,1,FI,ID,2,5,loss,,
-OWC 2025,Group Stage,2,FI,NZ,2,5,loss,,
-OWC 2025,Group Stage,0,RO,FI,1,5,loss,,
-OWC 2025,Group Stage,1,RO,NZ,3,5,loss,,
-OWC 2025,Group Stage,2,RO,ID,5,1,win,,
-
-OWC 2025,Group Stage,0,FR,ES,5,2,win,,
-OWC 2025,Group Stage,1,FR,CL,2,5,loss,,
-OWC 2025,Group Stage,2,FR,IT,5,0,win,,
-OWC 2025,Group Stage,0,ES,FR,2,5,loss,,
-OWC 2025,Group Stage,1,ES,IT,5,0,win,,
-OWC 2025,Group Stage,2,ES,CL,5,4,win,,
-OWC 2025,Group Stage,0,CL,IT,5,0,win,,
-OWC 2025,Group Stage,1,CL,FR,5,2,win,,
-OWC 2025,Group Stage,2,CL,ES,4,5,loss,,
-OWC 2025,Group Stage,0,IT,CL,0,5,loss,,
-OWC 2025,Group Stage,1,IT,ES,0,5,loss,,
-OWC 2025,Group Stage,2,IT,FR,0,5,loss,,
-
-OWC 2025,Group Stage,0,SE,PH,5,3,win,,
-OWC 2025,Group Stage,1,SE,NL,3,5,loss,,
-OWC 2025,Group Stage,2,SE,BR,2,5,loss,,
-OWC 2025,Group Stage,0,PH,SE,3,5,loss,,
-OWC 2025,Group Stage,1,PH,BR,5,3,win,,
-OWC 2025,Group Stage,2,PH,NL,5,1,win,,
-OWC 2025,Group Stage,0,BR,NL,5,2,win,,
-OWC 2025,Group Stage,1,BR,PH,3,5,loss,,
-OWC 2025,Group Stage,2,BR,SE,5,2,win,,
-OWC 2025,Group Stage,0,NL,BR,2,5,loss,,
-OWC 2025,Group Stage,1,NL,SE,5,3,win,,
-OWC 2025,Group Stage,2,NL,PH,1,5,loss,,
-
-OWC 2025,Group Stage,0,MY,VN,5,3,win,,
-OWC 2025,Group Stage,1,MY,DK,5,1,win,,
-OWC 2025,Group Stage,2,MY,TW,1,5,loss,,
-OWC 2025,Group Stage,0,VN,MY,3,5,loss,,
-OWC 2025,Group Stage,1,VN,TW,1,5,loss,,
-OWC 2025,Group Stage,2,VN,DK,5,3,win,,
-OWC 2025,Group Stage,0,TW,DK,5,0,win,,
-OWC 2025,Group Stage,1,TW,VN,5,1,win,,
-OWC 2025,Group Stage,2,TW,MY,5,1,win,,
-OWC 2025,Group Stage,0,DK,TW,0,5,loss,,
-OWC 2025,Group Stage,1,DK,MY,1,5,loss,,
-OWC 2025,Group Stage,2,DK,VN,3,5,loss,,
-
-OWC 2025,Group Stage,0,AR,UY,5,4,win,,
-OWC 2025,Group Stage,1,AR,TR,1,5,loss,,
-OWC 2025,Group Stage,2,AR,BE,5,2,win,,
-OWC 2025,Group Stage,0,UY,AR,4,5,loss,,
-OWC 2025,Group Stage,1,UY,BE,4,5,loss,,
-OWC 2025,Group Stage,2,UY,TR,1,5,loss,,
-OWC 2025,Group Stage,0,TR,BE,5,1,win,,
-OWC 2025,Group Stage,1,TR,AR,5,1,win,,
-OWC 2025,Group Stage,2,TR,UY,5,1,win,,
-OWC 2025,Group Stage,0,BE,TR,1,5,loss,,
-OWC 2025,Group Stage,1,BE,UY,5,4,win,,
-OWC 2025,Group Stage,2,BE,AR,2,5,loss,,
-
-OWC 2025,Group Stage,0,PT,UA,5,3,win,,
-OWC 2025,Group Stage,1,PT,PE,3,5,loss,,
-OWC 2025,Group Stage,2,PT,KZ,3,5,loss,,
-OWC 2025,Group Stage,0,UA,PT,3,5,loss,,
-OWC 2025,Group Stage,1,UA,KZ,0,5,loss,,
-OWC 2025,Group Stage,2,UA,PE,2,5,loss,,
-OWC 2025,Group Stage,0,KZ,PE,5,1,win,,
-OWC 2025,Group Stage,1,KZ,UA,5,0,win,,
-OWC 2025,Group Stage,2,KZ,PT,5,3,win,,
-OWC 2025,Group Stage,0,PE,KZ,1,5,loss,,
-OWC 2025,Group Stage,1,PE,PT,5,3,win,,
-OWC 2025,Group Stage,2,PE,UA,5,2,win,,
-
-OWC 2025,Group Stage,0,SG,GR,5,2,win,,
-OWC 2025,Group Stage,1,SG,JP,3,5,loss,,
-OWC 2025,Group Stage,2,SG,HK,5,4,win,,
-OWC 2025,Group Stage,0,GR,SG,2,5,loss,,
-OWC 2025,Group Stage,1,GR,HK,4,5,loss,,
-OWC 2025,Group Stage,2,GR,JP,1,5,loss,,
-OWC 2025,Group Stage,0,JP,HK,5,2,win,,
-OWC 2025,Group Stage,1,JP,SG,5,3,win,,
-OWC 2025,Group Stage,2,JP,GR,5,1,win,,
-OWC 2025,Group Stage,0,HK,JP,2,5,loss,,
-OWC 2025,Group Stage,1,HK,GR,5,4,win,,
-OWC 2025,Group Stage,2,HK,SG,4,5,loss,,
-
-OWC 2025,Round of 16,0,AR,ES,0,6,loss,,
-OWC 2025,Round of 16,0,AT,SG,5,1,win,,
-OWC 2025,Round of 16,0,AU,RO,5,0,win,,
-OWC 2025,Round of 16,0,BR,DE,1,5,loss,,
-OWC 2025,Round of 16,0,CA,NO,5,0,win,,
-OWC 2025,Round of 16,0,CL,KR,0,5,loss,,
-OWC 2025,Round of 16,0,CN,RU,5,3,win,,
-OWC 2025,Round of 16,0,DE,BR,5,1,win,,
-OWC 2025,Round of 16,0,ES,AR,6,0,win,,
-OWC 2025,Round of 16,0,FI,PE,5,1,win,,
-OWC 2025,Round of 16,0,FR,US,2,5,loss,,
-OWC 2025,Round of 16,0,GB,NZ,5,3,win,,
-OWC 2025,Round of 16,0,ID,KZ,5,2,win,,
-OWC 2025,Round of 16,0,IT,TR,3,5,loss,,
-OWC 2025,Round of 16,0,JP,TH,5,4,win,,
-OWC 2025,Round of 16,0,KR,CL,5,0,win,,
-OWC 2025,Round of 16,0,KZ,ID,2,5,loss,,
-OWC 2025,Round of 16,0,MY,SE,3,5,loss,,
-OWC 2025,Round of 16,0,NL,TW,0,5,loss,,
-OWC 2025,Round of 16,0,NO,CA,0,5,loss,,
-OWC 2025,Round of 16,0,NZ,GB,3,5,loss,,
-OWC 2025,Round of 16,0,PE,FI,1,5,loss,,
-OWC 2025,Round of 16,0,PH,PL,1,5,loss,,
-OWC 2025,Round of 16,0,PL,PH,5,1,win,,
-OWC 2025,Round of 16,0,RO,AU,0,5,loss,,
-OWC 2025,Round of 16,0,RU,CN,3,5,loss,,
-OWC 2025,Round of 16,0,SE,MY,5,3,win,,
-OWC 2025,Round of 16,0,SG,AT,1,5,loss,,
-OWC 2025,Round of 16,0,TH,JP,4,5,loss,,
-OWC 2025,Round of 16,0,TR,IT,5,3,win,,
-OWC 2025,Round of 16,0,TW,NL,5,0,win,,
-OWC 2025,Round of 16,0,US,FR,5,2,win,,
-
-OWC 2025,Quarterfinals,0,AT,PL,1,6,loss,,
-OWC 2025,Quarterfinals,0,AU,KR,6,2,win,,
-OWC 2025,Quarterfinals,0,BR,FI,6,4,win,,
-OWC 2025,Quarterfinals,1,BR,NO,3,6,loss,,
-OWC 2025,Quarterfinals,0,CA,DE,6,3,win,,
-OWC 2025,Quarterfinals,0,CL,ID,6,1,win,,
-OWC 2025,Quarterfinals,1,CL,TW,6,2,win,,
-OWC 2025,Quarterfinals,0,CN,FR,1,6,loss,,
-OWC 2025,Quarterfinals,0,DE,CA,3,6,loss,,
-OWC 2025,Quarterfinals,0,ES,RU,2,6,loss,,
-OWC 2025,Quarterfinals,0,FI,BR,4,6,loss,,
-OWC 2025,Quarterfinals,0,FR,CN,6,1,win,,
-OWC 2025,Quarterfinals,1,FR,NZ,3,6,loss,,
-OWC 2025,Quarterfinals,0,GB,US,0,6,loss,,
-OWC 2025,Quarterfinals,0,ID,CL,1,6,loss,,
-OWC 2025,Quarterfinals,0,JP,PH,1,6,loss,,
-OWC 2025,Quarterfinals,0,KR,AU,2,6,loss,,
-OWC 2025,Quarterfinals,0,NO,TR,6,2,win,,
-OWC 2025,Quarterfinals,1,NO,BR,6,3,win,,
-OWC 2025,Quarterfinals,0,NZ,SE,6,1,win,,
-OWC 2025,Quarterfinals,1,NZ,FR,6,3,win,,
-OWC 2025,Quarterfinals,0,PH,JP,6,1,win,,
-OWC 2025,Quarterfinals,1,PH,RU,3,6,loss,,
-OWC 2025,Quarterfinals,0,PL,AT,6,1,win,,
-OWC 2025,Quarterfinals,0,RO,TW,5,6,loss,,
-OWC 2025,Quarterfinals,0,RU,ES,6,2,win,,
-OWC 2025,Quarterfinals,1,RU,PH,6,3,win,,
-OWC 2025,Quarterfinals,0,SE,NZ,1,6,loss,,
-OWC 2025,Quarterfinals,0,TR,NO,2,6,loss,,
-OWC 2025,Quarterfinals,0,TW,CL,2,6,loss,,
-OWC 2025,Quarterfinals,1,TW,RO,6,5,win,,
-OWC 2025,Quarterfinals,0,US,GB,6,0,win,,
-
-OWC 2025,Semifinals,0,AU,US,0,6,loss,,
-OWC 2025,Semifinals,0,CA,KR,1,6,loss,,
-OWC 2025,Semifinals,0,CL,DE,2,6,loss,,
-OWC 2025,Semifinals,0,CN,NZ,3,6,loss,,
-OWC 2025,Semifinals,0,DE,CL,6,2,win,,
-OWC 2025,Semifinals,1,DE,NZ,6,4,win,,
-OWC 2025,Semifinals,0,GB,RU,3,6,loss,,
-OWC 2025,Semifinals,0,KR,CA,6,1,win,,
-OWC 2025,Semifinals,1,KR,RU,6,1,win,,
-OWC 2025,Semifinals,0,NO,PL,1,6,loss,,
-OWC 2025,Semifinals,0,NZ,CN,6,3,win,,
-OWC 2025,Semifinals,1,NZ,DE,4,6,loss,,
-OWC 2025,Semifinals,0,PL,NO,6,1,win,,
-OWC 2025,Semifinals,0,RU,GB,6,3,win,,
-OWC 2025,Semifinals,1,RU,KR,1,6,loss,,
-
-OWC 2025,Finals,0,AU,DE,7,2,win,,
-OWC 2025,Finals,1,AU,CA,7,3,win,,
-OWC 2025,Finals,0,CA,KR,7,4,win,,
-OWC 2025,Finals,1,CA,AU,3,7,loss,,
-OWC 2025,Finals,0,DE,AU,2,7,loss,,
-OWC 2025,Finals,0,KR,CA,4,7,loss,,
-OWC 2025,Finals,0,PL,US,7,6,win,,
-OWC 2025,Finals,0,US,PL,6,7,loss,,
-
-OWC 2025,Grand Finals,0,AU,US,6,7,loss,,
-OWC 2025,Grand Finals,0,PL,US,1,7,loss,,
-OWC 2025,Grand Finals,1,PL,US,7,3,win,,
-OWC 2025,Grand Finals,0,US,AU,7,6,win,,
-OWC 2025,Grand Finals,1,US,PL,3,7,loss,,
-OWC 2025,Grand Finals,2,US,PL,7,1,win,,
+OWC 2025,Group Stage,0,VN,MY,3,5,loss,https://osu.ppy.sh/community/matches/119701959,2025-10-31
+OWC 2025,Group Stage,0,MY,VN,5,3,win,https://osu.ppy.sh/community/matches/119701959,2025-10-31
+OWC 2025,Group Stage,0,NZ,FI,5,2,win,https://osu.ppy.sh/community/matches/119709590,2025-11-01
+OWC 2025,Group Stage,0,FI,NZ,2,5,loss,https://osu.ppy.sh/community/matches/119709590,2025-11-01
+OWC 2025,Group Stage,0,TW,VN,5,1,win,https://osu.ppy.sh/community/matches/119710881,2025-11-01
+OWC 2025,Group Stage,1,VN,TW,1,5,loss,https://osu.ppy.sh/community/matches/119710881,2025-11-01
+OWC 2025,Group Stage,0,AR,BE,5,2,win,https://osu.ppy.sh/community/matches/119712013,2025-11-01
+OWC 2025,Group Stage,0,BE,AR,2,5,loss,https://osu.ppy.sh/community/matches/119712013,2025-11-01
+OWC 2025,Group Stage,0,FR,IT,5,0,win,https://osu.ppy.sh/community/matches/119712591,2025-11-01
+OWC 2025,Group Stage,0,IT,FR,0,5,loss,https://osu.ppy.sh/community/matches/119712591,2025-11-01
+OWC 2025,Group Stage,0,CL,ES,4,5,loss,https://osu.ppy.sh/community/matches/119713766,2025-11-01
+OWC 2025,Group Stage,0,ES,CL,5,4,win,https://osu.ppy.sh/community/matches/119713766,2025-11-01
+OWC 2025,Group Stage,0,BR,SE,5,2,win,https://osu.ppy.sh/community/matches/119714427,2025-11-01
+OWC 2025,Group Stage,0,SE,BR,2,5,loss,https://osu.ppy.sh/community/matches/119714427,2025-11-01
+OWC 2025,Group Stage,0,JP,GR,5,1,win,https://osu.ppy.sh/community/matches/119719487,2025-11-02
+OWC 2025,Group Stage,0,GR,JP,1,5,loss,https://osu.ppy.sh/community/matches/119719487,2025-11-02
+OWC 2025,Group Stage,0,CN,TH,5,1,win,https://osu.ppy.sh/community/matches/119720145,2025-11-02
+OWC 2025,Group Stage,0,TH,CN,1,5,loss,https://osu.ppy.sh/community/matches/119720145,2025-11-02
+OWC 2025,Group Stage,0,PH,NL,5,1,win,https://osu.ppy.sh/community/matches/119720150,2025-11-02
+OWC 2025,Group Stage,0,NL,PH,1,5,loss,https://osu.ppy.sh/community/matches/119720150,2025-11-02
+OWC 2025,Group Stage,0,ID,FI,5,2,win,https://osu.ppy.sh/community/matches/119720537,2025-11-02
+OWC 2025,Group Stage,1,FI,ID,2,5,loss,https://osu.ppy.sh/community/matches/119720537,2025-11-02
+OWC 2025,Group Stage,1,TW,DK,5,0,win,https://osu.ppy.sh/community/matches/119720519,2025-11-02
+OWC 2025,Group Stage,0,DK,TW,0,5,loss,https://osu.ppy.sh/community/matches/119720519,2025-11-02
+OWC 2025,Group Stage,1,MY,DK,5,1,win,https://osu.ppy.sh/community/matches/119720976,2025-11-02
+OWC 2025,Group Stage,1,DK,MY,1,5,loss,https://osu.ppy.sh/community/matches/119720976,2025-11-02
+OWC 2025,Group Stage,0,SG,HK,5,4,win,https://osu.ppy.sh/community/matches/119721465,2025-11-02
+OWC 2025,Group Stage,0,HK,SG,4,5,loss,https://osu.ppy.sh/community/matches/119721465,2025-11-02
+OWC 2025,Group Stage,1,ES,IT,4,1,win,https://osu.ppy.sh/community/matches/119722602,2025-11-02
+OWC 2025,Group Stage,1,IT,ES,1,4,loss,https://osu.ppy.sh/community/matches/119722602,2025-11-02
+OWC 2025,Group Stage,0,TR,BE,5,1,win,https://osu.ppy.sh/community/matches/119723169,2025-11-02
+OWC 2025,Group Stage,1,BE,TR,1,5,loss,https://osu.ppy.sh/community/matches/119723169,2025-11-02
+OWC 2025,Group Stage,1,CL,FR,5,2,win,https://osu.ppy.sh/community/matches/119723171,2025-11-02
+OWC 2025,Group Stage,1,FR,CL,2,5,loss,https://osu.ppy.sh/community/matches/119723171,2025-11-02
+OWC 2025,Group Stage,2,CL,IT,5,0,win,https://osu.ppy.sh/community/matches/119723660,2025-11-02
+OWC 2025,Group Stage,2,IT,CL,0,5,loss,https://osu.ppy.sh/community/matches/119723660,2025-11-02
+OWC 2025,Group Stage,1,BR,NL,5,2,win,https://osu.ppy.sh/community/matches/119723640,2025-11-02
+OWC 2025,Group Stage,1,NL,BR,2,5,loss,https://osu.ppy.sh/community/matches/119723640,2025-11-02
+OWC 2025,Group Stage,0,UA,PT,3,5,loss,https://osu.ppy.sh/community/matches/119723675,2025-11-02
+OWC 2025,Group Stage,0,PT,UA,5,3,win,https://osu.ppy.sh/community/matches/119723675,2025-11-02
+OWC 2025,Group Stage,1,PT,PE,3,5,loss,https://osu.ppy.sh/community/matches/119724770,2025-11-02
+OWC 2025,Group Stage,0,PE,PT,5,3,win,https://osu.ppy.sh/community/matches/119724770,2025-11-02
+OWC 2025,Group Stage,2,VN,DK,5,4,win,https://osu.ppy.sh/community/matches/119760678,2025-11-07
+OWC 2025,Group Stage,2,DK,VN,4,5,loss,https://osu.ppy.sh/community/matches/119760678,2025-11-07
+OWC 2025,Group Stage,0,NO,AT,5,0,win,https://osu.ppy.sh/community/matches/119768390,2025-11-08
+OWC 2025,Group Stage,0,AT,NO,0,5,loss,https://osu.ppy.sh/community/matches/119768390,2025-11-08
+OWC 2025,Group Stage,1,NO,TH,5,0,win,https://osu.ppy.sh/community/matches/119768679,2025-11-08
+OWC 2025,Group Stage,1,TH,NO,0,5,loss,https://osu.ppy.sh/community/matches/119768679,2025-11-08
+OWC 2025,Group Stage,1,NZ,ID,5,0,win,https://osu.ppy.sh/community/matches/119768654,2025-11-08
+OWC 2025,Group Stage,1,ID,NZ,0,5,loss,https://osu.ppy.sh/community/matches/119768654,2025-11-08
+OWC 2025,Group Stage,1,CN,AT,5,3,win,https://osu.ppy.sh/community/matches/119769022,2025-11-08
+OWC 2025,Group Stage,1,AT,CN,3,5,loss,https://osu.ppy.sh/community/matches/119769022,2025-11-08
+OWC 2025,Group Stage,2,CN,NO,5,2,win,https://osu.ppy.sh/community/matches/119769529,2025-11-08
+OWC 2025,Group Stage,2,NO,CN,2,5,loss,https://osu.ppy.sh/community/matches/119769529,2025-11-08
+OWC 2025,Group Stage,1,JP,HK,5,2,win,https://osu.ppy.sh/community/matches/119769816,2025-11-08
+OWC 2025,Group Stage,1,HK,JP,2,5,loss,https://osu.ppy.sh/community/matches/119769816,2025-11-08
+OWC 2025,Group Stage,2,JP,SG,5,3,win,https://osu.ppy.sh/community/matches/119770610,2025-11-08
+OWC 2025,Group Stage,1,SG,JP,3,5,loss,https://osu.ppy.sh/community/matches/119770610,2025-11-08
+OWC 2025,Group Stage,2,TW,MY,5,1,win,https://osu.ppy.sh/community/matches/119770650,2025-11-08
+OWC 2025,Group Stage,2,MY,TW,1,5,loss,https://osu.ppy.sh/community/matches/119770650,2025-11-08
+OWC 2025,Group Stage,0,KZ,PT,5,3,win,https://osu.ppy.sh/community/matches/119771215,2025-11-08
+OWC 2025,Group Stage,2,PT,KZ,3,5,loss,https://osu.ppy.sh/community/matches/119771215,2025-11-08
+OWC 2025,Group Stage,2,BR,PH,3,5,loss,https://osu.ppy.sh/community/matches/119771221,2025-11-08
+OWC 2025,Group Stage,1,PH,BR,5,3,win,https://osu.ppy.sh/community/matches/119771221,2025-11-08
+OWC 2025,Group Stage,1,TR,UY,5,1,win,https://osu.ppy.sh/community/matches/119771859,2025-11-08
+OWC 2025,Group Stage,0,UY,TR,1,5,loss,https://osu.ppy.sh/community/matches/119771859,2025-11-08
+OWC 2025,Group Stage,0,RO,FI,1,5,loss,https://osu.ppy.sh/community/matches/119771875,2025-11-08
+OWC 2025,Group Stage,2,FI,RO,5,1,win,https://osu.ppy.sh/community/matches/119771875,2025-11-08
+OWC 2025,Group Stage,2,SG,GR,5,2,win,https://osu.ppy.sh/community/matches/119779391,2025-11-09
+OWC 2025,Group Stage,1,GR,SG,2,5,loss,https://osu.ppy.sh/community/matches/119779391,2025-11-09
+OWC 2025,Group Stage,1,RO,NZ,3,5,loss,https://osu.ppy.sh/community/matches/119779688,2025-11-09
+OWC 2025,Group Stage,2,NZ,RO,5,3,win,https://osu.ppy.sh/community/matches/119779688,2025-11-09
+OWC 2025,Group Stage,2,AT,TH,6,2,win,https://osu.ppy.sh/community/matches/119780784,2025-11-09
+OWC 2025,Group Stage,2,TH,AT,2,6,loss,https://osu.ppy.sh/community/matches/119780784,2025-11-09
+OWC 2025,Group Stage,2,GR,HK,4,5,loss,https://osu.ppy.sh/community/matches/119781345,2025-11-09
+OWC 2025,Group Stage,2,HK,GR,5,4,win,https://osu.ppy.sh/community/matches/119781345,2025-11-09
+OWC 2025,Group Stage,2,RO,ID,5,1,win,https://osu.ppy.sh/community/matches/119781605,2025-11-09
+OWC 2025,Group Stage,2,ID,RO,1,5,loss,https://osu.ppy.sh/community/matches/119781605,2025-11-09
+OWC 2025,Group Stage,2,PH,SE,3,5,loss,https://osu.ppy.sh/community/matches/119781933,2025-11-09
+OWC 2025,Group Stage,1,SE,PH,5,3,win,https://osu.ppy.sh/community/matches/119781933,2025-11-09
+OWC 2025,Group Stage,1,KZ,PE,5,1,win,https://osu.ppy.sh/community/matches/119782489,2025-11-09
+OWC 2025,Group Stage,1,PE,KZ,1,5,loss,https://osu.ppy.sh/community/matches/119782489,2025-11-09
+OWC 2025,Group Stage,1,UY,BE,4,5,loss,https://osu.ppy.sh/community/matches/119783013,2025-11-09
+OWC 2025,Group Stage,2,BE,UY,5,4,win,https://osu.ppy.sh/community/matches/119783013,2025-11-09
+OWC 2025,Group Stage,2,KZ,UA,5,0,win,https://osu.ppy.sh/community/matches/119783074,2025-11-09
+OWC 2025,Group Stage,1,UA,KZ,0,5,loss,https://osu.ppy.sh/community/matches/119783074,2025-11-09
+OWC 2025,Group Stage,2,FR,ES,5,2,win,https://osu.ppy.sh/community/matches/119783601,2025-11-09
+OWC 2025,Group Stage,2,ES,FR,2,5,loss,https://osu.ppy.sh/community/matches/119783601,2025-11-09
+OWC 2025,Group Stage,2,TR,AR,5,1,win,https://osu.ppy.sh/community/matches/119783585,2025-11-09
+OWC 2025,Group Stage,1,AR,TR,1,5,loss,https://osu.ppy.sh/community/matches/119783585,2025-11-09
+OWC 2025,Group Stage,2,SE,NL,3,5,loss,https://osu.ppy.sh/community/matches/119784200,2025-11-09
+OWC 2025,Group Stage,2,NL,SE,5,3,win,https://osu.ppy.sh/community/matches/119784200,2025-11-09
+OWC 2025,Group Stage,2,AR,UY,5,4,win,https://osu.ppy.sh/community/matches/119784197,2025-11-09
+OWC 2025,Group Stage,2,UY,AR,4,5,loss,https://osu.ppy.sh/community/matches/119784197,2025-11-09
+OWC 2025,Group Stage,2,UA,PE,2,5,loss,https://osu.ppy.sh/community/matches/119784965,2025-11-09
+OWC 2025,Group Stage,2,PE,UA,5,2,win,https://osu.ppy.sh/community/matches/119784965,2025-11-09
+OWC 2025,Round of 16,0,AU,RO,5,0,win,https://osu.ppy.sh/community/matches/119831812,2025-11-15
+OWC 2025,Round of 16,0,RO,AU,0,5,loss,https://osu.ppy.sh/community/matches/119831812,2025-11-15
+OWC 2025,Round of 16,0,PL,PH,5,1,win,https://osu.ppy.sh/community/matches/119832663,2025-11-15
+OWC 2025,Round of 16,0,PH,PL,1,5,loss,https://osu.ppy.sh/community/matches/119832663,2025-11-15
+OWC 2025,Round of 16,0,IT,TR,3,5,loss,https://osu.ppy.sh/community/matches/119834213,2025-11-15
+OWC 2025,Round of 16,0,TR,IT,5,3,win,https://osu.ppy.sh/community/matches/119834213,2025-11-15
+OWC 2025,Round of 16,0,CA,NO,5,0,win,https://osu.ppy.sh/community/matches/119834569,2025-11-15
+OWC 2025,Round of 16,0,NO,CA,0,5,loss,https://osu.ppy.sh/community/matches/119834569,2025-11-15
+OWC 2025,Round of 16,0,KR,CL,5,0,win,https://osu.ppy.sh/community/matches/119834573,2025-11-15
+OWC 2025,Round of 16,0,CL,KR,0,5,loss,https://osu.ppy.sh/community/matches/119834573,2025-11-15
+OWC 2025,Round of 16,0,NL,TW,0,5,loss,https://osu.ppy.sh/community/matches/119842597,2025-11-16
+OWC 2025,Round of 16,0,TW,NL,5,0,win,https://osu.ppy.sh/community/matches/119842597,2025-11-16
+OWC 2025,Round of 16,0,TH,JP,4,5,loss,https://osu.ppy.sh/community/matches/119842823,2025-11-16
+OWC 2025,Round of 16,0,JP,TH,5,4,win,https://osu.ppy.sh/community/matches/119842823,2025-11-16
+OWC 2025,Round of 16,0,GB,NZ,5,3,win,https://osu.ppy.sh/community/matches/119842870,2025-11-16
+OWC 2025,Round of 16,0,NZ,GB,3,5,loss,https://osu.ppy.sh/community/matches/119842870,2025-11-16
+OWC 2025,Round of 16,0,RU,CN,3,5,loss,https://osu.ppy.sh/community/matches/119843765,2025-11-16
+OWC 2025,Round of 16,0,CN,RU,5,3,win,https://osu.ppy.sh/community/matches/119843765,2025-11-16
+OWC 2025,Round of 16,0,ID,KZ,5,2,win,https://osu.ppy.sh/community/matches/119843979,2025-11-16
+OWC 2025,Round of 16,0,KZ,ID,2,5,loss,https://osu.ppy.sh/community/matches/119843979,2025-11-16
+OWC 2025,Round of 16,0,AT,SG,5,2,win,https://osu.ppy.sh/community/matches/119844472,2025-11-16
+OWC 2025,Round of 16,0,SG,AT,2,5,loss,https://osu.ppy.sh/community/matches/119844472,2025-11-16
+OWC 2025,Round of 16,0,SE,MY,5,3,win,https://osu.ppy.sh/community/matches/119845095,2025-11-16
+OWC 2025,Round of 16,0,MY,SE,3,5,loss,https://osu.ppy.sh/community/matches/119845095,2025-11-16
+OWC 2025,Round of 16,0,FI,PE,5,1,win,https://osu.ppy.sh/community/matches/119846505,2025-11-16
+OWC 2025,Round of 16,0,PE,FI,1,5,loss,https://osu.ppy.sh/community/matches/119846505,2025-11-16
+OWC 2025,Round of 16,0,ES,AR,6,0,win,https://osu.ppy.sh/community/matches/119846741,2025-11-16
+OWC 2025,Round of 16,0,AR,ES,0,6,loss,https://osu.ppy.sh/community/matches/119846741,2025-11-16
+OWC 2025,Round of 16,0,US,FR,5,2,win,https://osu.ppy.sh/community/matches/119846783,2025-11-16
+OWC 2025,Round of 16,0,FR,US,2,5,loss,https://osu.ppy.sh/community/matches/119846783,2025-11-16
+OWC 2025,Round of 16,0,DE,BR,5,1,win,https://osu.ppy.sh/community/matches/119847337,2025-11-16
+OWC 2025,Round of 16,0,BR,DE,1,5,loss,https://osu.ppy.sh/community/matches/119847337,2025-11-16
+OWC 2025,Quarterfinals,0,RU,ES,6,2,win,https://osu.ppy.sh/community/matches/119886429,2025-11-21
+OWC 2025,Quarterfinals,0,ES,RU,2,6,loss,https://osu.ppy.sh/community/matches/119886429,2025-11-21
+OWC 2025,Quarterfinals,0,NZ,SE,6,1,win,https://osu.ppy.sh/community/matches/119891963,2025-11-22
+OWC 2025,Quarterfinals,0,SE,NZ,1,6,loss,https://osu.ppy.sh/community/matches/119891963,2025-11-22
+OWC 2025,Quarterfinals,0,FR,JP,6,1,win,https://osu.ppy.sh/community/matches/119893254,2025-11-22
+OWC 2025,Quarterfinals,0,JP,FR,1,6,loss,https://osu.ppy.sh/community/matches/119893254,2025-11-22
+OWC 2025,Quarterfinals,0,RO,TW,5,6,loss,https://osu.ppy.sh/community/matches/119893306,2025-11-22
+OWC 2025,Quarterfinals,0,TW,RO,6,5,win,https://osu.ppy.sh/community/matches/119893306,2025-11-22
+OWC 2025,Quarterfinals,0,PH,ID,6,1,win,https://osu.ppy.sh/community/matches/119893634,2025-11-22
+OWC 2025,Quarterfinals,0,ID,PH,1,6,loss,https://osu.ppy.sh/community/matches/119893634,2025-11-22
+OWC 2025,Quarterfinals,0,NO,TR,6,2,win,https://osu.ppy.sh/community/matches/119894490,2025-11-22
+OWC 2025,Quarterfinals,0,TR,NO,2,6,loss,https://osu.ppy.sh/community/matches/119894490,2025-11-22
+OWC 2025,Quarterfinals,0,BR,FI,6,4,win,https://osu.ppy.sh/community/matches/119894518,2025-11-22
+OWC 2025,Quarterfinals,0,FI,BR,4,6,loss,https://osu.ppy.sh/community/matches/119894518,2025-11-22
+OWC 2025,Quarterfinals,0,CA,DE,6,3,win,https://osu.ppy.sh/community/matches/119895668,2025-11-22
+OWC 2025,Quarterfinals,0,DE,CA,3,6,loss,https://osu.ppy.sh/community/matches/119895668,2025-11-22
+OWC 2025,Quarterfinals,0,CL,AT,6,1,win,https://osu.ppy.sh/community/matches/119896209,2025-11-22
+OWC 2025,Quarterfinals,0,AT,CL,1,6,loss,https://osu.ppy.sh/community/matches/119896209,2025-11-22
+OWC 2025,Quarterfinals,0,US,GB,6,0,win,https://osu.ppy.sh/community/matches/119896553,2025-11-22
+OWC 2025,Quarterfinals,0,GB,US,0,6,loss,https://osu.ppy.sh/community/matches/119896553,2025-11-22
+OWC 2025,Quarterfinals,0,AU,KR,6,2,win,https://osu.ppy.sh/community/matches/119902383,2025-11-23
+OWC 2025,Quarterfinals,0,KR,AU,2,6,loss,https://osu.ppy.sh/community/matches/119902383,2025-11-23
+OWC 2025,Quarterfinals,1,FR,NZ,4,6,loss,https://osu.ppy.sh/community/matches/119902659,2025-11-23
+OWC 2025,Quarterfinals,1,NZ,FR,6,4,win,https://osu.ppy.sh/community/matches/119902659,2025-11-23
+OWC 2025,Quarterfinals,0,PL,CN,6,1,win,https://osu.ppy.sh/community/matches/119903989,2025-11-23
+OWC 2025,Quarterfinals,0,CN,PL,1,6,loss,https://osu.ppy.sh/community/matches/119903989,2025-11-23
+OWC 2025,Quarterfinals,1,TW,CL,2,6,loss,https://osu.ppy.sh/community/matches/119904570,2025-11-23
+OWC 2025,Quarterfinals,1,CL,TW,6,2,win,https://osu.ppy.sh/community/matches/119904570,2025-11-23
+OWC 2025,Quarterfinals,1,PH,RU,3,6,loss,https://osu.ppy.sh/community/matches/119904521,2025-11-23
+OWC 2025,Quarterfinals,1,RU,PH,6,3,win,https://osu.ppy.sh/community/matches/119904521,2025-11-23
+OWC 2025,Quarterfinals,1,NO,BR,6,3,win,https://osu.ppy.sh/community/matches/119906662,2025-11-23
+OWC 2025,Quarterfinals,1,BR,NO,3,6,loss,https://osu.ppy.sh/community/matches/119906662,2025-11-23
+OWC 2025,Semifinals,0,CN,NZ,3,6,loss,https://osu.ppy.sh/community/matches/119951823,2025-11-29
+OWC 2025,Semifinals,0,NZ,CN,6,3,win,https://osu.ppy.sh/community/matches/119951823,2025-11-29
+OWC 2025,Semifinals,0,KR,NO,6,1,win,https://osu.ppy.sh/community/matches/119952773,2025-11-29
+OWC 2025,Semifinals,0,NO,KR,1,6,loss,https://osu.ppy.sh/community/matches/119952773,2025-11-29
+OWC 2025,Semifinals,0,DE,CL,6,2,win,https://osu.ppy.sh/community/matches/119954087,2025-11-29
+OWC 2025,Semifinals,0,CL,DE,2,6,loss,https://osu.ppy.sh/community/matches/119954087,2025-11-29
+OWC 2025,Semifinals,0,GB,RU,3,6,loss,https://osu.ppy.sh/community/matches/119954473,2025-11-29
+OWC 2025,Semifinals,0,RU,GB,6,3,win,https://osu.ppy.sh/community/matches/119954473,2025-11-29
+OWC 2025,Semifinals,0,US,AU,6,0,win,https://osu.ppy.sh/community/matches/119959585,2025-11-30
+OWC 2025,Semifinals,0,AU,US,0,6,loss,https://osu.ppy.sh/community/matches/119959585,2025-11-30
+OWC 2025,Semifinals,1,DE,NZ,6,4,win,https://osu.ppy.sh/community/matches/119961432,2025-11-30
+OWC 2025,Semifinals,1,NZ,DE,4,6,loss,https://osu.ppy.sh/community/matches/119961432,2025-11-30
+OWC 2025,Semifinals,1,KR,RU,6,1,win,https://osu.ppy.sh/community/matches/119962407,2025-11-30
+OWC 2025,Semifinals,1,RU,KR,1,6,loss,https://osu.ppy.sh/community/matches/119962407,2025-11-30
+OWC 2025,Semifinals,0,PL,CA,6,1,win,https://osu.ppy.sh/community/matches/119964626,2025-11-30
+OWC 2025,Semifinals,0,CA,PL,1,6,loss,https://osu.ppy.sh/community/matches/119964626,2025-11-30
+OWC 2025,Finals,0,CA,KR,7,4,win,https://osu.ppy.sh/community/matches/120006218,2025-12-06
+OWC 2025,Finals,0,KR,CA,4,7,loss,https://osu.ppy.sh/community/matches/120006218,2025-12-06
+OWC 2025,Finals,0,AU,DE,7,2,win,https://osu.ppy.sh/community/matches/120008210,2025-12-06
+OWC 2025,Finals,0,DE,AU,2,7,loss,https://osu.ppy.sh/community/matches/120008210,2025-12-06
+OWC 2025,Finals,1,AU,CA,7,4,win,https://osu.ppy.sh/community/matches/120015136,2025-12-07
+OWC 2025,Finals,1,CA,AU,4,7,loss,https://osu.ppy.sh/community/matches/120015136,2025-12-07
+OWC 2025,Finals,0,PL,US,7,6,win,https://osu.ppy.sh/community/matches/120021463,2025-12-07
+OWC 2025,Finals,0,US,PL,6,7,loss,https://osu.ppy.sh/community/matches/120021463,2025-12-07
+OWC 2025,Grand Finals,0,US,AU,7,6,win,https://osu.ppy.sh/community/matches/120062857,2025-12-13
+OWC 2025,Grand Finals,0,AU,US,6,7,loss,https://osu.ppy.sh/community/matches/120062857,2025-12-13
+OWC 2025,Grand Finals,0,PL,US,1,7,loss,https://osu.ppy.sh/community/matches/120078133,2025-12-14
+OWC 2025,Grand Finals,1,US,PL,7,1,win,https://osu.ppy.sh/community/matches/120078133,2025-12-14
+OWC 2025,Grand Finals,2,US,PL,3,8,loss,https://osu.ppy.sh/community/matches/120078716,2025-12-14
+OWC 2025,Grand Finals,1,PL,US,8,3,win,https://osu.ppy.sh/community/matches/120078716,2025-12-14

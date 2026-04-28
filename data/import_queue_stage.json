@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-04-27T12:29:35+00:00",
+  "source": "stage",
+  "status": "manual_approval_required",
+  "items": [],
+  "rules": {
+    "production_safe": "Stage has high verification and external forum/wiki/sheet/bracket corroboration.",
+    "likely_importable": "Stage has useful verified match data plus at least one external corroborating source.",
+    "stage_only": "Stage has match data but no external source yet; review before import."
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "event": "OIT 2025",
+  "matches": 58,
+  "map_scores": 489,
+  "players": 16,
+  "mappool": 102,
+  "missing_timestamps": 0,
+  "duplicate_match_links": 0,
+  "broken_player_references": 0,
+  "broken_map_references": 0,
+  "slot_inferred_rows": 0,
+  "api_errors": 0,
+  "score_mismatches": 7,
+  "skipped_beatmaps": 6,
+  "details": {
+    "api_errors": [],
+    "score_mismatches": [
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120532089",
+        "match_kind": "match",
+        "derived_score": [
+          7,
+          4
+        ],
+        "official_score": [
+          7,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 22
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120425197",
+        "match_kind": "match",
+        "derived_score": [
+          7,
+          5
+        ],
+        "official_score": [
+          7,
+          4
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 23
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120377225",
+        "match_kind": "match",
+        "derived_score": [
+          5,
+          3
+        ],
+        "official_score": [
+          6,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120319285",
+        "match_kind": "match",
+        "derived_score": [
+          5,
+          3
+        ],
+        "official_score": [
+          6,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120329594",
+        "match_kind": "match",
+        "derived_score": [
+          2,
+          5
+        ],
+        "official_score": [
+          2,
+          6
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 14
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120336088",
+        "match_kind": "match",
+        "derived_score": [
+          6,
+          3
+        ],
+        "official_score": [
+          6,
+          4
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 2,
+        "map_rows": 18
+      },
+      {
+        "match_link": "https://osu.ppy.sh/community/matches/120343896",
+        "match_kind": "match",
+        "derived_score": [
+          6,
+          2
+        ],
+        "official_score": [
+          6,
+          4
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 2,
+        "map_rows": 16
+      }
+    ]
+  },
+  "placement_records": 3,
+  "missing_player_placements": 16
+}

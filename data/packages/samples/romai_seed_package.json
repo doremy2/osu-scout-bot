@@ -1,0 +1,160 @@
+{
+  "package_id": "romai-seed-package",
+  "package_name": "ROMAI Seed Package",
+  "package_status": "sample",
+  "production_safe": false,
+  "notes": [
+    "Synthetic seed data for tournament-package dry runs only."
+  ],
+  "source": {
+    "name": "ROMAI",
+    "type": "json",
+    "url": "https://rom-ai-site.vercel.app/"
+  },
+  "events": [
+    {
+      "event": "ROMAI Week 3",
+      "display_name": "ROMAI Week 3",
+      "short_name": "ROMAI W3",
+      "tier": "weekly",
+      "start_date": "2026-04-01",
+      "end_date": "2026-04-07"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "display_name": "ROMAI Week 4",
+      "short_name": "ROMAI W4",
+      "tier": "weekly",
+      "start_date": "2026-04-03",
+      "end_date": "2026-04-09"
+    }
+  ],
+  "stages": [
+    {
+      "event": "ROMAI Week 3",
+      "stage": "Week 3",
+      "stage_order": 1,
+      "stage_type": "weekly_ladder"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "stage": "Week 4",
+      "stage_order": 1,
+      "stage_type": "weekly_ladder"
+    }
+  ],
+  "players": [
+    {
+      "event": "ROMAI Week 3",
+      "player": "hieu"
+    },
+    {
+      "event": "ROMAI Week 3",
+      "player": "playerx"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "player": "hieu"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "player": "playerx"
+    }
+  ],
+  "matches": [
+    {
+      "event": "ROMAI Week 3",
+      "stage": "Week 3",
+      "team": "hieu",
+      "opponent_team": "playerA",
+      "team_score": 1,
+      "opponent_score": 0,
+      "result": "win",
+      "match_index": 0,
+      "date": "2026-04-01"
+    },
+    {
+      "event": "ROMAI Week 3",
+      "stage": "Week 3",
+      "team": "playerx",
+      "opponent_team": "aaa",
+      "team_score": 0,
+      "opponent_score": 1,
+      "result": "loss",
+      "match_index": 0,
+      "date": "2026-04-02"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "stage": "Week 4",
+      "team": "hieu",
+      "opponent_team": "playerB",
+      "team_score": 0,
+      "opponent_score": 1,
+      "result": "loss",
+      "match_index": 0,
+      "date": "2026-04-03"
+    },
+    {
+      "event": "ROMAI Week 4",
+      "stage": "Week 4",
+      "team": "playerx",
+      "opponent_team": "bbb",
+      "team_score": 1,
+      "opponent_score": 0,
+      "result": "win",
+      "match_index": 0,
+      "date": "2026-04-04"
+    }
+  ],
+  "map_scores": [
+    {
+      "player": "hieu",
+      "opponent": "playerA",
+      "event": "ROMAI Week 3",
+      "stage": "Week 3",
+      "date": "2026-04-01",
+      "mod": "NM",
+      "slot": "NM1",
+      "score": 500000,
+      "accuracy": 97.4,
+      "result": "win"
+    },
+    {
+      "player": "playerx",
+      "opponent": "aaa",
+      "event": "ROMAI Week 3",
+      "stage": "Week 3",
+      "date": "2026-04-02",
+      "mod": "NM",
+      "slot": "NM1",
+      "score": 470000,
+      "accuracy": 96.8,
+      "result": "loss"
+    },
+    {
+      "player": "hieu",
+      "opponent": "playerB",
+      "event": "ROMAI Week 4",
+      "stage": "Week 4",
+      "date": "2026-04-03",
+      "mod": "NM",
+      "slot": "NM2",
+      "score": 300000,
+      "accuracy": 95.2,
+      "result": "loss"
+    },
+    {
+      "player": "playerx",
+      "opponent": "bbb",
+      "event": "ROMAI Week 4",
+      "stage": "Week 4",
+      "date": "2026-04-04",
+      "mod": "HD",
+      "slot": "HD2",
+      "score": 410000,
+      "accuracy": 94.8,
+      "result": "win"
+    }
+  ]
+}

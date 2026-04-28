@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "year": 2024,
+  "total": 13,
+  "quality_counts": {
+    "partial": 13
+  },
+  "status_counts": {
+    "discovered": 13
+  },
+  "manual_review_count": 13,
+  "manual_review": [
+    {
+      "tournament_key": "b7aa39ccbc440f409a40",
+      "tournament_name": "4DM 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DM/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "66a45b78f0f94f184c19",
+      "tournament_name": "4DPT 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DPT/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "39559d941bbc06bd93f3",
+      "tournament_name": "4WC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4WC/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "91556e2af8d17c8a7ad8",
+      "tournament_name": "CWC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "e71ffc19f26f7f52d013",
+      "tournament_name": "HRS 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/HRS/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "85c87b017fa8a5a5441e",
+      "tournament_name": "IntlConvertCup 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/IntlConvertCup/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "172e9db7dd2cfb6429fc",
+      "tournament_name": "LGA 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/LGA/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "d15520a010708e5786d0",
+      "tournament_name": "NDC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "5aba1ac0cbca65a5fd67",
+      "tournament_name": "OIT 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "1c10c5651a900cd93254",
+      "tournament_name": "OWC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "cd7967963e509fa4265c",
+      "tournament_name": "Project Prism 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/Project_Prism/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "5c3321090654c5de4194",
+      "tournament_name": "RESC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2024",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "7c67285ff40d1e0d751c",
+      "tournament_name": "TWC 2024",
+      "year": 2024,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2024",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "generated_at": "2026-04-27T03:23:38+00:00",
+  "years": [
+    2026,
+    2025
+  ],
+  "limit": 30,
+  "status": "manual_approval_required",
+  "items": [],
+  "exclusion_rules": {
+    "game_mode": "Only game_mode=osu is importable.",
+    "excluded_modes": [
+      "taiko",
+      "catch",
+      "mania",
+      "mixed",
+      "unknown"
+    ],
+    "required_links": "At least one osu! match link or lazer room link is required.",
+    "required_quality": [
+      "verified",
+      "high"
+    ]
+  },
+  "excluded_items": [
+    {
+      "tournament_key": "75aa543091af76d4c077",
+      "tournament_name": "TWC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "game_mode": "taiko",
+      "exclusion_reason": "game_mode=taiko (TWC)",
+      "match_link_count": 98,
+      "lazer_room_count": 0,
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2025",
+      "wiki_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2025",
+      "forum_url": null
+    },
+    {
+      "tournament_key": "cea4c66fd23f7947c615",
+      "tournament_name": "CWC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "game_mode": "catch",
+      "exclusion_reason": "game_mode=catch (CWC)",
+      "match_link_count": 107,
+      "lazer_room_count": 0,
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2025",
+      "wiki_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2025",
+      "forum_url": null
+    }
+  ]
+}

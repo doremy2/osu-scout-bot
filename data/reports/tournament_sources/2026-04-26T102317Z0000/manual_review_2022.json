@@ -1,0 +1,254 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "year": 2022,
+  "total": 15,
+  "quality_counts": {
+    "partial": 15
+  },
+  "status_counts": {
+    "discovered": 15
+  },
+  "manual_review_count": 15,
+  "manual_review": [
+    {
+      "tournament_key": "ea4fa4020ad2ec9d7fe3",
+      "tournament_name": "4CWC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4CWC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "508c15b4eab39bc49fa5",
+      "tournament_name": "AIT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/AIT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "48043fd94afb6cb7534f",
+      "tournament_name": "CIC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "3269cebe1b0e6f34f206",
+      "tournament_name": "COT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/COT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "59a9ea8b8c10463f6825",
+      "tournament_name": "CWC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "f243b30e7d881777ba52",
+      "tournament_name": "ICC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "166b070eb67e50c56f3c",
+      "tournament_name": "NDC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ebd718aae3ba47827cb2",
+      "tournament_name": "o!RT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "25a552f01dbc9c3a7610",
+      "tournament_name": "OIT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "7fef62190f3007a8a699",
+      "tournament_name": "OTMT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OTMT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "9bc98ecc8cfc0aeba448",
+      "tournament_name": "OWC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ff66cbc89f212b5a4347",
+      "tournament_name": "POT 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/POT/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "e61ca8760cdf44f6a7c3",
+      "tournament_name": "SS 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SS/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6d8dc644a32f1aaa2442",
+      "tournament_name": "TWC 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2022",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "f717b32726a4cfbaf2bb",
+      "tournament_name": "UCUP 2022",
+      "year": 2022,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2022",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

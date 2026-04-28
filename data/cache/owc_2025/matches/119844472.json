@@ -1,0 +1,914 @@
+{
+  "match_id": 119844472,
+  "name": "OWC2025: (Austria) VS (Singapore)",
+  "start_time": "2025-11-16T13:51:13+00:00",
+  "end_time": "2025-11-16T14:59:43+00:00",
+  "red_score": 5,
+  "blue_score": 2,
+  "users": {
+    "2312106": "GSBlank",
+    "2323131": "fedoragoose",
+    "5144534": "Dawnwing",
+    "5407620": "Tebi",
+    "5712451": "tomadoi",
+    "6895187": "Suicune3",
+    "8369887": "fruit cup",
+    "10270787": "Mekeyo",
+    "10958852": "lifetime",
+    "11987104": "Eagle5324",
+    "13057699": "z9a",
+    "15195364": "hollowknees",
+    "18153252": "z10a",
+    "19256705": "Cymango",
+    "21811804": "Akuma no Tenshi"
+  },
+  "games": [
+    {
+      "game_id": 628563819,
+      "beatmap_id": 4984190,
+      "beatmap_title": "The Deaden Room",
+      "beatmap_version": "Precognition of Blood",
+      "star_rating": 7.40759,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [
+        "NF"
+      ],
+      "start_time": "2025-11-16T14:06:17Z",
+      "end_time": "2025-11-16T14:09:57Z",
+      "winning_team": "red",
+      "red_total": 3020732,
+      "blue_total": 2294160,
+      "scores": [
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 785514,
+          "accuracy": 98.48584595128374,
+          "max_combo": 1556,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 21811804,
+          "username": "Akuma no Tenshi",
+          "score": 807999,
+          "accuracy": 96.89488698705289,
+          "max_combo": 1679,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 887804,
+          "accuracy": 96.13780996269476,
+          "max_combo": 1829,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 539415,
+          "accuracy": 92.99978055738424,
+          "max_combo": 1257,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 2312106,
+          "username": "GSBlank",
+          "score": 613319,
+          "accuracy": 97.02655255650647,
+          "max_combo": 1194,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 19256705,
+          "username": "Cymango",
+          "score": 929483,
+          "accuracy": 97.41057713407943,
+          "max_combo": 1829,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 10958852,
+          "username": "lifetime",
+          "score": 252161,
+          "accuracy": 89.47772657450076,
+          "max_combo": 684,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 15195364,
+          "username": "hollowknees",
+          "score": 499197,
+          "accuracy": 94.88698705288567,
+          "max_combo": 1149,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628564350,
+      "beatmap_id": 5386902,
+      "beatmap_title": "NON-USE",
+      "beatmap_version": "owc",
+      "star_rating": 6.64004,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [],
+      "start_time": "2025-11-16T14:14:10Z",
+      "end_time": "2025-11-16T14:17:51Z",
+      "winning_team": "red",
+      "red_total": 2324941,
+      "blue_total": 2141267,
+      "scores": [
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 569428,
+          "accuracy": 98.05436337625179,
+          "max_combo": 823,
+          "mods": [
+            "NF",
+            "HR"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 5712451,
+          "username": "tomadoi",
+          "score": 620899,
+          "accuracy": 98.71244635193133,
+          "max_combo": 999,
+          "mods": [
+            "NF",
+            "HD"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 576549,
+          "accuracy": 98.68383404864092,
+          "max_combo": 742,
+          "mods": [
+            "NF",
+            "HR"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 558065,
+          "accuracy": 99.02718168812589,
+          "max_combo": 918,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 5407620,
+          "username": "Tebi",
+          "score": 436667,
+          "accuracy": 98.22603719599428,
+          "max_combo": 633,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 5144534,
+          "username": "Dawnwing",
+          "score": 771419,
+          "accuracy": 99.02718168812589,
+          "max_combo": 1370,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 10270787,
+          "username": "Mekeyo",
+          "score": 542715,
+          "accuracy": 96.63805436337624,
+          "max_combo": 742,
+          "mods": [
+            "NF",
+            "HR"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 11987104,
+          "username": "Eagle5324",
+          "score": 390466,
+          "accuracy": 97.92560801144492,
+          "max_combo": 426,
+          "mods": [
+            "NF",
+            "HD"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628564854,
+      "beatmap_id": 5386832,
+      "beatmap_title": "Tokuiten no Kaibutsuteki Kanjou",
+      "beatmap_version": "Satellite",
+      "star_rating": 4.96018,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [
+        "NF",
+        "DT"
+      ],
+      "start_time": "2025-11-16T14:21:51Z",
+      "end_time": "2025-11-16T14:24:01Z",
+      "winning_team": "red",
+      "red_total": 3610215,
+      "blue_total": 2893932,
+      "scores": [
+        {
+          "user_id": 21811804,
+          "username": "Akuma no Tenshi",
+          "score": 1131849,
+          "accuracy": 98.25381976925476,
+          "max_combo": 1290,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 1144844,
+          "accuracy": 98.62800124727158,
+          "max_combo": 1290,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 719616,
+          "accuracy": 95.88400374181478,
+          "max_combo": 933,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 613906,
+          "accuracy": 97.92641097599002,
+          "max_combo": 636,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 19256705,
+          "username": "Cymango",
+          "score": 1117478,
+          "accuracy": 97.92641097599002,
+          "max_combo": 1289,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 2312106,
+          "username": "GSBlank",
+          "score": 762171,
+          "accuracy": 96.27377611474898,
+          "max_combo": 974,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 10958852,
+          "username": "lifetime",
+          "score": 501817,
+          "accuracy": 96.02432179607109,
+          "max_combo": 614,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 15195364,
+          "username": "hollowknees",
+          "score": 512466,
+          "accuracy": 97.53663860305582,
+          "max_combo": 386,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628565228,
+      "beatmap_id": 5386789,
+      "beatmap_title": "Daibouken o Yoroshiku",
+      "beatmap_version": "Jet to the Future",
+      "star_rating": 7.09311,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [
+        "NF"
+      ],
+      "start_time": "2025-11-16T14:28:09Z",
+      "end_time": "2025-11-16T14:32:11Z",
+      "winning_team": "blue",
+      "red_total": 2711923,
+      "blue_total": 2855391,
+      "scores": [
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 938224,
+          "accuracy": 99.2601246105919,
+          "max_combo": 1551,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 716465,
+          "accuracy": 99.48078920041536,
+          "max_combo": 1173,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 8369887,
+          "username": "fruit cup",
+          "score": 442941,
+          "accuracy": 98.81879543094496,
+          "max_combo": 546,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 614293,
+          "accuracy": 98.98753894080997,
+          "max_combo": 1045,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 10270787,
+          "username": "Mekeyo",
+          "score": 998598,
+          "accuracy": 99.68847352024922,
+          "max_combo": 1609,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 5144534,
+          "username": "Dawnwing",
+          "score": 650661,
+          "accuracy": 99.37694704049844,
+          "max_combo": 846,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 19256705,
+          "username": "Cymango",
+          "score": 750029,
+          "accuracy": 98.20872274143302,
+          "max_combo": 1330,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 5407620,
+          "username": "Tebi",
+          "score": 456103,
+          "accuracy": 98.87071651090342,
+          "max_combo": 548,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628565727,
+      "beatmap_id": 5386835,
+      "beatmap_title": "Ring Ring Ring",
+      "beatmap_version": "Voicemail",
+      "star_rating": 4.83599,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [
+        "NF",
+        "DT"
+      ],
+      "start_time": "2025-11-16T14:36:10Z",
+      "end_time": "2025-11-16T14:39:21Z",
+      "winning_team": "blue",
+      "red_total": 2306094,
+      "blue_total": 2422292,
+      "scores": [
+        {
+          "user_id": 21811804,
+          "username": "Akuma no Tenshi",
+          "score": 736271,
+          "accuracy": 97.7396920019871,
+          "max_combo": 700,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 965893,
+          "accuracy": 95.60357675111774,
+          "max_combo": 1030,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 603930,
+          "accuracy": 93.98907103825137,
+          "max_combo": 691,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 15195364,
+          "username": "hollowknees",
+          "score": 574940,
+          "accuracy": 96.72131147540983,
+          "max_combo": 547,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 2312106,
+          "username": "GSBlank",
+          "score": 507293,
+          "accuracy": 95.47938400397416,
+          "max_combo": 430,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 10270787,
+          "username": "Mekeyo",
+          "score": 621605,
+          "accuracy": 91.92747143566817,
+          "max_combo": 763,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 5144534,
+          "username": "Dawnwing",
+          "score": 718454,
+          "accuracy": 95.60357675111774,
+          "max_combo": 795,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628566495,
+      "beatmap_id": 5386835,
+      "beatmap_title": "Ring Ring Ring",
+      "beatmap_version": "Voicemail",
+      "star_rating": 4.83599,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [
+        "NF",
+        "DT"
+      ],
+      "start_time": "2025-11-16T14:48:23Z",
+      "end_time": "2025-11-16T14:50:47Z",
+      "winning_team": "red",
+      "red_total": 2918074,
+      "blue_total": 2362204,
+      "scores": [
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 596200,
+          "accuracy": 92.52359662195728,
+          "max_combo": 722,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 546543,
+          "accuracy": 94.95777446597118,
+          "max_combo": 564,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 653830,
+          "accuracy": 93.61649279682067,
+          "max_combo": 748,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 21811804,
+          "username": "Akuma no Tenshi",
+          "score": 1121501,
+          "accuracy": 98.11227024341778,
+          "max_combo": 1089,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 5144534,
+          "username": "Dawnwing",
+          "score": 719335,
+          "accuracy": 95.87680079483358,
+          "max_combo": 756,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 10270787,
+          "username": "Mekeyo",
+          "score": 359291,
+          "accuracy": 91.00844510680575,
+          "max_combo": 336,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 2312106,
+          "username": "GSBlank",
+          "score": 681801,
+          "accuracy": 94.95777446597118,
+          "max_combo": 786,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 15195364,
+          "username": "hollowknees",
+          "score": 601777,
+          "accuracy": 97.54098360655738,
+          "max_combo": 586,
+          "mods": [
+            "NF",
+            "DT"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    },
+    {
+      "game_id": 628566853,
+      "beatmap_id": 5290020,
+      "beatmap_title": "Liar Dancer",
+      "beatmap_version": "DANSA",
+      "star_rating": 6.5866,
+      "mode": "osu",
+      "scoring_type": "scorev2",
+      "team_type": "team-vs",
+      "mods": [],
+      "start_time": "2025-11-16T14:54:10Z",
+      "end_time": "2025-11-16T14:57:51Z",
+      "winning_team": "red",
+      "red_total": 2342986,
+      "blue_total": 1977088,
+      "scores": [
+        {
+          "user_id": 2323131,
+          "username": "fedoragoose",
+          "score": 1003509,
+          "accuracy": 98.57651245551602,
+          "max_combo": 1750,
+          "mods": [
+            "NF",
+            "HD"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 0
+        },
+        {
+          "user_id": 5712451,
+          "username": "tomadoi",
+          "score": 306246,
+          "accuracy": 95.7888493475682,
+          "max_combo": 381,
+          "mods": [
+            "NF",
+            "HD"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 1
+        },
+        {
+          "user_id": 18153252,
+          "username": "z10a",
+          "score": 449558,
+          "accuracy": 97.62752075919336,
+          "max_combo": 734,
+          "mods": [
+            "NF"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 2
+        },
+        {
+          "user_id": 13057699,
+          "username": "z9a",
+          "score": 583673,
+          "accuracy": 95.69988137603796,
+          "max_combo": 1173,
+          "mods": [
+            "NF",
+            "HR"
+          ],
+          "team": "red",
+          "passed": true,
+          "slot": 3
+        },
+        {
+          "user_id": 5144534,
+          "username": "Dawnwing",
+          "score": 544936,
+          "accuracy": 97.64234875444839,
+          "max_combo": 1061,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 4
+        },
+        {
+          "user_id": 11987104,
+          "username": "Eagle5324",
+          "score": 422487,
+          "accuracy": 98.02787663107948,
+          "max_combo": 502,
+          "mods": [
+            "NF",
+            "HD"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 5
+        },
+        {
+          "user_id": 2312106,
+          "username": "GSBlank",
+          "score": 528105,
+          "accuracy": 96.23368920521945,
+          "max_combo": 942,
+          "mods": [
+            "NF",
+            "HR"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 6
+        },
+        {
+          "user_id": 19256705,
+          "username": "Cymango",
+          "score": 481560,
+          "accuracy": 96.02609727164887,
+          "max_combo": 993,
+          "mods": [
+            "NF"
+          ],
+          "team": "blue",
+          "passed": true,
+          "slot": 7
+        }
+      ]
+    }
+  ]
+}

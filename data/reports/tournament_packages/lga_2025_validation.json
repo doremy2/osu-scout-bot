@@ -1,0 +1,592 @@
+{
+  "event": "LGA 2025",
+  "matches": 76,
+  "map_scores": 552,
+  "players": 32,
+  "mappool": 40,
+  "missing_timestamps": 0,
+  "duplicate_match_links": 0,
+  "broken_player_references": 0,
+  "broken_map_references": 0,
+  "slot_inferred_rows": 0,
+  "api_errors": 0,
+  "score_mismatches": 38,
+  "skipped_beatmaps": 11,
+  "details": {
+    "api_errors": [],
+    "score_mismatches": [
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1374325",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 10
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1375373",
+        "match_kind": "room",
+        "derived_score": [
+          3,
+          5
+        ],
+        "official_score": [
+          3,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1376863",
+        "match_kind": "room",
+        "derived_score": [
+          3,
+          6
+        ],
+        "official_score": [
+          2,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 2,
+        "map_rows": 18
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1377693",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          4
+        ],
+        "official_score": [
+          1,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1379178",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1380145",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 10
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1380255",
+        "match_kind": "room",
+        "derived_score": [
+          4,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 10
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1379254",
+        "match_kind": "room",
+        "derived_score": [
+          1,
+          5
+        ],
+        "official_score": [
+          0,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1379334",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1382174",
+        "match_kind": "room",
+        "derived_score": [
+          7,
+          4
+        ],
+        "official_score": [
+          3,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 22
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1382384",
+        "match_kind": "room",
+        "derived_score": [
+          4,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 10
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1395145",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          1
+        ],
+        "official_score": [
+          3,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 14
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1395240",
+        "match_kind": "room",
+        "derived_score": [
+          4,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 1,
+        "map_rows": 10
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1395358",
+        "match_kind": "room",
+        "derived_score": [
+          7,
+          2
+        ],
+        "official_score": [
+          2,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 2,
+        "map_rows": 18
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1364116",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1364219",
+        "match_kind": "room",
+        "derived_score": [
+          4,
+          2
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1364301",
+        "match_kind": "room",
+        "derived_score": [
+          7,
+          4
+        ],
+        "official_score": [
+          3,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 22
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1364971",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365028",
+        "match_kind": "room",
+        "derived_score": [
+          2,
+          6
+        ],
+        "official_score": [
+          1,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365122",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365358",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          0
+        ],
+        "official_score": [
+          3,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 24
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365363",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365538",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          2
+        ],
+        "official_score": [
+          3,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365531",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365680",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365810",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          3
+        ],
+        "official_score": [
+          1,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365934",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1365937",
+        "match_kind": "room",
+        "derived_score": [
+          4,
+          0
+        ],
+        "official_score": [
+          2,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 22
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1366079",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          4
+        ],
+        "official_score": [
+          3,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 20
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367207",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1368095",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367689",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          6
+        ],
+        "official_score": [
+          1,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367557",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367562",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          1
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367580",
+        "match_kind": "room",
+        "derived_score": [
+          6,
+          0
+        ],
+        "official_score": [
+          3,
+          0
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367960",
+        "match_kind": "room",
+        "derived_score": [
+          2,
+          4
+        ],
+        "official_score": [
+          0,
+          3
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 12
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1368105",
+        "match_kind": "room",
+        "derived_score": [
+          0,
+          0
+        ],
+        "official_score": [
+          3,
+          2
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 22
+      },
+      {
+        "match_link": "https://osu.ppy.sh/multiplayer/rooms/1367302",
+        "match_kind": "room",
+        "derived_score": [
+          5,
+          3
+        ],
+        "official_score": [
+          3,
+          1
+        ],
+        "score_mismatch": true,
+        "skipped_beatmaps": 0,
+        "map_rows": 16
+      }
+    ]
+  },
+  "placement_records": 3,
+  "missing_player_placements": 32
+}

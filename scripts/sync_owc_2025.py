@@ -28,6 +28,7 @@ Usage:
     python -m scripts.sync_owc_2025 --dry-run        # fetch + print, no DB writes
     python -m scripts.sync_owc_2025                   # full run
     python -m scripts.sync_owc_2025 --skip-match-detail  # layers 1, 2, 4, fallback only
+    python -m scripts.sync_owc_2025 --refresh-match-detail  # refetch cached /matches/{id}.json
     python -m scripts.sync_owc_2025 --only-layer 2    # run a single layer
 
 Environment:
@@ -142,6 +143,7 @@ def run_layer_3_match_detail(
     *,
     dry_run: bool,
     limit: int | None = None,
+    refresh: bool = False,
 ) -> dict[str, int]:
     """For each match_link in the bracket, call /matches/{id} and cache
     the per-map per-player result to disk.
@@ -178,7 +180,7 @@ def run_layer_3_match_detail(
             break
 
         out_file = match_dir / f"{mid}.json"
-        if out_file.exists() and not dry_run:
+        if out_file.exists() and not dry_run and not refresh:
             # Already cached — count as cached but don't re-fetch.
             stats["matches_cached"] += 1
             continue
@@ -252,6 +254,202 @@ def _match_to_dict(match: Match) -> dict:
     }
 
 
+# ---------- layer 3.5: ingest cached match JSON into DB ----------
+
+def run_layer_3_5_ingest(
+    bracket: TournamentBracket | None,
+    *,
+    dry_run: bool,
+) -> dict[str, int]:
+    """Walk cached /matches/{id}.json files written by layer 3 and write
+    them into match_games + match_scores via storage.ingest_cached_match.
+
+    Stage is looked up from the bracket (match_id -> stage). If no bracket
+    is available, rows are ingested without a stage tag.
+    """
+    from storage import ingest_cached_match
+
+    match_dir = CACHE_DIR / "matches"
+    stats = {
+        "files_seen": 0,
+        "matches_ingested": 0,
+        "games_written": 0,
+        "scores_written": 0,
+        "failed": 0,
+    }
+    if not match_dir.exists():
+        return stats
+
+    stage_by_id: dict[int, str] = {}
+    if bracket is not None:
+        for bm in bracket.matches:
+            if bm.match_id is not None and bm.stage:
+                stage_by_id.setdefault(bm.match_id, bm.stage)
+
+    for json_file in sorted(match_dir.glob("*.json")):
+        stats["files_seen"] += 1
+        try:
+            mid = int(json_file.stem)
+        except ValueError:
+            mid = None
+        stage = stage_by_id.get(mid) if mid is not None else None
+
+        if dry_run:
+            continue
+
+        try:
+            result = ingest_cached_match(
+                json_file, event=OWC_2025.event, stage=stage
+            )
+        except Exception as exc:
+            print(f"  ! {json_file.name}: {exc}")
+            stats["failed"] += 1
+            continue
+
+        stats["matches_ingested"] += 1
+        stats["games_written"] += result.get("games_written", 0)
+        stats["scores_written"] += result.get("scores_written", 0)
+
+    return stats
+
+
+# ---------- layer 3.6: bridge cached match JSON -> tournament_matches ----------
+
+def run_layer_3_6_tm_bridge(
+    bracket: TournamentBracket | None,
+    *,
+    dry_run: bool,
+) -> dict[str, int]:
+    """Bridge the cached /matches/{id}.json files back into
+    tournament_matches.opponent_team / match_link / date.
+
+    The original OWC team-stats CSV seeded tournament_matches with real
+    scorelines but NULL opponents (flags didn't export). layer 3 + 3.5 have
+    the real truth in match.name: "(Country A) vs (Country B)". This step
+    matches those back onto tournament_matches rows by (event, stage,
+    team_code, team_score, opponent_score) and fills the missing fields.
+
+    Only touches rows where opponent_team IS NULL, so manually-verified
+    matches.csv data is never overwritten.
+    """
+    from storage import backfill_tm_opponent_by_scores, get_connection
+
+    match_dir = CACHE_DIR / "matches"
+    stats = {
+        "files_seen": 0,
+        "rows_updated": 0,
+        "name_parse_fail": 0,
+        "no_stage": 0,
+        "no_match": 0,
+    }
+    if not match_dir.exists():
+        return stats
+
+    # Build stage lookup from bracket (match_id -> stage)
+    stage_by_id: dict[int, str] = {}
+    if bracket is not None:
+        for bm in bracket.matches:
+            if bm.match_id is not None and bm.stage:
+                stage_by_id.setdefault(bm.match_id, bm.stage)
+
+    # Build team_name -> team_code lookup from DB
+    with get_connection() as connection:
+        team_rows = connection.execute(
+            "SELECT team_code, team_name FROM teams WHERE team_name IS NOT NULL"
+        ).fetchall()
+    name_to_code = {
+        (r["team_name"] or "").strip().lower(): r["team_code"] for r in team_rows
+    }
+
+    import re as _re
+    pair_re = _re.compile(
+        r"\(([^()]+)\)\s*(?:vs\.?|v\.?)\s*\(([^()]+)\)", _re.IGNORECASE
+    )
+
+    def _resolve(name: str | None) -> str | None:
+        if not name:
+            return None
+        key = name.strip().lower()
+        if key in name_to_code:
+            return name_to_code[key]
+        u = name.strip().upper()
+        if 2 <= len(u) <= 4 and u.isalpha():
+            return u
+        return None
+
+    for json_file in sorted(match_dir.glob("*.json")):
+        stats["files_seen"] += 1
+        try:
+            mid = int(json_file.stem)
+        except ValueError:
+            mid = None
+        try:
+            payload = json.loads(json_file.read_text(encoding="utf-8"))
+        except Exception as exc:
+            print(f"  ! {json_file.name}: {exc}")
+            continue
+
+        name = payload.get("name") or ""
+        m = pair_re.search(name)
+        if not m:
+            stats["name_parse_fail"] += 1
+            continue
+        red_code = _resolve(m.group(1))
+        blue_code = _resolve(m.group(2))
+        if not red_code or not blue_code:
+            stats["name_parse_fail"] += 1
+            continue
+
+        stage = stage_by_id.get(mid) if mid is not None else None
+        if not stage:
+            stats["no_stage"] += 1
+            continue
+
+        red_score = payload.get("red_score")
+        blue_score = payload.get("blue_score")
+        # Fall back: count game wins per side if top-level scores missing.
+        if red_score is None or blue_score is None:
+            r_wins = b_wins = 0
+            for g in (payload.get("games") or []):
+                w = (g.get("winning_team") or "").lower()
+                if w == "red":
+                    r_wins += 1
+                elif w == "blue":
+                    b_wins += 1
+            red_score, blue_score = r_wins, b_wins
+
+        if red_score is None or blue_score is None:
+            continue
+
+        start_time = payload.get("start_time")
+        date = start_time[:10] if isinstance(start_time, str) and len(start_time) >= 10 else None
+        match_link = f"https://osu.ppy.sh/community/matches/{mid}" if mid else None
+
+        if dry_run:
+            continue
+
+        # Backfill both perspectives.
+        # From RED team's perspective: team_score=red_score, opp_score=blue_score, opponent=blue_code
+        updated = backfill_tm_opponent_by_scores(
+            event=OWC_2025.event, stage=stage,
+            team_code=red_code,
+            team_score=red_score, opponent_score=blue_score,
+            opponent_team=blue_code, match_link=match_link, date=date,
+        )
+        # From BLUE team's perspective
+        updated += backfill_tm_opponent_by_scores(
+            event=OWC_2025.event, stage=stage,
+            team_code=blue_code,
+            team_score=blue_score, opponent_score=red_score,
+            opponent_team=red_code, match_link=match_link, date=date,
+        )
+        stats["rows_updated"] += updated
+        if updated == 0:
+            stats["no_match"] += 1
+
+    return stats
+
+
 # ---------- layer 4: mappool ----------
 
 def run_layer_4_mappool(
@@ -307,14 +505,14 @@ def run_layer_4_mappool(
     # Manual override fallback:
     try:
         from importers.manual_map_metadata import (
-            apply_manual_maps,
-            parse_manual_maps_csv,
+            apply_manual_map_metadata,
+            parse_manual_map_metadata_csv,
         )
         maps_csv = METADATA_DIR / "maps.csv"
         if maps_csv.exists():
-            rows = parse_manual_maps_csv(maps_csv)
+            rows = parse_manual_map_metadata_csv(maps_csv)
             if not dry_run:
-                applied = apply_manual_maps(rows)
+                applied = apply_manual_map_metadata(rows)
                 stats["manual_applied"] = applied.get("rows_updated", 0)
             else:
                 stats["manual_applied"] = len(rows)
@@ -354,7 +552,7 @@ def run_fallback_manual_matches(*, dry_run: bool) -> dict[str, int]:
 
 # ---------- driver ----------
 
-LAYER_CHOICES = ("1", "2", "3", "4", "fallback", "all")
+LAYER_CHOICES = ("1", "2", "3", "3.5", "3.6", "4", "fallback", "all")
 
 
 def main() -> int:
@@ -378,6 +576,11 @@ def main() -> int:
         type=int,
         default=None,
         help="Max number of matches to fetch in layer 3 (for testing)",
+    )
+    parser.add_argument(
+        "--refresh-match-detail",
+        action="store_true",
+        help="Refetch cached /matches/{id}.json files instead of reusing them.",
     )
     args = parser.parse_args()
 
@@ -413,11 +616,42 @@ def main() -> int:
         if bracket is not None:
             try:
                 stats = run_layer_3_match_detail(
-                    bracket, dry_run=args.dry_run, limit=args.match_limit
+                    bracket,
+                    dry_run=args.dry_run,
+                    limit=args.match_limit,
+                    refresh=args.refresh_match_detail,
                 )
                 print(f"  {stats}")
             except Exception as exc:
                 print(f"  ! layer 3 failed: {exc}")
+
+    if want("3.5"):
+        print("== layer 3.5: ingest cached match JSON ==")
+        if bracket is None:
+            try:
+                bracket, _ = run_layer_2_bracket(dry_run=True)
+            except Exception as exc:
+                print(f"  ! proceeding without bracket (no stage tags): {exc}")
+                bracket = None
+        try:
+            stats = run_layer_3_5_ingest(bracket, dry_run=args.dry_run)
+            print(f"  {stats}")
+        except Exception as exc:
+            print(f"  ! layer 3.5 failed: {exc}")
+
+    if want("3.6"):
+        print("== layer 3.6: bridge match detail -> tournament_matches ==")
+        if bracket is None:
+            try:
+                bracket, _ = run_layer_2_bracket(dry_run=True)
+            except Exception as exc:
+                print(f"  ! proceeding without bracket (no stage tags): {exc}")
+                bracket = None
+        try:
+            stats = run_layer_3_6_tm_bridge(bracket, dry_run=args.dry_run)
+            print(f"  {stats}")
+        except Exception as exc:
+            print(f"  ! layer 3.6 failed: {exc}")
 
     if want("4"):
         print("== layer 4: mappool ==")

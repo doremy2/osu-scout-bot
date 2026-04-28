@@ -5,3 +5,6 @@ __pycache__/
 venv/
 .vscode/
 .idea/
+node_modules/
+.next/
+*.tsbuildinfo

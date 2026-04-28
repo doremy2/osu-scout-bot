@@ -1,0 +1,312 @@
+{
+  "generated_at": "2026-04-27T02:11:16+00:00",
+  "year": 2026,
+  "total": 21,
+  "quality_counts": {
+    "partial": 17,
+    "low": 4
+  },
+  "status_counts": {
+    "discovered": 21
+  },
+  "manual_review_count": 21,
+  "manual_review": [
+    {
+      "tournament_key": "9d42008a0c41a2480aab",
+      "tournament_name": "[STD] LeBron James Suiji | 4v4 | International | Open Rank | Player & Staff Registrations Open",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2195943",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "70803806ca64f02e3dee",
+      "tournament_name": "[STD] Open Rank | Suiji | 4v4 | Kitsune Cup | [Habla Hispana Only] | [Regs Closed]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2188468",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "8f427565a946976435c1",
+      "tournament_name": "[STD] Suomen Alueellinen Turnaus [ 2v2 | Open Rank | FI only ] Regs Open!",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198883",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "eabe974cdb702739d5c4",
+      "tournament_name": "[STD] Australian States Cup 2026 (AU/NZ only) | 3v3 | Open Rank (Registrations Open!)",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2193923",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "924c7835c330a739ede0",
+      "tournament_name": "[osu!Standard] (Open rank) Sweden Cup 2026 [Registrations open]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198246",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "479d2b0b67aa3843fd63",
+      "tournament_name": "[STD] Midarna's Aim Battle Royale | FR speakers Only | Open rank",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2199701",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "109b297a6d19616aaac7",
+      "tournament_name": "[1V1] [STD] KEL ONLINE INVITATIONAL",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198792",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "c76a93faee06c8a23d98",
+      "tournament_name": "[STD | 28k-ထ | 2v2 TS2] Gambling Gulag League 2 [STAFF/PLAYER REG OPEN]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2176063",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "022dc3598ea887c11f6f",
+      "tournament_name": "[STD] European Draft Cup 2026 | #10+ BWS",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198584",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "9716564e2cd2eb15665c",
+      "tournament_name": "[STD 1v1] Letni Obóz Èze [1k+ PL ONLY] [REGS OPEN]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198834",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "146abd172f3d69c3bba6",
+      "tournament_name": "[STD 1v1] South Africa osu! Tournament 7 [REG Closed] (Sponsored by ACGL)",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2161070",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "dd855641fe476a15bf2e",
+      "tournament_name": "[STD] The Grand Orchestra | 3v3 Ts6 | #1.000 - #99.000 BWS | Team, FA & Staff Regs Open!",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2197109",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "ae1af825157047c307ae",
+      "tournament_name": "[STD][Staff Regs OPEN // Player Regs CLOSED][75k-200k] Redshift Frequency [3v3 TS5]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2190179",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "c52fb381309059fd500a",
+      "tournament_name": "[KR, STD] 듀오 컵: 한국 2026 | DUO CUP: KOREA 2026 [참가 신청 ~4/20 02:00]",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2195574",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "7827c636b5bf85aaee2e",
+      "tournament_name": "[STD] SPUNOUT SPUNOUT \"NORMALES\" TOURNAMENT (Regs Open 1k-25k BWS [DACH REGION])",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2176671",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "153348567599db256173",
+      "tournament_name": "[STD] Re:Revolution Tournament (SEA Region Only) | 2v2 TS3 | 50k - 999k (Registrations Open!)",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2200883",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "a046f6e6edcbaff86eca",
+      "tournament_name": "[STD][1v1][85k - 999k][Reg Open] o!TA:N Season 1",
+      "year": 2026,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2198104",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "dff938f2e1cd63ee1978",
+      "tournament_name": "[STD, o!m4k][1v1][Open Rank] Canonical LAN osu! UCI During Spring",
+      "year": 2026,
+      "data_quality": "low",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2200393",
+      "notes": "discovered but missing structured data links"
+    },
+    {
+      "tournament_key": "58e350d47191c82a6c39",
+      "tournament_name": "[STD] Play-Osu.RU Extemely High Standards Tournament (1v1, Open Rank, RU-Speaking)",
+      "year": 2026,
+      "data_quality": "low",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2197945",
+      "notes": "discovered but missing structured data links"
+    },
+    {
+      "tournament_key": "77c30eeffe8071a1222b",
+      "tournament_name": "[STD] [Chinese/中文] Summer Dew Cup [4v4 Draft, TS8] [#4,000 - ∞]",
+      "year": 2026,
+      "data_quality": "low",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2200164",
+      "notes": "discovered but missing structured data links"
+    },
+    {
+      "tournament_key": "85cc27945af228bb7a9f",
+      "tournament_name": "[STD] osu! Belgium (or Belux idk) Team Tournament 2026 | BeLux | 2v2 ts2 [Regs Open !!!]",
+      "year": 2026,
+      "data_quality": "low",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/community/forums/topics/2200859",
+      "notes": "discovered but missing structured data links"
+    }
+  ]
+}

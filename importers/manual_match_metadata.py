@@ -105,6 +105,7 @@ def apply_manual_matches(rows: list[dict[str, Any]]) -> dict[str, int]:
             date=row.get("date"),
             team_score=row.get("team_score"),
             opponent_score=row.get("opponent_score"),
+            result=row.get("result"),
         )
         if updated:
             stats["rows_updated"] += updated

@@ -1,0 +1,1443 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "years": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021,
+    2020
+  ],
+  "discovered_this_run": 84,
+  "by_year": {
+    "2025": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2025,
+      "total": 10,
+      "quality_counts": {
+        "partial": 10
+      },
+      "status_counts": {
+        "discovered": 10
+      },
+      "manual_review_count": 10,
+      "manual_review": [
+        {
+          "tournament_key": "09035ca287272f0a82a7",
+          "tournament_name": "3WC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/3WC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "b23931caeadc9a1f37d7",
+          "tournament_name": "4WC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4WC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "cea4c66fd23f7947c615",
+          "tournament_name": "CWC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "a432eb9f2467658bb41d",
+          "tournament_name": "FDC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/FDC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "88c9158efcaec5b3dffa",
+          "tournament_name": "LGA 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/LGA/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "3493357e172887bd773a",
+          "tournament_name": "NDC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "9080b18966f14ec1dd4f",
+          "tournament_name": "OIT 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "0ff582fcfd75d761a495",
+          "tournament_name": "OWC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "7cadc9a04c3f76c70f5a",
+          "tournament_name": "RESC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2025",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "75aa543091af76d4c077",
+          "tournament_name": "TWC 2025",
+          "year": 2025,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2025",
+          "notes": "has at least one structured source"
+        }
+      ]
+    },
+    "2024": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2024,
+      "total": 13,
+      "quality_counts": {
+        "partial": 13
+      },
+      "status_counts": {
+        "discovered": 13
+      },
+      "manual_review_count": 13,
+      "manual_review": [
+        {
+          "tournament_key": "b7aa39ccbc440f409a40",
+          "tournament_name": "4DM 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DM/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "66a45b78f0f94f184c19",
+          "tournament_name": "4DPT 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DPT/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "39559d941bbc06bd93f3",
+          "tournament_name": "4WC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4WC/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "91556e2af8d17c8a7ad8",
+          "tournament_name": "CWC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "e71ffc19f26f7f52d013",
+          "tournament_name": "HRS 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/HRS/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "85c87b017fa8a5a5441e",
+          "tournament_name": "IntlConvertCup 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/IntlConvertCup/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "172e9db7dd2cfb6429fc",
+          "tournament_name": "LGA 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/LGA/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "d15520a010708e5786d0",
+          "tournament_name": "NDC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "5aba1ac0cbca65a5fd67",
+          "tournament_name": "OIT 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "1c10c5651a900cd93254",
+          "tournament_name": "OWC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "cd7967963e509fa4265c",
+          "tournament_name": "Project Prism 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/Project_Prism/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "5c3321090654c5de4194",
+          "tournament_name": "RESC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2024",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "7c67285ff40d1e0d751c",
+          "tournament_name": "TWC 2024",
+          "year": 2024,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2024",
+          "notes": "has at least one structured source"
+        }
+      ]
+    },
+    "2023": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2023,
+      "total": 13,
+      "quality_counts": {
+        "partial": 13
+      },
+      "status_counts": {
+        "discovered": 13
+      },
+      "manual_review_count": 13,
+      "manual_review": [
+        {
+          "tournament_key": "2bf86e1ed9493593296f",
+          "tournament_name": "4DM 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DM/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "47b223995a03c364cb79",
+          "tournament_name": "AIT 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/AIT/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "bee8fb46d709cea60a27",
+          "tournament_name": "CIC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "47a14360e80412fdb0da",
+          "tournament_name": "CWC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "bda71f7e627abdfb18f2",
+          "tournament_name": "DACH4K 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/DACH4K/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "a0f92d41e4e8892735c3",
+          "tournament_name": "NDC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6b216a651ae0bc78d399",
+          "tournament_name": "o!cCO 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!cCO/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6af69090bac581ed4079",
+          "tournament_name": "o!RT 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "22123db940d4a798ea03",
+          "tournament_name": "OIT 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "bf194e8d94a96c0e8418",
+          "tournament_name": "OWC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "220e24943a62509acd69",
+          "tournament_name": "RESC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "0ddeca7fdcc989978b58",
+          "tournament_name": "SOL 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SOL/2023",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "f320f76e67f816f8a397",
+          "tournament_name": "TWC 2023",
+          "year": 2023,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2023",
+          "notes": "has at least one structured source"
+        }
+      ]
+    },
+    "2022": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2022,
+      "total": 15,
+      "quality_counts": {
+        "partial": 15
+      },
+      "status_counts": {
+        "discovered": 15
+      },
+      "manual_review_count": 15,
+      "manual_review": [
+        {
+          "tournament_key": "ea4fa4020ad2ec9d7fe3",
+          "tournament_name": "4CWC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4CWC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "508c15b4eab39bc49fa5",
+          "tournament_name": "AIT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/AIT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "48043fd94afb6cb7534f",
+          "tournament_name": "CIC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "3269cebe1b0e6f34f206",
+          "tournament_name": "COT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/COT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "59a9ea8b8c10463f6825",
+          "tournament_name": "CWC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "f243b30e7d881777ba52",
+          "tournament_name": "ICC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "166b070eb67e50c56f3c",
+          "tournament_name": "NDC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "ebd718aae3ba47827cb2",
+          "tournament_name": "o!RT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "25a552f01dbc9c3a7610",
+          "tournament_name": "OIT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "7fef62190f3007a8a699",
+          "tournament_name": "OTMT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OTMT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "9bc98ecc8cfc0aeba448",
+          "tournament_name": "OWC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "ff66cbc89f212b5a4347",
+          "tournament_name": "POT 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/POT/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "e61ca8760cdf44f6a7c3",
+          "tournament_name": "SS 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SS/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6d8dc644a32f1aaa2442",
+          "tournament_name": "TWC 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2022",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "f717b32726a4cfbaf2bb",
+          "tournament_name": "UCUP 2022",
+          "year": 2022,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2022",
+          "notes": "has at least one structured source"
+        }
+      ]
+    },
+    "2021": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2021,
+      "total": 15,
+      "quality_counts": {
+        "partial": 15
+      },
+      "status_counts": {
+        "discovered": 15
+      },
+      "manual_review_count": 15,
+      "manual_review": [
+        {
+          "tournament_key": "408a54f0c19742e0b911",
+          "tournament_name": "3WC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/3WC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "bbe89c5c1208a6a93cd3",
+          "tournament_name": "4CWC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4CWC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "0f9c124bd00b1a55a031",
+          "tournament_name": "ATT 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ATT/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "0d7f3440f339c46d3529",
+          "tournament_name": "CIC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "095d6769c100f31ec6f9",
+          "tournament_name": "CWC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "94d7f4bbe0fa4e6cddbd",
+          "tournament_name": "ICC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "4551b96f1e2a0163221c",
+          "tournament_name": "MCNC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/MCNC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6635822f01313389a46e",
+          "tournament_name": "o!ET 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!ET/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "b163ab73840b3e96086c",
+          "tournament_name": "o!RT 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "4153dde5903e64581b8b",
+          "tournament_name": "OIT 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "c00b5ecd85810eb50884",
+          "tournament_name": "OWC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "7889f0e981c21fbf474c",
+          "tournament_name": "SS 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SS/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "ee03b0692b1b985ee68d",
+          "tournament_name": "TWC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "1c48657d28407d74d8b8",
+          "tournament_name": "UCUP 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2021",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "f588a8f0f512b6508a53",
+          "tournament_name": "YSC 2021",
+          "year": 2021,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/YSC/2021",
+          "notes": "has at least one structured source"
+        }
+      ]
+    },
+    "2020": {
+      "generated_at": "2026-04-26T10:23:20+00:00",
+      "year": 2020,
+      "total": 18,
+      "quality_counts": {
+        "partial": 18
+      },
+      "status_counts": {
+        "discovered": 18
+      },
+      "manual_review_count": 18,
+      "manual_review": [
+        {
+          "tournament_key": "6d35c0dd7ea33ce50b1f",
+          "tournament_name": "ATT 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ATT/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "1752daf482c974f49171",
+          "tournament_name": "CIC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "54b750297917993d175f",
+          "tournament_name": "CMC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CMC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "e9c7db259c58d880fca4",
+          "tournament_name": "CWC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "8a679d54d34566915284",
+          "tournament_name": "ICC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/ICC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "ef24f958e54e3787adac",
+          "tournament_name": "IDC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/IDC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "a3858f99dca22b677acd",
+          "tournament_name": "MCNC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/MCNC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6e48838e4522a9a8158e",
+          "tournament_name": "Mirai 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/Mirai/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "00672f3efc41caaf3ee9",
+          "tournament_name": "o!mAC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!mAC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "971c1ef411073d52ee29",
+          "tournament_name": "OIT 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "9e91d212fb6505ee316f",
+          "tournament_name": "otst! 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/otst!/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "9d3a5904f8ada5023395",
+          "tournament_name": "OWC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "3453093ebc59091a90a0",
+          "tournament_name": "RDOC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RDOC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "b9bd82696056b23224bf",
+          "tournament_name": "SEAC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SEAC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "ddb14c36a8f502dc94d7",
+          "tournament_name": "SOL 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SOL/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "6ed6cbaae06a1d238245",
+          "tournament_name": "TSC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TSC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "b6fa299b9e8c7d32e806",
+          "tournament_name": "TWC 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2020",
+          "notes": "has at least one structured source"
+        },
+        {
+          "tournament_key": "7f6ceaf67392017989d5",
+          "tournament_name": "UCUP 2020",
+          "year": 2020,
+          "data_quality": "partial",
+          "status": "discovered",
+          "missing": [
+            "spreadsheet_url",
+            "bracket_url",
+            "match_links",
+            "rank_range",
+            "team_size_or_format"
+          ],
+          "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/UCUP/2020",
+          "notes": "has at least one structured source"
+        }
+      ]
+    }
+  },
+  "indexed_total": 84
+}

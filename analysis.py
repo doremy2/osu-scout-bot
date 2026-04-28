@@ -1,9 +1,13 @@
 import statistics
 
+from external_ratings import get_external_ratings
 
 from storage import (
+    canonicalize_stage,
+    compute_real_winrates,
     fetch_all_matches,
     fetch_player_matches,
+    fetch_recent_player_maps,
     fetch_player_scores,
     fetch_player_tournament_matches,
 )
@@ -24,6 +28,60 @@ SLOT_GROUPS = {
 }
 
 ALL_SLOTS = [slot for slots in SLOT_GROUPS.values() for slot in slots]
+
+
+# ─── Mod SR multipliers ─────────────────────────────────────────
+# The osu! API returns base (no-mod) star rating.  Mods change the
+# effective difficulty.  These are community-standard approximations
+# since exact recalculation requires running osu!'s difficulty engine.
+#
+# Sources:
+#   - DT increases BPM by 50% → SR jumps ~1.3-1.6x depending on map
+#   - HR raises CS+30%, AR+40%, OD+40% → SR jumps ~1.2-1.4x
+#   - HD has no effect on SR (purely visual)
+#   - EZ halves CS/AR/OD → roughly halves SR
+#   - HT reduces BPM by 25% → SR drops ~0.7-0.8x
+#   - FM varies per player choice; use a mild average
+MOD_SR_MULTIPLIERS: dict[str, float] = {
+    "NM": 1.0,
+    "HD": 1.0,     # Hidden doesn't change star rating
+    "HR": 1.3,     # Conservative average for HR
+    "DT": 1.5,     # Conservative average for DT/NC
+    "NC": 1.5,
+    "FM": 1.1,     # Freemod: mild average since mods vary
+    "EZ": 0.5,
+    "HT": 0.75,
+    "FL": 1.0,     # Flashlight: minimal SR impact
+    "TB": 1.1,     # Tiebreaker: often freemod-like
+}
+
+
+def get_mod_multiplier(slot_or_mod: str) -> float:
+    """Return the SR multiplier for a given slot name or mod prefix.
+
+    Accepts both 'DT1' (slot) and 'DT' (mod prefix).
+    """
+    prefix = slot_or_mod.rstrip("0123456789").upper()
+    return MOD_SR_MULTIPLIERS.get(prefix, 1.0)
+
+
+def effective_star_rating(base_sr: float, slot_or_mod: str) -> float:
+    """Calculate the effective (mod-adjusted) star rating."""
+    return round(base_sr * get_mod_multiplier(slot_or_mod), 2)
+
+
+def star_efficiency(score: int | float, effective_sr: float) -> float | None:
+    """Score per effective star = how well you convert difficulty into score.
+
+    Higher = better.  A player scoring 900k on a 7★ effective map has
+    SE = 128,571.  A player scoring 500k on an 8★ map has SE = 62,500.
+    The first player is clearly more efficient.
+
+    Returns None if effective_sr is 0 or missing.
+    """
+    if not effective_sr or effective_sr <= 0:
+        return None
+    return round(score / effective_sr)
 ALL_MODS = list(SLOT_GROUPS.keys())
 
 MOD_ORDER = {
@@ -36,6 +94,7 @@ MOD_ORDER = {
 }
 
 STAGE_ORDER = {
+    "Qualifiers": 0,
     "Group Stage": 1,
     "Round of 16": 2,
     "Quarterfinals": 3,
@@ -48,7 +107,7 @@ STAGE_ORDER = {
 def _stage_rank(stage: str | None) -> int:
     if not stage:
         return 0
-    return STAGE_ORDER.get(stage, 0)
+    return STAGE_ORDER.get(canonicalize_stage(stage), 0)
 
 def _slot_prefix(slot: str) -> str:
     return "".join(ch for ch in slot if ch.isalpha()).upper()
@@ -104,7 +163,7 @@ def get_recent_maps(username: str, limit: int = 5) -> list[dict[str, Any]]:
     NOT the same as a match (a full BO9/BO11/BO13 series). For match-level
     history use get_recent_match_history().
     """
-    return get_player_matches(username)[:limit]
+    return fetch_recent_player_maps(username, limit)
 
 
 # Kept as an alias so older callers / tests don't break, but new code should
@@ -146,8 +205,8 @@ def get_recent_match_history(username: str, limit: int = 5) -> list[dict[str, An
     def sort_key(row: dict[str, Any]):
         parsed_date = parse_date(row.get("date"))
         return (
-            parsed_date or datetime.min,
             _stage_rank(row.get("stage")),
+            parsed_date or datetime.min,
             int(row.get("match_index") or 0),
         )
 
@@ -202,6 +261,8 @@ def _empty_stat() -> dict[str, Any]:
         "avg_score": "N/A",
         "avg_accuracy": "N/A",
         "avg_star_rating": "N/A",
+        "effective_sr": None,
+        "star_efficiency": None,
         "winrate": "N/A",
         "matches": 0,
     }
@@ -263,10 +324,21 @@ def build_slot_stats(
             else "N/A"
         )
 
+        avg_score = round(stats["score_sum"] / total)
+
+        # Effective star rating (mod-adjusted) and Star Efficiency
+        eff_sr = None
+        se = None
+        if isinstance(avg_star_rating, (int, float)):
+            eff_sr = effective_star_rating(avg_star_rating, slot)
+            se = star_efficiency(avg_score, eff_sr)
+
         result[slot] = {
-            "avg_score": round(stats["score_sum"] / total),
+            "avg_score": avg_score,
             "avg_accuracy": round(stats["acc_sum"] / total, 2),
             "avg_star_rating": avg_star_rating,
+            "effective_sr": eff_sr,
+            "star_efficiency": se,
             "winrate": winrate,
             "matches": total,
         }
@@ -459,6 +531,20 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
     map_wins, maps_with_results, map_winrate = _compute_map_winrate(matches)
     match_wins, matches_with_results, match_winrate = _compute_match_winrate(matches)
 
+    # Prefer real WR from the match_games/match_scores tables (populated by
+    # the osu! API /matches/{id} ingestion layer). These are ground truth;
+    # the leaderboard-derived values above are only a fallback for legacy
+    # rows that don't have osu! API data yet.
+    real_wr = compute_real_winrates(username)
+    if isinstance(real_wr.get("map_wr"), (int, float)):
+        map_wins = real_wr["map_wins"]
+        maps_with_results = real_wr["maps_total"]
+        map_winrate = real_wr["map_wr"]
+    if isinstance(real_wr.get("match_wr"), (int, float)):
+        match_wins = real_wr["match_wins"]
+        matches_with_results = real_wr["matches_total"]
+        match_winrate = real_wr["match_wr"]
+
     # Prefer the real pscore values from the imported Performance Scores
     # sheets when they exist; fall back to the median-ratio proxy otherwise.
     real_pscore = _lookup_real_pscore(username)
@@ -490,6 +576,7 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
     slot_stats_90 = build_slot_stats(recent_90, slots=get_all_slots(recent_90))
     mod_stats_90 = build_mod_stats(recent_90)
     strengths, weaknesses = get_strengths_and_weaknesses(mod_stats_90)
+    ratings = get_external_ratings(username)
 
     return {
         "player": username,
@@ -510,11 +597,7 @@ def get_overall_summary(username: str) -> dict[str, Any] | None:
         "mod_stats_90": mod_stats_90,
         "strengths": strengths,
         "weaknesses": weaknesses,
-        "ratings": {
-            "romai": "N/A",
-            "elitebotix_duel": "N/A",
-            "skillissue": "N/A",
-        },
+        "ratings": ratings,
     }
 
 
@@ -546,6 +629,8 @@ def _top_comfort_picks(
                 "avg_score": stats["avg_score"],
                 "avg_accuracy": stats["avg_accuracy"],
                 "avg_star_rating": stats["avg_star_rating"],
+                "effective_sr": stats.get("effective_sr"),
+                "star_efficiency": stats.get("star_efficiency"),
                 "winrate": stats["winrate"],
                 "matches": stats["matches"],
             }
@@ -586,6 +671,7 @@ def _build_key_picks(
                 "player2_score": p2["avg_score"],
                 "player1_winrate": p1["winrate"],
                 "player2_winrate": p2["winrate"],
+                "effective_sr": p1.get("effective_sr"),
                 "score_gap": score_gap,
             }
         )
@@ -720,7 +806,7 @@ def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
     return {
         "player1": summary1,
         "player2": summary2,
-        "slots": observed_slots,
+        "observed_slots": observed_slots,
         "key_picks": key_picks,
         "slot_winrates": slot_winrates,
         "accuracy_edges": accuracy_edges,
@@ -730,5 +816,3 @@ def compare_players(player1: str, player2: str) -> dict[str, Any] | None:
         },
         "recommended_bans": recommended_bans,
     }
-
-

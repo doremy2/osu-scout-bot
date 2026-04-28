@@ -1,0 +1,122 @@
+[
+  {
+    "username": "maliszewski",
+    "event_name": "OWC 2025",
+    "days_since_event": 12,
+    "match_cost": 96,
+    "win_rate": 83,
+    "placement_percentile": 98,
+    "strength_of_schedule": 93,
+    "event_tier_weight": 1.4
+  },
+  {
+    "username": "maliszewski",
+    "event_name": "Corsace Closed 2025",
+    "days_since_event": 71,
+    "match_cost": 91,
+    "win_rate": 79,
+    "placement_percentile": 94,
+    "strength_of_schedule": 90,
+    "event_tier_weight": 1.25
+  },
+  {
+    "username": "maliszewski",
+    "event_name": "Perennial 2025",
+    "days_since_event": 124,
+    "match_cost": 87,
+    "win_rate": 76,
+    "placement_percentile": 88,
+    "strength_of_schedule": 85,
+    "event_tier_weight": 1.1
+  },
+  {
+    "username": "mrekk",
+    "event_name": "Corsace Open 2025",
+    "days_since_event": 22,
+    "match_cost": 95,
+    "win_rate": 81,
+    "placement_percentile": 97,
+    "strength_of_schedule": 91,
+    "event_tier_weight": 1.35
+  },
+  {
+    "username": "mrekk",
+    "event_name": "Asterisk Cup 2025",
+    "days_since_event": 67,
+    "match_cost": 89,
+    "win_rate": 75,
+    "placement_percentile": 90,
+    "strength_of_schedule": 86,
+    "event_tier_weight": 1.15
+  },
+  {
+    "username": "milosz",
+    "event_name": "OWC 2025",
+    "days_since_event": 12,
+    "match_cost": 84,
+    "win_rate": 72,
+    "placement_percentile": 89,
+    "strength_of_schedule": 92,
+    "event_tier_weight": 1.4
+  },
+  {
+    "username": "milosz",
+    "event_name": "Polish Championship 2025",
+    "days_since_event": 95,
+    "match_cost": 78,
+    "win_rate": 70,
+    "placement_percentile": 82,
+    "strength_of_schedule": 74,
+    "event_tier_weight": 1.0
+  },
+  {
+    "username": "milosz",
+    "event_name": "Autumn Team Cup 2025",
+    "days_since_event": 173,
+    "match_cost": 72,
+    "win_rate": 67,
+    "placement_percentile": 79,
+    "strength_of_schedule": 71,
+    "event_tier_weight": 0.9
+  },
+  {
+    "username": "akolibed",
+    "event_name": "Roundtable II",
+    "days_since_event": 31,
+    "match_cost": 86,
+    "win_rate": 74,
+    "placement_percentile": 88,
+    "strength_of_schedule": 87,
+    "event_tier_weight": 1.2
+  },
+  {
+    "username": "akolibed",
+    "event_name": "Arena Grandmasters",
+    "days_since_event": 142,
+    "match_cost": 79,
+    "win_rate": 69,
+    "placement_percentile": 80,
+    "strength_of_schedule": 83,
+    "event_tier_weight": 1.05
+  },
+  {
+    "username": "xootynator",
+    "event_name": "Women World Cup 2025",
+    "days_since_event": 47,
+    "match_cost": 81,
+    "win_rate": 73,
+    "placement_percentile": 86,
+    "strength_of_schedule": 80,
+    "event_tier_weight": 1.2
+  },
+  {
+    "username": "xootynator",
+    "event_name": "Spring Invitational 2025",
+    "days_since_event": 184,
+    "match_cost": 68,
+    "win_rate": 63,
+    "placement_percentile": 72,
+    "strength_of_schedule": 69,
+    "event_tier_weight": 0.85
+  }
+]

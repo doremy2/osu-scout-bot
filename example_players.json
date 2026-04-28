@@ -1,0 +1,47 @@
+[
+  {
+    "username": "maliszewski",
+    "elitebotix_rating": 6.82,
+    "skill_issue_rating": 1928,
+    "bancho_rank": 14,
+    "lazer_rank": 26,
+    "tournaments_played_last_12m": 7,
+    "days_since_last_event": 12
+  },
+  {
+    "username": "mrekk",
+    "elitebotix_rating": 7.18,
+    "skill_issue_rating": 1890,
+    "bancho_rank": 1,
+    "lazer_rank": 4,
+    "tournaments_played_last_12m": 4,
+    "days_since_last_event": 22
+  },
+  {
+    "username": "milosz",
+    "elitebotix_rating": 6.31,
+    "skill_issue_rating": 1810,
+    "bancho_rank": 191,
+    "lazer_rank": 284,
+    "tournaments_played_last_12m": 5,
+    "days_since_last_event": 12
+  },
+  {
+    "username": "akolibed",
+    "elitebotix_rating": 6.47,
+    "skill_issue_rating": 1844,
+    "bancho_rank": 3,
+    "lazer_rank": 8,
+    "tournaments_played_last_12m": 3,
+    "days_since_last_event": 31
+  },
+  {
+    "username": "xootynator",
+    "elitebotix_rating": 5.94,
+    "skill_issue_rating": 1718,
+    "bancho_rank": 259,
+    "lazer_rank": 301,
+    "tournaments_played_last_12m": 2,
+    "days_since_last_event": 47
+  }
+]

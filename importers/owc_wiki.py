@@ -42,9 +42,8 @@ from __future__ import annotations
 import html
 import re
 from dataclasses import dataclass, field
-from typing import Iterable
-
-import requests
+from typing import Any, Iterable
+from urllib.request import Request, urlopen
 
 from importers.osu_api import parse_match_id
 
@@ -104,6 +103,7 @@ class TournamentWikiConfig:
     mappool_url: str | None = None
     # Human-readable stage names we expect to find as section headers.
     known_stages: tuple[str, ...] = (
+        "Qualifiers",
         "Group Stage",
         "Round of 32",
         "Round of 16",
@@ -123,20 +123,26 @@ OWC_2025 = TournamentWikiConfig(
 
 # ---------- HTTP ----------
 
-def _get(url: str, *, session: requests.Session | None = None) -> str:
-    sess = session or requests.Session()
-    try:
-        resp = sess.get(
+def _get(url: str, *, session: Any | None = None) -> str:
+    if session is not None and hasattr(session, "get"):
+        resp = session.get(
             url,
             headers={"User-Agent": WIKI_USER_AGENT, "Accept": "text/html"},
             timeout=DEFAULT_TIMEOUT,
         )
-    finally:
-        if session is None:
-            sess.close()
-    if resp.status_code != 200:
-        raise RuntimeError(f"Wiki fetch {url} -> {resp.status_code}")
-    return resp.text
+        if resp.status_code != 200:
+            raise RuntimeError(f"Wiki fetch {url} -> {resp.status_code}")
+        return resp.text
+
+    request = Request(
+        url,
+        headers={"User-Agent": WIKI_USER_AGENT, "Accept": "text/html"},
+    )
+    with urlopen(request, timeout=DEFAULT_TIMEOUT) as response:
+        status_code = getattr(response, "status", None) or response.getcode()
+        if status_code != 200:
+            raise RuntimeError(f"Wiki fetch {url} -> {status_code}")
+        return response.read().decode("utf-8")
 
 
 # ---------- HTML helpers (regex-based, no BS4 dep) ----------
@@ -289,17 +295,99 @@ def parse_bracket_page(
 # (slot, map title, beatmap_id) — SR we can re-pull cheaply via osu_api.
 
 _BEATMAP_URL_RE = re.compile(
-    r"https?://osu\.ppy\.sh/beatmaps/(?P<id>\d+)",
+    r"(?:https?://osu\.ppy\.sh)?/(?:beatmaps/(?P<direct_id>\d+)|beatmapsets/\d+#osu/(?P<set_id>\d+))",
     re.IGNORECASE,
 )
-_SLOT_RE = re.compile(r"\b(NM|HD|HR|DT|FM|EZ|HT|TB)\d*\b", re.IGNORECASE)
+_SLOT_RE = re.compile(r"\b(NM|HD|HR|DT|FM|EZ|HT|TB|LM|FL|OG)\d*\b", re.IGNORECASE)
 _TABLE_ROW_RE = re.compile(r"<tr\b[^>]*>(?P<body>.*?)</tr>", re.DOTALL | re.IGNORECASE)
 _TABLE_CELL_RE = re.compile(r"<t[dh]\b[^>]*>(?P<body>.*?)</t[dh]>", re.DOTALL | re.IGNORECASE)
+_MOD_LABELS = (
+    ("No Mod", "NM"),
+    ("Hidden", "HD"),
+    ("Hard Rock", "HR"),
+    ("Double Time", "DT"),
+    ("Free Mod", "FM"),
+    ("Flashlight", "FL"),
+    ("Lazer Mod", "LM"),
+    ("Original", "OG"),
+    ("Tiebreaker", "TB"),
+)
+_MOD_LABEL_RE = re.compile(
+    "|".join(re.escape(label) for label, _ in _MOD_LABELS),
+    re.IGNORECASE,
+)
+
+
+def _parse_anchor_map_text(text: str) -> tuple[str | None, str | None]:
+    cleaned = _strip_tags(text)
+    if not cleaned:
+        return None, None
+
+    difficulty_name = None
+    diff_match = re.search(r"\[(?P<diff>[^\]]+)\]\s*$", cleaned)
+    if diff_match:
+        difficulty_name = diff_match.group("diff").strip() or None
+        cleaned = cleaned[:diff_match.start()].strip()
+
+    mapper_match = re.search(r"\(([^()]*)\)\s*$", cleaned)
+    if mapper_match:
+        cleaned = cleaned[:mapper_match.start()].strip()
+
+    return cleaned or None, difficulty_name
+
+
+def _extract_mappool_from_mod_list(
+    stage: str, section_html: str
+) -> list[MappoolEntry]:
+    label_matches = list(_MOD_LABEL_RE.finditer(section_html))
+    if not label_matches:
+        return []
+
+    prefix_by_label = {label.casefold(): prefix for label, prefix in _MOD_LABELS}
+    entries: list[MappoolEntry] = []
+    for index, label_match in enumerate(label_matches):
+        label = label_match.group(0)
+        prefix = prefix_by_label.get(label.casefold())
+        if prefix is None:
+            continue
+        block_end = label_matches[index + 1].start() if index + 1 < len(label_matches) else len(section_html)
+        block_html = section_html[label_match.end():block_end]
+
+        seen_ids: set[int] = set()
+        beatmap_rows: list[tuple[int, str | None, str | None]] = []
+        for anchor in _ANCHOR_RE.finditer(block_html):
+            href = anchor.group("href") or ""
+            beatmap_match = _BEATMAP_URL_RE.search(href)
+            if beatmap_match is None:
+                continue
+            beatmap_id = int(beatmap_match.group("direct_id") or beatmap_match.group("set_id"))
+            if beatmap_id in seen_ids:
+                continue
+            seen_ids.add(beatmap_id)
+            map_name, difficulty_name = _parse_anchor_map_text(anchor.group("text"))
+            beatmap_rows.append((beatmap_id, map_name, difficulty_name))
+
+        for beatmap_index, (beatmap_id, map_name, difficulty_name) in enumerate(beatmap_rows, start=1):
+            slot = "TB" if prefix == "TB" else f"{prefix}{beatmap_index}"
+            entries.append(
+                MappoolEntry(
+                    stage=stage,
+                    slot=slot,
+                    beatmap_id=beatmap_id,
+                    map_name=map_name,
+                    difficulty_name=difficulty_name,
+                )
+            )
+    return entries
 
 
 def _extract_mappool_from_section(
     stage: str, section_html: str
 ) -> list[MappoolEntry]:
+    entries = _extract_mappool_from_mod_list(stage, section_html)
+    if entries:
+        return entries
+
     entries: list[MappoolEntry] = []
     for row in _TABLE_ROW_RE.finditer(section_html):
         cells_raw = [
@@ -347,11 +435,17 @@ def parse_mappool_page(
     page_html: str, config: TournamentWikiConfig
 ) -> list[MappoolEntry]:
     results: list[MappoolEntry] = []
+    seen_keys: set[tuple[str, str]] = set()
     for title, body in _iter_sections(page_html):
         stage = _nearest_stage(title, config.known_stages)
         if stage is None:
             continue
-        results.extend(_extract_mappool_from_section(stage, body))
+        for entry in _extract_mappool_from_section(stage, body):
+            key = (entry.stage, entry.slot)
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+            results.append(entry)
     return results
 
 
@@ -360,7 +454,7 @@ def parse_mappool_page(
 def fetch_bracket(
     config: TournamentWikiConfig,
     *,
-    session: requests.Session | None = None,
+    session: Any | None = None,
 ) -> TournamentBracket:
     """Fetch bracket + (if configured) mappool for one tournament."""
     page_html = _get(config.bracket_url, session=session)
@@ -382,7 +476,7 @@ def fetch_bracket(
 
 
 def fetch_owc_2025_bracket(
-    session: requests.Session | None = None,
+    session: Any | None = None,
 ) -> TournamentBracket:
     """Convenience: fetch OWC 2025 with the default config."""
     return fetch_bracket(OWC_2025, session=session)

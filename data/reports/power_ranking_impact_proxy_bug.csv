@@ -1,0 +1,611 @@
+username,elitebotix_score,skill_issue_score,bancho_score,lazer_score,recent_tournament_form,consistency_score,reliability_multiplier,activity_multiplier,final_power_score,provisional,base_power_score,tournaments_played_last_12m,days_since_last_event,explanation,debug
+BoshyMan741,,,,,83.43,83.98,0.8875,0.9475,70.25,True,83.54,2,134.0,"BoshyMan741 scores 70.25 with consistency score 84.0, recent tournament form 83.4; reliability 0.887, activity 0.948, provisional",{}
+hav,,,,,79.34,88.52,0.8875,0.9475,68.26,True,81.18,2,134.0,"hav scores 68.26 with consistency score 88.5, recent tournament form 79.3; reliability 0.887, activity 0.948, provisional",{}
+MALISZEWSKI,,,,,74.72,91.83,0.9062,0.9475,67.09,False,78.14,3,134.0,"MALISZEWSKI scores 67.09 with consistency score 91.8, recent tournament form 74.7; reliability 0.906, activity 0.948",{}
+decaten,,,,,76.22,81.1,0.9062,0.9475,66.28,False,77.2,3,134.0,"decaten scores 66.28 with consistency score 81.1, recent tournament form 76.2; reliability 0.906, activity 0.948",{}
+rektygon,,,,,78.98,73.4,0.8875,0.9475,65.48,True,77.86,2,134.0,"rektygon scores 65.48 with recent tournament form 79.0, consistency score 73.4; reliability 0.887, activity 0.948, provisional",{}
+Rafis,,,,,75.42,86.05,0.8875,0.9475,65.21,True,77.55,2,134.0,"Rafis scores 65.21 with consistency score 86.0, recent tournament form 75.4; reliability 0.887, activity 0.948, provisional",{}
+Pezz,,,,,73.98,88.65,0.8875,0.9475,64.68,True,76.91,2,134.0,"Pezz scores 64.68 with consistency score 88.7, recent tournament form 74.0; reliability 0.887, activity 0.948, provisional",{}
+liliel,,,,,70.97,96.54,0.8875,0.9475,63.98,True,76.08,2,134.0,"liliel scores 63.98 with consistency score 96.5, recent tournament form 71.0; reliability 0.887, activity 0.948, provisional",{}
+EthantrixV3,,,,,73.63,85.84,0.8688,0.9475,62.62,True,76.07,1,134.0,"EthantrixV3 scores 62.62 with consistency score 85.8, recent tournament form 73.6; reliability 0.869, activity 0.948, provisional",{}
+calebshucks,,,,,71.6,89.87,0.8688,0.9475,61.95,True,75.25,1,134.0,"calebshucks scores 61.95 with consistency score 89.9, recent tournament form 71.6; reliability 0.869, activity 0.948, provisional",{}
+ASecretBox,,,,,65.67,95.91,0.9062,0.9472,61.56,False,71.72,3,135.0,"ASecretBox scores 61.56 with consistency score 95.9, recent tournament form 65.7; reliability 0.906, activity 0.947",{}
+gnahus,,,,,67.31,96.26,0.8875,0.9475,61.47,True,73.1,2,134.0,"gnahus scores 61.47 with consistency score 96.3, recent tournament form 67.3; reliability 0.887, activity 0.948, provisional",{}
+cloppit,,,,,64.9,99.09,0.8875,0.9472,60.31,True,71.74,2,135.0,"cloppit scores 60.31 with consistency score 99.1, recent tournament form 64.9; reliability 0.887, activity 0.947, provisional",{}
+tekkito,,,,,70.29,71.03,0.8875,0.9475,59.23,True,70.44,2,134.0,"tekkito scores 59.23 with consistency score 71.0, recent tournament form 70.3; reliability 0.887, activity 0.948, provisional",{}
+bored yes,,,,,86.13,25.0,0.8688,0.9194,59.03,True,73.9,1,295.0,"bored yes scores 59.03 with recent tournament form 86.1, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+mrekk,,,,,65.56,88.58,0.8875,0.9472,58.98,True,70.16,2,135.0,"mrekk scores 58.98 with consistency score 88.6, recent tournament form 65.6; reliability 0.887, activity 0.947, provisional",{}
+Nopekjk,,,,,65.2,86.6,0.8875,0.9454,58.3,True,69.48,2,142.0,"Nopekjk scores 58.30 with consistency score 86.6, recent tournament form 65.2; reliability 0.887, activity 0.945, provisional",{}
+Kosiarek,,,,,63.29,83.4,0.9062,0.9475,57.8,False,67.31,3,134.0,"Kosiarek scores 57.80 with consistency score 83.4, recent tournament form 63.3; reliability 0.906, activity 0.948",{}
+szedis,,,,,63.79,88.26,0.8875,0.9475,57.76,True,68.68,2,134.0,"szedis scores 57.76 with consistency score 88.3, recent tournament form 63.8; reliability 0.887, activity 0.948, provisional",{}
+distantmemory,,,,,66.98,93.17,0.8688,0.9179,57.59,True,72.22,1,310.0,"distantmemory scores 57.59 with consistency score 93.2, recent tournament form 67.0; reliability 0.869, activity 0.918, provisional",{}
+Allegrissimo,,,,,62.95,96.94,0.8688,0.9454,57.29,True,69.75,1,142.0,"Allegrissimo scores 57.29 with consistency score 96.9, recent tournament form 63.0; reliability 0.869, activity 0.945, provisional",{}
+WindowLife,,,,,79.18,25.0,0.8688,0.9475,56.26,True,68.34,1,134.0,"WindowLife scores 56.26 with recent tournament form 79.2, consistency score 25.0; reliability 0.869, activity 0.948, provisional",{}
+FlyingTuna,,,,,60.18,94.19,0.8875,0.9454,56.2,True,66.98,2,142.0,"FlyingTuna scores 56.20 with consistency score 94.2, recent tournament form 60.2; reliability 0.887, activity 0.945, provisional",{}
+palr,,,,,60.45,89.87,0.8875,0.9472,55.76,True,66.33,2,135.0,"palr scores 55.76 with consistency score 89.9, recent tournament form 60.5; reliability 0.887, activity 0.947, provisional",{}
+NeliNyan,,,,,60.62,95.45,0.8688,0.9454,55.51,True,67.59,1,142.0,"NeliNyan scores 55.51 with consistency score 95.5, recent tournament form 60.6; reliability 0.869, activity 0.945, provisional",{}
+Birchman,,,,,57.99,90.07,0.9062,0.9457,55.2,False,64.41,3,141.0,"Birchman scores 55.20 with consistency score 90.1, recent tournament form 58.0; reliability 0.906, activity 0.946",{}
+toybot,,,,,65.24,75.81,0.8875,0.9193,54.95,True,67.35,2,296.0,"toybot scores 54.95 with consistency score 75.8, recent tournament form 65.2; reliability 0.887, activity 0.919, provisional",{}
+rng_,,,,,79.36,25.0,0.8688,0.918,54.62,True,68.49,1,309.0,"rng_ scores 54.62 with recent tournament form 79.4, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+criller,,,,,60.09,84.65,0.8875,0.9454,54.54,True,65.0,2,142.0,"criller scores 54.54 with consistency score 84.7, recent tournament form 60.1; reliability 0.887, activity 0.945, provisional",{}
+aknzx,,,,,59.44,79.48,0.9062,0.9472,54.46,False,63.45,3,135.0,"aknzx scores 54.46 with consistency score 79.5, recent tournament form 59.4; reliability 0.906, activity 0.947",{}
+Rumyndra,,,,,60.31,92.09,0.8875,0.9201,54.44,True,66.67,2,289.0,"Rumyndra scores 54.44 with consistency score 92.1, recent tournament form 60.3; reliability 0.887, activity 0.920, provisional",{}
+eddy,,,,,79.11,25.0,0.8688,0.9173,54.42,True,68.29,1,316.0,"eddy scores 54.42 with recent tournament form 79.1, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Tokii,,,,,78.63,25.0,0.8688,0.918,54.16,True,67.9,1,309.0,"Tokii scores 54.16 with recent tournament form 78.6, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+A]],,,,,60.25,89.21,0.8688,0.942,54.05,True,66.04,1,156.0,"A]] scores 54.05 with consistency score 89.2, recent tournament form 60.2; reliability 0.869, activity 0.942, provisional",{}
+Ruyaya,,,,,54.63,97.48,0.9062,0.9423,53.97,False,63.2,3,155.0,"Ruyaya scores 53.97 with consistency score 97.5, recent tournament form 54.6; reliability 0.906, activity 0.942",{}
+Indiana,,,,,66.38,64.22,0.8875,0.9186,53.76,True,65.95,2,303.0,"Indiana scores 53.76 with recent tournament form 66.4, consistency score 64.2; reliability 0.887, activity 0.919, provisional",{}
+Flyer,,,,,55.7,97.7,0.8875,0.9423,53.61,True,64.1,2,155.0,"Flyer scores 53.61 with consistency score 97.7, recent tournament form 55.7; reliability 0.887, activity 0.942, provisional",{}
+lifeline,,,,,59.24,73.57,0.8875,0.9674,53.32,True,62.11,2,71.0,"lifeline scores 53.32 with consistency score 73.6, recent tournament form 59.2; reliability 0.887, activity 0.967, provisional",{}
+LordGabriel,,,,,60.78,82.36,0.8688,0.9423,53.29,True,65.1,1,155.0,"LordGabriel scores 53.29 with consistency score 82.4, recent tournament form 60.8; reliability 0.869, activity 0.942, provisional",{}
+Wanderio,,,,,58.05,77.45,0.9062,0.9457,53.07,False,61.93,3,141.0,"Wanderio scores 53.07 with consistency score 77.5, recent tournament form 58.0; reliability 0.906, activity 0.946",{}
+Fleh,,,,,57.1,94.58,0.8688,0.9454,53.06,True,64.6,1,142.0,"Fleh scores 53.06 with consistency score 94.6, recent tournament form 57.1; reliability 0.869, activity 0.945, provisional",{}
+Spinesnight,,,,,54.74,97.45,0.8875,0.9423,52.92,True,63.28,2,155.0,"Spinesnight scores 52.92 with consistency score 97.5, recent tournament form 54.7; reliability 0.887, activity 0.942, provisional",{}
+yip,,,,,56.97,86.56,0.8875,0.9457,52.78,True,62.89,2,141.0,"yip scores 52.78 with consistency score 86.6, recent tournament form 57.0; reliability 0.887, activity 0.946, provisional",{}
+LUNAISTABBY,,,,,63.02,69.81,0.8875,0.918,52.45,True,64.38,2,309.0,"LUNAISTABBY scores 52.45 with consistency score 69.8, recent tournament form 63.0; reliability 0.887, activity 0.918, provisional",{}
+steamhappy,,,,,56.45,84.26,0.8875,0.9457,52.05,True,62.01,2,141.0,"steamhappy scores 52.05 with consistency score 84.3, recent tournament form 56.5; reliability 0.887, activity 0.946, provisional",{}
+shwq,,,,,54.73,90.41,0.8875,0.9423,51.74,True,61.87,2,155.0,"shwq scores 51.74 with consistency score 90.4, recent tournament form 54.7; reliability 0.887, activity 0.942, provisional",{}
+Zylice,,,,,52.6,90.15,0.9062,0.9457,51.51,False,60.11,3,141.0,"Zylice scores 51.51 with consistency score 90.2, recent tournament form 52.6; reliability 0.906, activity 0.946",{}
+sharytory,,,,,71.86,25.0,0.8688,0.9475,51.44,True,62.49,1,134.0,"sharytory scores 51.44 with recent tournament form 71.9, consistency score 25.0; reliability 0.869, activity 0.948, provisional",{}
+Xaver,,,,,51.73,98.92,0.8875,0.9457,51.34,True,61.17,2,141.0,"Xaver scores 51.34 with consistency score 98.9, recent tournament form 51.7; reliability 0.887, activity 0.946, provisional",{}
+nujabes,,,,,53.36,91.47,0.8875,0.9457,51.18,True,60.98,2,141.0,"nujabes scores 51.18 with consistency score 91.5, recent tournament form 53.4; reliability 0.887, activity 0.946, provisional",{}
+Eirra,,,,,57.82,81.6,0.8875,0.9193,51.05,True,62.58,2,296.0,"Eirra scores 51.05 with consistency score 81.6, recent tournament form 57.8; reliability 0.887, activity 0.919, provisional",{}
+calangi,,,,,52.4,94.7,0.8875,0.9423,50.9,True,60.86,2,155.0,"calangi scores 50.90 with consistency score 94.7, recent tournament form 52.4; reliability 0.887, activity 0.942, provisional",{}
+Raikouhou,,,,,56.32,77.26,0.8875,0.9475,50.88,True,60.51,2,134.0,"Raikouhou scores 50.88 with consistency score 77.3, recent tournament form 56.3; reliability 0.887, activity 0.948, provisional",{}
+Fuma,,,,,50.57,96.39,0.8875,0.9593,50.86,True,59.73,2,94.0,"Fuma scores 50.86 with consistency score 96.4, recent tournament form 50.6; reliability 0.887, activity 0.959, provisional",{}
+runnysunny,,,,,51.53,89.36,0.9062,0.9454,50.63,False,59.1,3,142.0,"runnysunny scores 50.63 with consistency score 89.4, recent tournament form 51.5; reliability 0.906, activity 0.945",{}
+MineFrostID,,,,,52.15,85.82,0.8875,0.9674,50.56,True,58.88,2,71.0,"MineFrostID scores 50.56 with consistency score 85.8, recent tournament form 52.1; reliability 0.887, activity 0.967, provisional",{}
+Oly9919,,,,,51.23,90.55,0.9062,0.9423,50.46,False,59.09,3,155.0,"Oly9919 scores 50.46 with consistency score 90.5, recent tournament form 51.2; reliability 0.906, activity 0.942",{}
+Tim Kackner,,,,,52.17,97.88,0.8688,0.9454,50.36,True,61.31,1,142.0,"Tim Kackner scores 50.36 with consistency score 97.9, recent tournament form 52.2; reliability 0.869, activity 0.945, provisional",{}
+maxim,,,,,52.03,92.45,0.8875,0.9437,50.35,True,60.11,2,149.0,"maxim scores 50.35 with consistency score 92.5, recent tournament form 52.0; reliability 0.887, activity 0.944, provisional",{}
+Chipori,,,,,55.19,85.37,0.8688,0.9454,50.29,True,61.23,1,142.0,"Chipori scores 50.29 with consistency score 85.4, recent tournament form 55.2; reliability 0.869, activity 0.945, provisional",{}
+Pregnancy,,,,,51.55,94.77,0.8875,0.9391,50.17,True,60.19,2,169.0,"Pregnancy scores 50.17 with consistency score 94.8, recent tournament form 51.5; reliability 0.887, activity 0.939, provisional",{}
+killer2007,,,,,50.11,97.57,0.8875,0.9439,49.93,True,59.6,2,148.0,"killer2007 scores 49.93 with consistency score 97.6, recent tournament form 50.1; reliability 0.887, activity 0.944, provisional",{}
+mcy4,,,,,71.92,25.0,0.8688,0.9188,49.92,True,62.54,1,301.0,"mcy4 scores 49.92 with recent tournament form 71.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+ZeitFrost,,,,,50.77,94.36,0.8875,0.9454,49.91,True,59.49,2,142.0,"ZeitFrost scores 49.91 with consistency score 94.4, recent tournament form 50.8; reliability 0.887, activity 0.945, provisional",{}
+Crystal,,,,,51.0,93.87,0.8875,0.9437,49.9,True,59.57,2,149.0,"Crystal scores 49.90 with consistency score 93.9, recent tournament form 51.0; reliability 0.887, activity 0.944, provisional",{}
+savilju,,,,,48.77,97.17,0.9062,0.942,49.9,False,58.45,3,156.0,"savilju scores 49.90 with consistency score 97.2, recent tournament form 48.8; reliability 0.906, activity 0.942",{}
+ESCRUPULILLO,,,,,49.56,93.75,0.9062,0.9418,49.84,False,58.4,3,157.0,"ESCRUPULILLO scores 49.84 with consistency score 93.8, recent tournament form 49.6; reliability 0.906, activity 0.942",{}
+nuxx,,,,,54.68,90.33,0.8688,0.9209,49.45,True,61.81,1,282.0,"nuxx scores 49.45 with consistency score 90.3, recent tournament form 54.7; reliability 0.869, activity 0.921, provisional",{}
+karate,,,,,54.03,86.48,0.8875,0.9201,49.42,True,60.52,2,289.0,"karate scores 49.42 with consistency score 86.5, recent tournament form 54.0; reliability 0.887, activity 0.920, provisional",{}
+PinkEyeFan2013,,,,,53.91,78.37,0.8875,0.9457,49.35,True,58.8,2,141.0,"PinkEyeFan2013 scores 49.35 with consistency score 78.4, recent tournament form 53.9; reliability 0.887, activity 0.946, provisional",{}
+Zucchiniii,,,,,71.07,25.0,0.8688,0.918,49.33,True,61.86,1,309.0,"Zucchiniii scores 49.33 with recent tournament form 71.1, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+Lightningfox,,,,,50.43,93.1,0.8875,0.942,49.3,True,58.96,2,156.0,"Lightningfox scores 49.30 with consistency score 93.1, recent tournament form 50.4; reliability 0.887, activity 0.942, provisional",{}
+perhap,,,,,50.68,91.7,0.8875,0.9423,49.24,True,58.88,2,155.0,"perhap scores 49.24 with consistency score 91.7, recent tournament form 50.7; reliability 0.887, activity 0.942, provisional",{}
+NathanRam1918,,,,,51.75,86.26,0.8875,0.9457,49.23,True,58.65,2,141.0,"NathanRam1918 scores 49.23 with consistency score 86.3, recent tournament form 51.8; reliability 0.887, activity 0.946, provisional",{}
+GET LOVED,,,,,53.5,86.96,0.8875,0.9209,49.19,True,60.19,2,282.0,"GET LOVED scores 49.19 with consistency score 87.0, recent tournament form 53.5; reliability 0.887, activity 0.921, provisional",{}
+lolol235,,,,,50.92,83.02,0.9062,0.9457,49.14,False,57.34,3,141.0,"lolol235 scores 49.14 with consistency score 83.0, recent tournament form 50.9; reliability 0.906, activity 0.946",{}
+Coreanmaluco,,,,,49.85,94.1,0.8875,0.9407,49.01,True,58.7,2,162.0,"Coreanmaluco scores 49.01 with consistency score 94.1, recent tournament form 49.9; reliability 0.887, activity 0.941, provisional",{}
+ZaNy_,,,,,49.95,84.98,0.9062,0.9423,48.64,False,56.96,3,155.0,"ZaNy_ scores 48.64 with consistency score 85.0, recent tournament form 50.0; reliability 0.906, activity 0.942",{}
+BATBALL,,,,,54.97,68.81,0.8875,0.9475,48.55,True,57.74,2,134.0,"BATBALL scores 48.55 with consistency score 68.8, recent tournament form 55.0; reliability 0.887, activity 0.948, provisional",{}
+Ledeau_Fox,,,,,49.74,89.67,0.8875,0.9437,48.35,True,57.73,2,149.0,"Ledeau_Fox scores 48.35 with consistency score 89.7, recent tournament form 49.7; reliability 0.887, activity 0.944, provisional",{}
+Icarussy,,,,,50.59,92.12,0.8688,0.9423,48.22,True,58.9,1,155.0,"Icarussy scores 48.22 with consistency score 92.1, recent tournament form 50.6; reliability 0.869, activity 0.942, provisional",{}
+PikaPwn,,,,,56.11,77.01,0.8688,0.9202,48.2,True,60.29,1,288.0,"PikaPwn scores 48.20 with consistency score 77.0, recent tournament form 56.1; reliability 0.869, activity 0.920, provisional",{}
+nemq,,,,,50.43,93.51,0.8875,0.9193,48.17,True,59.05,2,296.0,"nemq scores 48.17 with consistency score 93.5, recent tournament form 50.4; reliability 0.887, activity 0.919, provisional",{}
+steisha,,,,,51.61,95.29,0.8688,0.9165,48.05,True,60.35,1,324.0,"steisha scores 48.05 with consistency score 95.3, recent tournament form 51.6; reliability 0.869, activity 0.916, provisional",{}
+Tartis,,,,,50.77,96.6,0.8688,0.9201,47.91,True,59.94,1,289.0,"Tartis scores 47.91 with consistency score 96.6, recent tournament form 50.8; reliability 0.869, activity 0.920, provisional",{}
+z980838928,,,,,47.19,91.3,0.9062,0.9437,47.9,False,56.01,3,149.0,"z980838928 scores 47.90 with consistency score 91.3, recent tournament form 47.2; reliability 0.906, activity 0.944",{}
+-IZZY,,,,,46.96,96.8,0.8875,0.9423,47.61,True,56.93,2,155.0,"-IZZY scores 47.61 with consistency score 96.8, recent tournament form 47.0; reliability 0.887, activity 0.942, provisional",{}
+Agent5d,,,,,51.92,77.01,0.9062,0.9202,47.48,False,56.94,3,288.0,"Agent5d scores 47.48 with consistency score 77.0, recent tournament form 51.9; reliability 0.906, activity 0.920",{}
+bunnylikemoney,,,,,67.9,25.0,0.8688,0.9194,47.38,True,59.32,1,295.0,"bunnylikemoney scores 47.38 with recent tournament form 67.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Amasetic,,,,,48.07,89.16,0.8875,0.9475,47.33,True,56.29,2,134.0,"Amasetic scores 47.33 with consistency score 89.2, recent tournament form 48.1; reliability 0.887, activity 0.948, provisional",{}
+Kalanluu,,,,,50.8,79.34,0.8875,0.942,47.24,True,56.51,2,156.0,"Kalanluu scores 47.24 with consistency score 79.3, recent tournament form 50.8; reliability 0.887, activity 0.942, provisional",{}
+stellasu,,,,,50.41,87.43,0.8875,0.9193,47.17,True,57.81,2,296.0,"stellasu scores 47.17 with consistency score 87.4, recent tournament form 50.4; reliability 0.887, activity 0.919, provisional",{}
+Thatnoobguy,,,,,47.13,81.9,0.9062,0.962,47.15,False,54.08,3,86.0,"Thatnoobguy scores 47.15 with consistency score 81.9, recent tournament form 47.1; reliability 0.906, activity 0.962",{}
+fragranceofpage,,,,,69.82,25.0,0.85,0.9108,47.11,True,60.86,0,400.0,"fragranceofpage scores 47.11 with recent tournament form 69.8, consistency score 25.0; reliability 0.850, activity 0.911, provisional",{}
+aahoff,,,,,49.65,90.12,0.8875,0.9193,47.11,True,57.74,2,296.0,"aahoff scores 47.11 with consistency score 90.1, recent tournament form 49.6; reliability 0.887, activity 0.919, provisional",{}
+Hifkil,,,,,47.56,91.41,0.8875,0.9423,47.11,True,56.33,2,155.0,"Hifkil scores 47.11 with consistency score 91.4, recent tournament form 47.6; reliability 0.887, activity 0.942, provisional",{}
+NO37,,,,,48.08,88.92,0.8875,0.9437,47.11,True,56.25,2,149.0,"NO37 scores 47.11 with consistency score 88.9, recent tournament form 48.1; reliability 0.887, activity 0.944, provisional",{}
+NO67,,,,,48.46,87.63,0.8875,0.942,47.06,True,56.29,2,156.0,"NO67 scores 47.06 with consistency score 87.6, recent tournament form 48.5; reliability 0.887, activity 0.942, provisional",{}
+Emilbus,,,,,47.73,89.67,0.8875,0.9439,47.01,True,56.12,2,148.0,"Emilbus scores 47.01 with consistency score 89.7, recent tournament form 47.7; reliability 0.887, activity 0.944, provisional",{}
+A L E P H,,,,,45.47,98.81,0.8875,0.9418,46.92,True,56.14,2,157.0,"A L E P H scores 46.92 with consistency score 98.8, recent tournament form 45.5; reliability 0.887, activity 0.942, provisional",{}
+Satsukiiii,,,,,50.08,85.65,0.8688,0.9423,46.82,True,57.19,1,155.0,"Satsukiiii scores 46.82 with consistency score 85.7, recent tournament form 50.1; reliability 0.869, activity 0.942, provisional",{}
+Uzumaki,,,,,67.05,25.0,0.8688,0.918,46.77,True,58.64,1,309.0,"Uzumaki scores 46.77 with recent tournament form 67.0, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+Doomsday fanboy,,,,,69.18,25.0,0.85,0.9108,46.72,True,60.34,0,400.0,"Doomsday fanboy scores 46.72 with recent tournament form 69.2, consistency score 25.0; reliability 0.850, activity 0.911, provisional",{}
+desuqe,,,,,46.95,96.84,0.8688,0.9439,46.68,True,56.93,1,148.0,"desuqe scores 46.68 with consistency score 96.8, recent tournament form 47.0; reliability 0.869, activity 0.944, provisional",{}
+NINERIK,,,,,49.05,82.28,0.8875,0.9437,46.65,True,55.7,2,149.0,"NINERIK scores 46.65 with consistency score 82.3, recent tournament form 49.0; reliability 0.887, activity 0.944, provisional",{}
+fedotoff,,,,,47.54,96.08,0.8875,0.918,46.64,True,57.25,2,309.0,"fedotoff scores 46.64 with consistency score 96.1, recent tournament form 47.5; reliability 0.887, activity 0.918, provisional",{}
+Shinkiro,,,,,48.05,86.31,0.8875,0.942,46.57,True,55.7,2,156.0,"Shinkiro scores 46.57 with consistency score 86.3, recent tournament form 48.0; reliability 0.887, activity 0.942, provisional",{}
+NYASH,,,,,44.84,98.89,0.8875,0.9423,46.54,True,55.65,2,155.0,"NYASH scores 46.54 with consistency score 98.9, recent tournament form 44.8; reliability 0.887, activity 0.942, provisional",{}
+JapWhite,,,,,48.8,82.43,0.8875,0.9423,46.44,True,55.53,2,155.0,"JapWhite scores 46.44 with consistency score 82.4, recent tournament form 48.8; reliability 0.887, activity 0.942, provisional",{}
+Ethan2222,,,,,64.62,25.0,0.8688,0.9423,46.42,True,56.7,1,155.0,"Ethan2222 scores 46.42 with recent tournament form 64.6, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Zigarette,,,,,46.7,97.44,0.8875,0.9193,46.38,True,56.85,2,296.0,"Zigarette scores 46.38 with consistency score 97.4, recent tournament form 46.7; reliability 0.887, activity 0.919, provisional",{}
+Kurumiw,,,,,45.83,93.84,0.8875,0.9423,46.36,True,55.43,2,155.0,"Kurumiw scores 46.36 with consistency score 93.8, recent tournament form 45.8; reliability 0.887, activity 0.942, provisional",{}
+misha awa,,,,,49.86,75.61,0.8875,0.9475,46.26,True,55.01,2,134.0,"misha awa scores 46.26 with consistency score 75.6, recent tournament form 49.9; reliability 0.887, activity 0.948, provisional",{}
+HaSappy,,,,,64.24,25.0,0.8688,0.9439,46.24,True,56.39,1,148.0,"HaSappy scores 46.24 with recent tournament form 64.2, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+BabyScylla,,,,,44.69,97.87,0.8875,0.9418,46.24,True,55.33,2,157.0,"BabyScylla scores 46.24 with consistency score 97.9, recent tournament form 44.7; reliability 0.887, activity 0.942, provisional",{}
+Homura--,,,,,45.84,92.62,0.8875,0.9439,46.24,True,55.2,2,148.0,"Homura-- scores 46.24 with consistency score 92.6, recent tournament form 45.8; reliability 0.887, activity 0.944, provisional",{}
+BadAimBoi,,,,,66.2,25.0,0.8688,0.9179,46.22,True,57.96,1,310.0,"BadAimBoi scores 46.22 with recent tournament form 66.2, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+HUNDUR,,,,,45.61,93.1,0.8875,0.9437,46.15,True,55.11,2,149.0,"HUNDUR scores 46.15 with consistency score 93.1, recent tournament form 45.6; reliability 0.887, activity 0.944, provisional",{}
+Eevert,,,,,48.29,89.34,0.8875,0.9193,46.1,True,56.5,2,296.0,"Eevert scores 46.10 with consistency score 89.3, recent tournament form 48.3; reliability 0.887, activity 0.919, provisional",{}
+Azer,,,,,52.28,64.94,0.8875,0.9475,46.09,True,54.81,2,134.0,"Azer scores 46.09 with consistency score 64.9, recent tournament form 52.3; reliability 0.887, activity 0.948, provisional",{}
+macabea,,,,,44.9,86.61,0.9062,0.9552,46.09,False,53.24,3,107.0,"macabea scores 46.09 with consistency score 86.6, recent tournament form 44.9; reliability 0.906, activity 0.955",{}
+lolol234,,,,,44.77,90.2,0.9062,0.9437,46.06,False,53.86,3,149.0,"lolol234 scores 46.06 with consistency score 90.2, recent tournament form 44.8; reliability 0.906, activity 0.944",{}
+Hakui Koyori,,,,,47.45,73.02,0.9062,0.967,46.06,False,52.56,3,72.0,"Hakui Koyori scores 46.06 with consistency score 73.0, recent tournament form 47.5; reliability 0.906, activity 0.967",{}
+arbusion,,,,,48.14,96.23,0.8688,0.9167,46.0,True,57.76,1,322.0,"arbusion scores 46.00 with consistency score 96.2, recent tournament form 48.1; reliability 0.869, activity 0.917, provisional",{}
+chicken_67,,,,,65.72,25.0,0.8688,0.9194,45.99,True,57.58,1,295.0,"chicken_67 scores 45.99 with recent tournament form 65.7, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+zonelouise,,,,,47.22,91.79,0.8688,0.9423,45.96,True,56.13,1,155.0,"zonelouise scores 45.96 with consistency score 91.8, recent tournament form 47.2; reliability 0.869, activity 0.942, provisional",{}
+Pinguinzi,,,,,44.76,95.19,0.8875,0.9437,45.94,True,54.85,2,149.0,"Pinguinzi scores 45.94 with consistency score 95.2, recent tournament form 44.8; reliability 0.887, activity 0.944, provisional",{}
+Grippeh,,,,,45.38,92.5,0.8875,0.942,45.82,True,54.8,2,156.0,"Grippeh scores 45.82 with consistency score 92.5, recent tournament form 45.4; reliability 0.887, activity 0.942, provisional",{}
+Ievi-,,,,,46.45,87.65,0.8875,0.942,45.72,True,54.69,2,156.0,"Ievi- scores 45.72 with consistency score 87.7, recent tournament form 46.5; reliability 0.887, activity 0.942, provisional",{}
+-lion,,,,,48.63,85.81,0.8875,0.9187,45.71,True,56.07,2,302.0,"-lion scores 45.71 with consistency score 85.8, recent tournament form 48.6; reliability 0.887, activity 0.919, provisional",{}
+papercandle,,,,,46.52,80.13,0.9062,0.9457,45.63,False,53.24,3,141.0,"papercandle scores 45.63 with consistency score 80.1, recent tournament form 46.5; reliability 0.906, activity 0.946",{}
+mint breeze,,,,,47.3,84.14,0.8875,0.9389,45.55,True,54.67,2,170.0,"mint breeze scores 45.55 with consistency score 84.1, recent tournament form 47.3; reliability 0.887, activity 0.939, provisional",{}
+spray-,,,,,44.95,91.57,0.8875,0.942,45.37,True,54.27,2,156.0,"spray- scores 45.37 with consistency score 91.6, recent tournament form 45.0; reliability 0.887, activity 0.942, provisional",{}
+Mahmood,,,,,44.96,90.72,0.8875,0.9437,45.32,True,54.11,2,149.0,"Mahmood scores 45.32 with consistency score 90.7, recent tournament form 45.0; reliability 0.887, activity 0.944, provisional",{}
+stllok,,,,,64.37,25.0,0.8688,0.9179,45.05,True,56.5,1,310.0,"stllok scores 45.05 with recent tournament form 64.4, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+lolol233,,,,,46.0,84.04,0.8875,0.9457,44.99,True,53.61,2,141.0,"lolol233 scores 44.99 with consistency score 84.0, recent tournament form 46.0; reliability 0.887, activity 0.946, provisional",{}
+Kehest,,,,,41.64,96.78,0.9062,0.942,44.96,False,52.67,3,156.0,"Kehest scores 44.96 with consistency score 96.8, recent tournament form 41.6; reliability 0.906, activity 0.942",{}
+Welter,,,,,45.42,80.45,0.9062,0.9457,44.93,False,52.43,3,141.0,"Welter scores 44.93 with consistency score 80.5, recent tournament form 45.4; reliability 0.906, activity 0.946",{}
+Mike Tyson,,,,,46.41,88.81,0.8688,0.942,44.92,True,54.89,1,156.0,"Mike Tyson scores 44.92 with consistency score 88.8, recent tournament form 46.4; reliability 0.869, activity 0.942, provisional",{}
+fedoragoose,,,,,44.77,89.34,0.8875,0.942,44.88,True,53.68,2,156.0,"fedoragoose scores 44.88 with consistency score 89.3, recent tournament form 44.8; reliability 0.887, activity 0.942, provisional",{}
+Skrowell,,,,,44.51,89.82,0.8875,0.9439,44.88,True,53.57,2,148.0,"Skrowell scores 44.88 with consistency score 89.8, recent tournament form 44.5; reliability 0.887, activity 0.944, provisional",{}
+Ternafis,,,,,44.45,90.5,0.8875,0.9407,44.8,True,53.66,2,162.0,"Ternafis scores 44.80 with consistency score 90.5, recent tournament form 44.5; reliability 0.887, activity 0.941, provisional",{}
+Jimarrah,,,,,63.84,25.0,0.8688,0.918,44.72,True,56.07,1,309.0,"Jimarrah scores 44.72 with recent tournament form 63.8, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+NOUMEN BREAK,,,,,44.25,90.2,0.8875,0.9423,44.69,True,53.44,2,155.0,"NOUMEN BREAK scores 44.69 with consistency score 90.2, recent tournament form 44.2; reliability 0.887, activity 0.942, provisional",{}
+milimea,,,,,48.49,80.07,0.8875,0.9186,44.68,True,54.81,2,303.0,"milimea scores 44.68 with consistency score 80.1, recent tournament form 48.5; reliability 0.887, activity 0.919, provisional",{}
+Flameztear,,,,,48.89,78.01,0.8875,0.9201,44.68,True,54.71,2,289.0,"Flameztear scores 44.68 with consistency score 78.0, recent tournament form 48.9; reliability 0.887, activity 0.920, provisional",{}
+badeu,,,,,43.27,98.76,0.8688,0.9457,44.67,True,54.37,1,141.0,"badeu scores 44.67 with consistency score 98.8, recent tournament form 43.3; reliability 0.869, activity 0.946, provisional",{}
+Saryi,,,,,63.49,25.0,0.8688,0.9201,44.6,True,55.79,1,289.0,"Saryi scores 44.60 with recent tournament form 63.5, consistency score 25.0; reliability 0.869, activity 0.920, provisional",{}
+Juska,,,,,45.83,96.7,0.8688,0.916,44.57,True,56.0,1,330.0,"Juska scores 44.57 with consistency score 96.7, recent tournament form 45.8; reliability 0.869, activity 0.916, provisional",{}
+Nev-,,,,,46.58,92.48,0.8688,0.9193,44.53,True,55.76,1,296.0,"Nev- scores 44.53 with consistency score 92.5, recent tournament form 46.6; reliability 0.869, activity 0.919, provisional",{}
+lonq noir,,,,,48.44,85.76,0.8688,0.9165,44.51,True,55.9,1,324.0,"lonq noir scores 44.51 with consistency score 85.8, recent tournament form 48.4; reliability 0.869, activity 0.916, provisional",{}
+antonyw,,,,,41.15,95.42,0.9062,0.9437,44.47,False,52.0,3,149.0,"antonyw scores 44.47 with consistency score 95.4, recent tournament form 41.1; reliability 0.906, activity 0.944",{}
+Dawnwing,,,,,43.57,86.2,0.9062,0.9407,44.41,False,52.1,3,162.0,"Dawnwing scores 44.41 with consistency score 86.2, recent tournament form 43.6; reliability 0.906, activity 0.941",{}
+she gon pay me,,,,,61.5,25.0,0.8688,0.9423,44.37,True,54.2,1,155.0,"she gon pay me scores 44.37 with recent tournament form 61.5, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Mayuri,,,,,47.61,86.92,0.8688,0.916,44.15,True,55.47,1,330.0,"Mayuri scores 44.15 with consistency score 86.9, recent tournament form 47.6; reliability 0.869, activity 0.916, provisional",{}
+z9a,,,,,43.67,94.96,0.8688,0.942,44.14,True,53.93,1,156.0,"z9a scores 44.14 with consistency score 95.0, recent tournament form 43.7; reliability 0.869, activity 0.942, provisional",{}
+plambob,,,,,43.48,88.35,0.8875,0.9475,44.11,True,52.45,2,134.0,"plambob scores 44.11 with consistency score 88.3, recent tournament form 43.5; reliability 0.887, activity 0.948, provisional",{}
+Isak-,,,,,43.83,88.39,0.8875,0.942,44.09,True,52.74,2,156.0,"Isak- scores 44.09 with consistency score 88.4, recent tournament form 43.8; reliability 0.887, activity 0.942, provisional",{}
+xootynator,,,,,60.74,25.0,0.8688,0.9457,44.03,True,53.59,1,141.0,"xootynator scores 44.03 with recent tournament form 60.7, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+kagiura,,,,,42.97,90.66,0.8875,0.9423,43.91,True,52.51,2,155.0,"kagiura scores 43.91 with consistency score 90.7, recent tournament form 43.0; reliability 0.887, activity 0.942, provisional",{}
+hollowknees,,,,,40.93,93.83,0.9062,0.9407,43.91,False,51.51,3,162.0,"hollowknees scores 43.91 with consistency score 93.8, recent tournament form 40.9; reliability 0.906, activity 0.941",{}
+Bernkastel,,,,,45.56,93.08,0.8688,0.9165,43.84,True,55.06,1,324.0,"Bernkastel scores 43.84 with consistency score 93.1, recent tournament form 45.6; reliability 0.869, activity 0.916, provisional",{}
+ItzZeroIce,,,,,43.06,90.11,0.8875,0.9407,43.81,True,52.47,2,162.0,"ItzZeroIce scores 43.81 with consistency score 90.1, recent tournament form 43.1; reliability 0.887, activity 0.941, provisional",{}
+Musty,,,,,48.94,66.03,0.8875,0.9423,43.79,True,52.36,2,155.0,"Musty scores 43.79 with consistency score 66.0, recent tournament form 48.9; reliability 0.887, activity 0.942, provisional",{}
+Asriel,,,,,62.13,25.0,0.8688,0.9179,43.62,True,54.7,1,310.0,"Asriel scores 43.62 with recent tournament form 62.1, consistency score 25.0; reliability 0.869, activity 0.918, provisional",{}
+trumpatino69,,,,,41.78,88.04,0.9062,0.942,43.56,False,51.03,3,156.0,"trumpatino69 scores 43.56 with consistency score 88.0, recent tournament form 41.8; reliability 0.906, activity 0.942",{}
+BlankTap,,,,,39.56,97.27,0.8875,0.9597,43.53,True,51.1,2,93.0,"BlankTap scores 43.53 with consistency score 97.3, recent tournament form 39.6; reliability 0.887, activity 0.960, provisional",{}
+GAO HAO,,,,,42.13,90.4,0.8875,0.9457,43.46,True,51.78,2,141.0,"GAO HAO scores 43.46 with consistency score 90.4, recent tournament form 42.1; reliability 0.887, activity 0.946, provisional",{}
+Cymango,,,,,42.67,89.45,0.8875,0.9407,43.44,True,52.03,2,162.0,"Cymango scores 43.44 with consistency score 89.5, recent tournament form 42.7; reliability 0.887, activity 0.941, provisional",{}
+Jerma985,,,,,46.99,83.25,0.8688,0.916,43.17,True,54.24,1,330.0,"Jerma985 scores 43.17 with consistency score 83.2, recent tournament form 47.0; reliability 0.869, activity 0.916, provisional",{}
+shiyumi,,,,,42.42,88.42,0.8875,0.9407,43.1,True,51.62,2,162.0,"shiyumi scores 43.10 with consistency score 88.4, recent tournament form 42.4; reliability 0.887, activity 0.941, provisional",{}
+Rizer,,,,,59.52,25.0,0.8688,0.9423,43.08,True,52.62,1,155.0,"Rizer scores 43.08 with recent tournament form 59.5, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+3uma,,,,,43.42,84.35,0.8875,0.9407,43.08,True,51.61,2,162.0,"3uma scores 43.08 with consistency score 84.3, recent tournament form 43.4; reliability 0.887, activity 0.941, provisional",{}
+Melvr,,,,,40.24,95.95,0.8875,0.9437,43.03,True,51.38,2,149.0,"Melvr scores 43.03 with consistency score 96.0, recent tournament form 40.2; reliability 0.887, activity 0.944, provisional",{}
+GNX,,,,,42.1,78.17,0.9062,0.9627,43.02,False,49.31,3,84.0,"GNX scores 43.02 with consistency score 78.2, recent tournament form 42.1; reliability 0.906, activity 0.963",{}
+z10a,,,,,43.92,87.08,0.8688,0.942,43.01,True,52.55,1,156.0,"z10a scores 43.01 with consistency score 87.1, recent tournament form 43.9; reliability 0.869, activity 0.942, provisional",{}
+PotJohn Nutella,,,,,46.31,72.42,0.8875,0.9391,42.95,True,51.53,2,169.0,"PotJohn Nutella scores 42.95 with consistency score 72.4, recent tournament form 46.3; reliability 0.887, activity 0.939, provisional",{}
+marbl,,,,,39.91,95.84,0.8875,0.9418,42.71,True,51.1,2,157.0,"marbl scores 42.71 with consistency score 95.8, recent tournament form 39.9; reliability 0.887, activity 0.942, provisional",{}
+puffonxe,,,,,60.76,25.0,0.8688,0.9158,42.65,True,53.61,1,332.0,"puffonxe scores 42.65 with recent tournament form 60.8, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+AllyrD,,,,,44.43,82.21,0.8688,0.942,42.55,True,51.99,1,156.0,"AllyrD scores 42.55 with consistency score 82.2, recent tournament form 44.4; reliability 0.869, activity 0.942, provisional",{}
+Tabletti,,,,,49.77,75.98,0.85,0.9093,42.52,True,55.01,0,428.0,"Tabletti scores 42.52 with consistency score 76.0, recent tournament form 49.8; reliability 0.850, activity 0.909, provisional",{}
+francisqueso,,,,,60.49,25.0,0.8688,0.9158,42.48,True,53.39,1,332.0,"francisqueso scores 42.48 with recent tournament form 60.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Jitterish,,,,,44.1,71.9,0.9062,0.9423,42.41,False,49.66,3,155.0,"Jitterish scores 42.41 with consistency score 71.9, recent tournament form 44.1; reliability 0.906, activity 0.942",{}
+Zeisen Udongein,,,,,62.2,25.0,0.85,0.9104,42.38,True,54.76,0,407.0,"Zeisen Udongein scores 42.38 with recent tournament form 62.2, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Suzuha,,,,,44.37,82.41,0.8875,0.9186,42.38,True,51.98,2,303.0,"Suzuha scores 42.38 with consistency score 82.4, recent tournament form 44.4; reliability 0.887, activity 0.919, provisional",{}
+house,,,,,43.62,90.74,0.8688,0.916,42.21,True,53.04,1,330.0,"house scores 42.21 with consistency score 90.7, recent tournament form 43.6; reliability 0.869, activity 0.916, provisional",{}
+willy0214,,,,,58.18,25.0,0.8688,0.9423,42.2,True,51.54,1,155.0,"willy0214 scores 42.20 with recent tournament form 58.2, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+bananachi,,,,,42.03,84.68,0.8875,0.9404,42.2,True,50.56,2,163.0,"bananachi scores 42.20 with consistency score 84.7, recent tournament form 42.0; reliability 0.887, activity 0.940, provisional",{}
+[ Blue ],,,,,59.92,25.0,0.8688,0.9173,42.19,True,52.94,1,316.0,"[ Blue ] scores 42.19 with recent tournament form 59.9, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+GSBlank,,,,,40.04,86.7,0.9062,0.9407,42.09,False,49.37,3,162.0,"GSBlank scores 42.09 with consistency score 86.7, recent tournament form 40.0; reliability 0.906, activity 0.941",{}
+lystia,,,,,39.37,98.88,0.8688,0.9437,42.04,True,51.27,1,149.0,"lystia scores 42.04 with consistency score 98.9, recent tournament form 39.4; reliability 0.869, activity 0.944, provisional",{}
+Stixe,,,,,37.08,98.63,0.8875,0.9577,41.98,True,49.39,2,99.0,"Stixe scores 41.98 with consistency score 98.6, recent tournament form 37.1; reliability 0.887, activity 0.958, provisional",{}
+JackPaX,,,,,40.73,91.77,0.8688,0.9475,41.93,True,50.94,1,134.0,"JackPaX scores 41.93 with consistency score 91.8, recent tournament form 40.7; reliability 0.869, activity 0.948, provisional",{}
+scylla,,,,,42.61,78.89,0.8875,0.9457,41.85,True,49.87,2,141.0,"scylla scores 41.85 with consistency score 78.9, recent tournament form 42.6; reliability 0.887, activity 0.946, provisional",{}
+alfiu,,,,,41.06,78.53,0.9062,0.9475,41.69,False,48.55,3,134.0,"alfiu scores 41.69 with consistency score 78.5, recent tournament form 41.1; reliability 0.906, activity 0.948",{}
+Swiq,,,,,44.6,68.97,0.8875,0.9475,41.6,True,49.47,2,134.0,"Swiq scores 41.60 with consistency score 69.0, recent tournament form 44.6; reliability 0.887, activity 0.948, provisional",{}
+junamat,,,,,37.58,98.13,0.8875,0.9418,41.53,True,49.69,2,157.0,"junamat scores 41.53 with consistency score 98.1, recent tournament form 37.6; reliability 0.887, activity 0.942, provisional",{}
+Tofy,,,,,37.67,97.84,0.8875,0.9407,41.5,True,49.7,2,162.0,"Tofy scores 41.50 with consistency score 97.8, recent tournament form 37.7; reliability 0.887, activity 0.941, provisional",{}
+YokesPai,,,,,38.87,91.71,0.8875,0.9437,41.41,True,49.44,2,149.0,"YokesPai scores 41.41 with consistency score 91.7, recent tournament form 38.9; reliability 0.887, activity 0.944, provisional",{}
+Palodex,,,,,37.86,96.14,0.8875,0.9418,41.39,True,49.52,2,157.0,"Palodex scores 41.39 with consistency score 96.1, recent tournament form 37.9; reliability 0.887, activity 0.942, provisional",{}
+etn,,,,,39.37,95.12,0.8688,0.942,41.35,True,50.52,1,156.0,"etn scores 41.35 with consistency score 95.1, recent tournament form 39.4; reliability 0.869, activity 0.942, provisional",{}
+sorinica17,,,,,41.12,82.85,0.8875,0.942,41.35,True,49.47,2,156.0,"sorinica17 scores 41.35 with consistency score 82.8, recent tournament form 41.1; reliability 0.887, activity 0.942, provisional",{}
+Shirosora,,,,,56.83,25.0,0.8688,0.9423,41.31,True,50.46,1,155.0,"Shirosora scores 41.31 with recent tournament form 56.8, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Aotoleen,,,,,39.35,89.65,0.8875,0.942,41.31,True,49.41,2,156.0,"Aotoleen scores 41.31 with consistency score 89.7, recent tournament form 39.4; reliability 0.887, activity 0.942, provisional",{}
+3BDOOO,,,,,42.85,87.59,0.8688,0.9154,41.19,True,51.8,1,337.0,"3BDOOO scores 41.19 with consistency score 87.6, recent tournament form 42.9; reliability 0.869, activity 0.915, provisional",{}
+chests,,,,,38.71,91.62,0.8875,0.9407,41.15,True,49.29,2,162.0,"chests scores 41.15 with consistency score 91.6, recent tournament form 38.7; reliability 0.887, activity 0.941, provisional",{}
+defii,,,,,40.52,93.88,0.8688,0.9202,40.93,True,51.19,1,288.0,"defii scores 40.93 with consistency score 93.9, recent tournament form 40.5; reliability 0.869, activity 0.920, provisional",{}
+Bubbleman,,,,,43.81,68.61,0.8875,0.9457,40.93,True,48.77,2,141.0,"Bubbleman scores 40.93 with consistency score 68.6, recent tournament form 43.8; reliability 0.887, activity 0.946, provisional",{}
+Orkay,,,,,37.04,96.25,0.8875,0.942,40.87,True,48.88,2,156.0,"Orkay scores 40.87 with consistency score 96.2, recent tournament form 37.0; reliability 0.887, activity 0.942, provisional",{}
+mabayu,,,,,36.56,96.83,0.8875,0.9407,40.59,True,48.61,2,162.0,"mabayu scores 40.59 with consistency score 96.8, recent tournament form 36.6; reliability 0.887, activity 0.941, provisional",{}
+Rosemi Lovelock,,,,,38.57,83.6,0.8875,0.9597,40.52,True,47.58,2,93.0,"Rosemi Lovelock scores 40.52 with consistency score 83.6, recent tournament form 38.6; reliability 0.887, activity 0.960, provisional",{}
+Riot,,,,,38.25,87.8,0.8875,0.9475,40.5,True,48.16,2,134.0,"Riot scores 40.50 with consistency score 87.8, recent tournament form 38.2; reliability 0.887, activity 0.948, provisional",{}
+Hellbeak,,,,,37.43,98.3,0.8875,0.9193,40.47,True,49.6,2,296.0,"Hellbeak scores 40.47 with consistency score 98.3, recent tournament form 37.4; reliability 0.887, activity 0.919, provisional",{}
+AlexBelea,,,,,36.15,97.38,0.8875,0.942,40.46,True,48.4,2,156.0,"AlexBelea scores 40.46 with consistency score 97.4, recent tournament form 36.1; reliability 0.887, activity 0.942, provisional",{}
+KiryuMiya,,,,,57.27,25.0,0.8688,0.916,40.44,True,50.82,1,330.0,"KiryuMiya scores 40.44 with recent tournament form 57.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Arz3,,,,,38.15,89.45,0.8875,0.9407,40.42,True,48.41,2,162.0,"Arz3 scores 40.42 with consistency score 89.5, recent tournament form 38.1; reliability 0.887, activity 0.941, provisional",{}
+[Karcher],,,,,55.22,25.0,0.8688,0.9454,40.39,True,49.18,1,142.0,"[Karcher] scores 40.39 with recent tournament form 55.2, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+DaHuJka,,,,,40.14,92.42,0.8688,0.9186,40.38,True,50.6,1,303.0,"DaHuJka scores 40.38 with consistency score 92.4, recent tournament form 40.1; reliability 0.869, activity 0.919, provisional",{}
+lifetime,,,,,38.92,85.14,0.8875,0.9407,40.21,True,48.16,2,162.0,"lifetime scores 40.21 with consistency score 85.1, recent tournament form 38.9; reliability 0.887, activity 0.941, provisional",{}
+melwem,,,,,41.03,76.24,0.8875,0.942,40.19,True,48.07,2,156.0,"melwem scores 40.19 with consistency score 76.2, recent tournament form 41.0; reliability 0.887, activity 0.942, provisional",{}
+Binninja,,,,,56.51,25.0,0.8688,0.9158,39.95,True,50.21,1,332.0,"Binninja scores 39.95 with recent tournament form 56.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Ravexi,,,,,35.72,95.24,0.8875,0.9407,39.76,True,47.62,2,162.0,"Ravexi scores 39.76 with consistency score 95.2, recent tournament form 35.7; reliability 0.887, activity 0.941, provisional",{}
+seegii,,,,,45.74,59.98,0.8875,0.9194,39.65,True,48.59,2,295.0,"seegii scores 39.65 with consistency score 60.0, recent tournament form 45.7; reliability 0.887, activity 0.919, provisional",{}
+-Wum-,,,,,57.82,25.0,0.85,0.9089,39.6,True,51.26,0,436.0,"-Wum- scores 39.60 with recent tournament form 57.8, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+Antaanar,,,,,41.52,75.72,0.8875,0.9186,39.43,True,48.36,2,303.0,"Antaanar scores 39.43 with consistency score 75.7, recent tournament form 41.5; reliability 0.887, activity 0.919, provisional",{}
+n0 head,,,,,54.05,25.0,0.8688,0.9407,39.43,True,48.24,1,162.0,"n0 head scores 39.43 with recent tournament form 54.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Tebi,,,,,38.82,80.84,0.8875,0.9407,39.43,True,47.22,2,162.0,"Tebi scores 39.43 with consistency score 80.8, recent tournament form 38.8; reliability 0.887, activity 0.941, provisional",{}
+PoYuTo,,,,,55.57,25.0,0.8688,0.9167,39.39,True,49.46,1,322.0,"PoYuTo scores 39.39 with recent tournament form 55.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Rammu,,,,,53.85,25.0,0.8688,0.9423,39.36,True,48.08,1,155.0,"Rammu scores 39.36 with recent tournament form 53.9, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+TTv_UFO,,,,,55.26,25.0,0.8688,0.9194,39.31,True,49.21,1,295.0,"TTv_UFO scores 39.31 with recent tournament form 55.3, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+vana,,,,,55.44,25.0,0.8688,0.9165,39.3,True,49.35,1,324.0,"vana scores 39.30 with recent tournament form 55.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+[ Couch ],,,,,55.39,25.0,0.8688,0.9173,39.3,True,49.31,1,316.0,"[ Couch ] scores 39.30 with recent tournament form 55.4, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Kyulke,,,,,57.37,25.0,0.85,0.9082,39.29,True,50.9,0,450.0,"Kyulke scores 39.29 with recent tournament form 57.4, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Dwagon,,,,,55.42,25.0,0.8688,0.9166,39.29,True,49.34,1,323.0,"Dwagon scores 39.29 with recent tournament form 55.4, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+miinr,,,,,34.41,97.64,0.8875,0.9407,39.29,True,47.06,2,162.0,"miinr scores 39.29 with consistency score 97.6, recent tournament form 34.4; reliability 0.887, activity 0.941, provisional",{}
+Heo,,,,,55.24,25.0,0.8688,0.9173,39.2,True,49.19,1,316.0,"Heo scores 39.20 with recent tournament form 55.2, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+yary,,,,,53.39,25.0,0.8688,0.9454,39.19,True,47.71,1,142.0,"yary scores 39.19 with recent tournament form 53.4, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+Teppi Fangirl,,,,,33.77,99.14,0.8875,0.942,39.16,True,46.84,2,156.0,"Teppi Fangirl scores 39.16 with consistency score 99.1, recent tournament form 33.8; reliability 0.887, activity 0.942, provisional",{}
+juujep,,,,,57.12,25.0,0.85,0.908,39.13,True,50.7,0,455.0,"juujep scores 39.13 with recent tournament form 57.1, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+shouponpon,,,,,34.13,97.26,0.8875,0.942,39.09,True,46.76,2,156.0,"shouponpon scores 39.09 with consistency score 97.3, recent tournament form 34.1; reliability 0.887, activity 0.942, provisional",{}
+Menoji,,,,,55.09,25.0,0.8688,0.9165,39.07,True,49.07,1,324.0,"Menoji scores 39.07 with recent tournament form 55.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+hayley,,,,,55.09,25.0,0.8688,0.9165,39.07,True,49.07,1,324.0,"hayley scores 39.07 with recent tournament form 55.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Jakson,,,,,37.27,90.33,0.8875,0.9193,39.07,True,47.88,2,296.0,"Jakson scores 39.07 with consistency score 90.3, recent tournament form 37.3; reliability 0.887, activity 0.919, provisional",{}
+El Milanga,,,,,53.6,25.0,0.8688,0.9391,39.06,True,47.88,1,169.0,"El Milanga scores 39.06 with recent tournament form 53.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+fudge,,,,,40.4,66.69,0.9062,0.9437,39.05,False,45.66,3,149.0,"fudge scores 39.05 with consistency score 66.7, recent tournament form 40.4; reliability 0.906, activity 0.944",{}
+Hana buys milk,,,,,37.22,89.19,0.8688,0.9437,39.04,True,47.61,1,149.0,"Hana buys milk scores 39.04 with consistency score 89.2, recent tournament form 37.2; reliability 0.869, activity 0.944, provisional",{}
+MALTESER,,,,,40.04,71.88,0.8875,0.9437,38.87,True,46.41,2,149.0,"MALTESER scores 38.87 with consistency score 71.9, recent tournament form 40.0; reliability 0.887, activity 0.944, provisional",{}
+8581210,,,,,42.27,74.39,0.8688,0.9186,38.86,True,48.69,1,303.0,"8581210 scores 38.86 with consistency score 74.4, recent tournament form 42.3; reliability 0.869, activity 0.919, provisional",{}
+siiphs,,,,,34.85,87.42,0.9062,0.9437,38.79,False,45.36,3,149.0,"siiphs scores 38.79 with consistency score 87.4, recent tournament form 34.9; reliability 0.906, activity 0.944",{}
+Dr Skill Issue,,,,,54.65,25.0,0.8688,0.9159,38.77,True,48.72,1,331.0,"Dr Skill Issue scores 38.77 with recent tournament form 54.6, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+shdewz,,,,,56.44,25.0,0.85,0.9086,38.73,True,50.15,0,442.0,"shdewz scores 38.73 with recent tournament form 56.4, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+gilgamesh815,,,,,35.2,96.55,0.8875,0.9193,38.73,True,47.47,2,296.0,"gilgamesh815 scores 38.73 with consistency score 96.5, recent tournament form 35.2; reliability 0.887, activity 0.919, provisional",{}
+MyzeJD,,,,,53.7,25.0,0.8688,0.9165,38.19,True,47.96,1,324.0,"MyzeJD scores 38.19 with recent tournament form 53.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+capybaras,,,,,35.19,87.66,0.8875,0.942,38.19,True,45.68,2,156.0,"capybaras scores 38.19 with consistency score 87.7, recent tournament form 35.2; reliability 0.887, activity 0.942, provisional",{}
+okinamo,,,,,51.76,25.0,0.8688,0.9454,38.12,True,46.41,1,142.0,"okinamo scores 38.12 with recent tournament form 51.8, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+Draxarta,,,,,53.57,25.0,0.8688,0.9165,38.11,True,47.86,1,324.0,"Draxarta scores 38.11 with recent tournament form 53.6, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+hexi,,,,,34.77,89.56,0.8875,0.9391,38.11,True,45.73,2,169.0,"hexi scores 38.11 with consistency score 89.6, recent tournament form 34.8; reliability 0.887, activity 0.939, provisional",{}
+Aheo,,,,,37.32,78.71,0.8875,0.9407,38.07,True,45.6,2,162.0,"Aheo scores 38.07 with consistency score 78.7, recent tournament form 37.3; reliability 0.887, activity 0.941, provisional",{}
+MejiroMcQueen,,,,,34.69,80.07,0.9062,0.96,38.07,False,43.77,3,92.0,"MejiroMcQueen scores 38.07 with consistency score 80.1, recent tournament form 34.7; reliability 0.906, activity 0.960",{}
+Hinamon,,,,,51.76,25.0,0.8688,0.9407,37.93,True,46.41,1,162.0,"Hinamon scores 37.93 with recent tournament form 51.8, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Mastasz,,,,,55.06,25.0,0.85,0.9096,37.92,True,49.05,0,421.0,"Mastasz scores 37.92 with recent tournament form 55.1, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+bobiak,,,,,52.94,25.0,0.8688,0.9202,37.86,True,47.35,1,288.0,"bobiak scores 37.86 with recent tournament form 52.9, consistency score 25.0; reliability 0.869, activity 0.920, provisional",{}
+Hecatia,,,,,53.12,25.0,0.8688,0.916,37.8,True,47.5,1,330.0,"Hecatia scores 37.80 with recent tournament form 53.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Suyong_,,,,,51.16,25.0,0.8688,0.9454,37.72,True,45.93,1,142.0,"Suyong_ scores 37.72 with recent tournament form 51.2, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+milosz kitten,,,,,52.96,25.0,0.8688,0.9153,37.67,True,47.37,1,338.0,"milosz kitten scores 37.67 with recent tournament form 53.0, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+pawb,,,,,51.25,25.0,0.8688,0.942,37.65,True,46.0,1,156.0,"pawb scores 37.65 with recent tournament form 51.2, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Lirumin,,,,,38.4,77.03,0.8875,0.9186,37.6,True,46.13,2,303.0,"Lirumin scores 37.60 with consistency score 77.0, recent tournament form 38.4; reliability 0.887, activity 0.919, provisional",{}
+Arge,,,,,32.59,94.7,0.8875,0.9404,37.57,True,45.01,2,163.0,"Arge scores 37.57 with consistency score 94.7, recent tournament form 32.6; reliability 0.887, activity 0.940, provisional",{}
+Gambler,,,,,52.56,25.0,0.8688,0.9172,37.49,True,47.05,1,317.0,"Gambler scores 37.49 with recent tournament form 52.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Hober38,,,,,50.9,25.0,0.8688,0.9437,37.49,True,45.72,1,149.0,"Hober38 scores 37.49 with recent tournament form 50.9, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+Saiyku,,,,,50.68,25.0,0.8688,0.9457,37.42,True,45.54,1,141.0,"Saiyku scores 37.42 with recent tournament form 50.7, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+EVIL BALNER,,,,,32.64,93.78,0.8875,0.9391,37.4,True,44.87,2,169.0,"EVIL BALNER scores 37.40 with consistency score 93.8, recent tournament form 32.6; reliability 0.887, activity 0.939, provisional",{}
+MYKEYBOARD,,,,,50.21,25.0,0.8688,0.9454,37.1,True,45.17,1,142.0,"MYKEYBOARD scores 37.10 with recent tournament form 50.2, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+tayko,,,,,50.35,25.0,0.8688,0.9423,37.07,True,45.28,1,155.0,"tayko scores 37.07 with recent tournament form 50.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+skia1,,,,,35.91,77.43,0.8875,0.9437,37.03,True,44.21,2,149.0,"skia1 scores 37.03 with consistency score 77.4, recent tournament form 35.9; reliability 0.887, activity 0.944, provisional",{}
+Teppi,,,,,31.46,94.74,0.8875,0.942,36.88,True,44.12,2,156.0,"Teppi scores 36.88 with consistency score 94.7, recent tournament form 31.5; reliability 0.887, activity 0.942, provisional",{}
+clafrelys,,,,,49.79,25.0,0.8688,0.9457,36.84,True,44.83,1,141.0,"clafrelys scores 36.84 with recent tournament form 49.8, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+JGLF,,,,,51.48,25.0,0.8688,0.9167,36.78,True,46.18,1,322.0,"JGLF scores 36.78 with recent tournament form 51.5, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+ch0co,,,,,51.2,25.0,0.8688,0.9172,36.62,True,45.96,1,317.0,"ch0co scores 36.62 with recent tournament form 51.2, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+supergirl,,,,,34.58,80.98,0.8875,0.9407,36.62,True,43.86,2,162.0,"supergirl scores 36.62 with consistency score 81.0, recent tournament form 34.6; reliability 0.887, activity 0.941, provisional",{}
+soik,,,,,51.12,25.0,0.8688,0.9173,36.58,True,45.9,1,316.0,"soik scores 36.58 with recent tournament form 51.1, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+KRZY,,,,,51.11,25.0,0.8688,0.9172,36.57,True,45.89,1,317.0,"KRZY scores 36.57 with recent tournament form 51.1, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Hanori,,,,,30.71,95.76,0.8875,0.9391,36.44,True,43.72,2,169.0,"Hanori scores 36.44 with consistency score 95.8, recent tournament form 30.7; reliability 0.887, activity 0.939, provisional",{}
+970,,,,,50.88,25.0,0.8688,0.9166,36.4,True,45.7,1,323.0,"970 scores 36.40 with recent tournament form 50.9, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+GabberSS,,,,,50.86,25.0,0.8688,0.9158,36.35,True,45.69,1,332.0,"GabberSS scores 36.35 with recent tournament form 50.9, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+gamer228666,,,,,48.94,25.0,0.8688,0.9439,36.21,True,44.15,1,148.0,"gamer228666 scores 36.21 with recent tournament form 48.9, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+Skydiver,,,,,47.87,25.0,0.8688,0.962,36.19,True,43.3,1,86.0,"Skydiver scores 36.19 with recent tournament form 47.9, consistency score 25.0; reliability 0.869, activity 0.962, provisional",{}
+shadevr,,,,,50.51,25.0,0.8688,0.9165,36.16,True,45.41,1,324.0,"shadevr scores 36.16 with recent tournament form 50.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+VtuberVoiceASMR,,,,,47.93,25.0,0.8688,0.96,36.15,True,43.34,1,92.0,"VtuberVoiceASMR scores 36.15 with recent tournament form 47.9, consistency score 25.0; reliability 0.869, activity 0.960, provisional",{}
+Nescafe Classic,,,,,50.43,25.0,0.8688,0.9165,36.11,True,45.34,1,324.0,"Nescafe Classic scores 36.11 with recent tournament form 50.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Nessy,,,,,50.24,25.0,0.8688,0.9165,35.98,True,45.19,1,324.0,"Nessy scores 35.98 with recent tournament form 50.2, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+EPEMA,,,,,31.56,89.46,0.8875,0.9391,35.96,True,43.14,2,169.0,"EPEMA scores 35.96 with consistency score 89.5, recent tournament form 31.6; reliability 0.887, activity 0.939, provisional",{}
+Chibi Maruko,,,,,29.33,97.79,0.8875,0.9407,35.92,True,43.02,2,162.0,"Chibi Maruko scores 35.92 with consistency score 97.8, recent tournament form 29.3; reliability 0.887, activity 0.941, provisional",{}
+Bartek22830,,,,,51.78,25.0,0.85,0.91,35.91,True,46.42,0,415.0,"Bartek22830 scores 35.91 with recent tournament form 51.8, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+alimentaire,,,,,51.75,25.0,0.85,0.9096,35.87,True,46.4,0,421.0,"alimentaire scores 35.87 with recent tournament form 51.8, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+flowering,,,,,32.57,89.02,0.8875,0.9187,35.76,True,43.86,2,302.0,"flowering scores 35.76 with consistency score 89.0, recent tournament form 32.6; reliability 0.887, activity 0.919, provisional",{}
+FLAVEN,,,,,49.85,25.0,0.8688,0.9165,35.74,True,44.88,1,324.0,"FLAVEN scores 35.74 with recent tournament form 49.9, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+sephy,,,,,49.84,25.0,0.8688,0.9167,35.74,True,44.87,1,322.0,"sephy scores 35.74 with recent tournament form 49.8, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+aimbotcone,,,,,48.06,25.0,0.8688,0.9454,35.69,True,43.45,1,142.0,"aimbotcone scores 35.69 with recent tournament form 48.1, consistency score 25.0; reliability 0.869, activity 0.945, provisional",{}
+nooneloves,,,,,32.15,85.29,0.8875,0.9391,35.65,True,42.78,2,169.0,"nooneloves scores 35.65 with consistency score 85.3, recent tournament form 32.1; reliability 0.887, activity 0.939, provisional",{}
+[Q],,,,,48.18,25.0,0.8688,0.942,35.64,True,43.54,1,156.0,"[Q] scores 35.64 with recent tournament form 48.2, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+minefieldsurfer,,,,,31.48,90.44,0.8688,0.9475,35.62,True,43.27,1,134.0,"minefieldsurfer scores 35.62 with consistency score 90.4, recent tournament form 31.5; reliability 0.869, activity 0.948, provisional",{}
+monte,,,,,49.44,25.0,0.8688,0.9186,35.56,True,44.55,1,303.0,"monte scores 35.56 with recent tournament form 49.4, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+apisedo,,,,,51.28,25.0,0.85,0.9085,35.54,True,46.02,0,443.0,"apisedo scores 35.54 with recent tournament form 51.3, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+m4rkvc,,,,,48.03,25.0,0.8688,0.9404,35.48,True,43.42,1,163.0,"m4rkvc scores 35.48 with recent tournament form 48.0, consistency score 25.0; reliability 0.869, activity 0.940, provisional",{}
+LyeRR,,,,,47.89,25.0,0.8688,0.942,35.45,True,43.31,1,156.0,"LyeRR scores 35.45 with recent tournament form 47.9, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+John ethken,,,,,29.21,95.26,0.8875,0.9407,35.42,True,42.42,2,162.0,"John ethken scores 35.42 with consistency score 95.3, recent tournament form 29.2; reliability 0.887, activity 0.941, provisional",{}
+Behwall,,,,,49.26,25.0,0.8688,0.9172,35.39,True,44.41,1,317.0,"Behwall scores 35.39 with recent tournament form 49.3, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+synoxa,,,,,49.0,25.0,0.8688,0.9209,35.36,True,44.2,1,282.0,"synoxa scores 35.36 with recent tournament form 49.0, consistency score 25.0; reliability 0.869, activity 0.921, provisional",{}
+nekore,,,,,35.91,77.74,0.8688,0.9178,35.31,True,44.28,1,311.0,"nekore scores 35.31 with consistency score 77.7, recent tournament form 35.9; reliability 0.869, activity 0.918, provisional",{}
+Marjus,,,,,50.87,25.0,0.85,0.9083,35.28,True,45.7,0,448.0,"Marjus scores 35.28 with recent tournament form 50.9, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+asta is cute,,,,,49.12,25.0,0.8688,0.9159,35.25,True,44.3,1,331.0,"asta is cute scores 35.25 with recent tournament form 49.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+tfge,,,,,48.8,25.0,0.8688,0.9193,35.17,True,44.04,1,296.0,"tfge scores 35.17 with recent tournament form 48.8, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+EZChamp,,,,,50.55,25.0,0.85,0.9099,35.14,True,45.44,0,416.0,"EZChamp scores 35.14 with recent tournament form 50.5, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+stupid dog,,,,,48.61,25.0,0.8688,0.9194,35.06,True,43.89,1,295.0,"stupid dog scores 35.06 with recent tournament form 48.6, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+-Puyu,,,,,28.95,98.75,0.8688,0.9391,35.01,True,42.91,1,169.0,"-Puyu scores 35.01 with consistency score 98.8, recent tournament form 28.9; reliability 0.869, activity 0.939, provisional",{}
+jj986544591,,,,,48.61,25.0,0.8688,0.9166,34.95,True,43.89,1,323.0,"jj986544591 scores 34.95 with recent tournament form 48.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Sobu,,,,,35.61,70.64,0.8688,0.9387,34.76,True,42.62,1,171.0,"Sobu scores 34.76 with consistency score 70.6, recent tournament form 35.6; reliability 0.869, activity 0.939, provisional",{}
+gheanfoil,,,,,46.81,25.0,0.8688,0.942,34.74,True,42.45,1,156.0,"gheanfoil scores 34.74 with recent tournament form 46.8, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Emerald Ages,,,,,47.99,25.0,0.8688,0.9193,34.66,True,43.39,1,296.0,"Emerald Ages scores 34.66 with recent tournament form 48.0, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Fault,,,,,48.04,25.0,0.8688,0.9167,34.59,True,43.43,1,322.0,"Fault scores 34.59 with recent tournament form 48.0, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Amuro,,,,,27.15,98.46,0.8875,0.9407,34.57,True,41.41,2,162.0,"Amuro scores 34.57 with consistency score 98.5, recent tournament form 27.1; reliability 0.887, activity 0.941, provisional",{}
+YMD,,,,,46.41,25.0,0.8688,0.942,34.48,True,42.13,1,156.0,"YMD scores 34.48 with recent tournament form 46.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Akuma no Tenshi,,,,,46.37,25.0,0.8688,0.942,34.45,True,42.1,1,156.0,"Akuma no Tenshi scores 34.45 with recent tournament form 46.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Dumb-Andy,,,,,47.77,25.0,0.8688,0.9167,34.42,True,43.22,1,322.0,"Dumb-Andy scores 34.42 with recent tournament form 47.8, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Fejlan,,,,,46.26,25.0,0.8688,0.942,34.38,True,42.01,1,156.0,"Fejlan scores 34.38 with recent tournament form 46.3, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Summer_Ouo,,,,,47.69,25.0,0.8688,0.916,34.34,True,43.15,1,330.0,"Summer_Ouo scores 34.34 with recent tournament form 47.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+NashiKari,,,,,47.69,25.0,0.8688,0.916,34.34,True,43.15,1,330.0,"NashiKari scores 34.34 with recent tournament form 47.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+velcro shoes,,,,,47.65,25.0,0.8688,0.9159,34.31,True,43.12,1,331.0,"velcro shoes scores 34.31 with recent tournament form 47.6, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+wick,,,,,47.54,25.0,0.8688,0.916,34.25,True,43.03,1,330.0,"wick scores 34.25 with recent tournament form 47.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+ChaiPhukChep,,,,,46.01,25.0,0.8688,0.9407,34.17,True,41.81,1,162.0,"ChaiPhukChep scores 34.17 with recent tournament form 46.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+FAW,,,,,31.64,77.28,0.8875,0.942,34.08,True,40.77,2,156.0,"FAW scores 34.08 with consistency score 77.3, recent tournament form 31.6; reliability 0.887, activity 0.942, provisional",{}
+Supernye,,,,,47.13,25.0,0.8688,0.9167,34.01,True,42.7,1,322.0,"Supernye scores 34.01 with recent tournament form 47.1, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+noncycle,,,,,46.62,25.0,0.8688,0.9201,33.81,True,42.3,1,289.0,"noncycle scores 33.81 with recent tournament form 46.6, consistency score 25.0; reliability 0.869, activity 0.920, provisional",{}
+[Crz]xz1z1z,,,,,46.57,25.0,0.8688,0.9166,33.65,True,42.26,1,323.0,"[Crz]xz1z1z scores 33.65 with recent tournament form 46.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+fruit cup,,,,,27.1,93.13,0.8875,0.9407,33.65,True,40.31,2,162.0,"fruit cup scores 33.65 with consistency score 93.1, recent tournament form 27.1; reliability 0.887, activity 0.941, provisional",{}
+[dekori],,,,,45.11,25.0,0.8688,0.9418,33.62,True,41.09,1,157.0,"[dekori] scores 33.62 with recent tournament form 45.1, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Markus,,,,,46.51,25.0,0.8688,0.916,33.59,True,42.21,1,330.0,"Markus scores 33.59 with recent tournament form 46.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+ozbert,,,,,44.81,25.0,0.8688,0.9457,33.56,True,40.85,1,141.0,"ozbert scores 33.56 with recent tournament form 44.8, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+Arnold24x24,,,,,31.22,74.8,0.8875,0.9457,33.52,True,39.94,2,141.0,"Arnold24x24 scores 33.52 with consistency score 74.8, recent tournament form 31.2; reliability 0.887, activity 0.946, provisional",{}
+G e n g a o z o,,,,,26.05,94.68,0.8875,0.9475,33.45,True,39.78,2,134.0,"G e n g a o z o scores 33.45 with consistency score 94.7, recent tournament form 26.1; reliability 0.887, activity 0.948, provisional",{}
+AHotDawg,,,,,25.56,97.44,0.8875,0.9407,33.34,True,39.94,2,162.0,"AHotDawg scores 33.34 with consistency score 97.4, recent tournament form 25.6; reliability 0.887, activity 0.941, provisional",{}
+smashcae,,,,,24.8,99.65,0.8875,0.9407,33.2,True,39.77,2,162.0,"smashcae scores 33.20 with consistency score 99.7, recent tournament form 24.8; reliability 0.887, activity 0.941, provisional",{}
+TrickyPugster,,,,,45.65,25.0,0.8688,0.9194,33.17,True,41.52,1,295.0,"TrickyPugster scores 33.17 with recent tournament form 45.6, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Mekeyo,,,,,44.37,25.0,0.8688,0.9407,33.1,True,40.5,1,162.0,"Mekeyo scores 33.10 with recent tournament form 44.4, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+suntanCTM,,,,,45.54,25.0,0.8688,0.9193,33.09,True,41.43,1,296.0,"suntanCTM scores 33.09 with recent tournament form 45.5, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Lantis,,,,,44.17,25.0,0.8688,0.942,33.01,True,40.34,1,156.0,"Lantis scores 33.01 with recent tournament form 44.2, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+dasdwqdf,,,,,47.07,25.0,0.85,0.9096,32.98,True,42.66,0,422.0,"dasdwqdf scores 32.98 with recent tournament form 47.1, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+big snag,,,,,43.84,25.0,0.8688,0.9472,32.98,True,40.07,1,135.0,"big snag scores 32.98 with recent tournament form 43.8, consistency score 25.0; reliability 0.869, activity 0.947, provisional",{}
+Burning John,,,,,24.64,94.22,0.9062,0.9407,32.87,False,38.56,3,162.0,"Burning John scores 32.87 with consistency score 94.2, recent tournament form 24.6; reliability 0.906, activity 0.941",{}
+ozy,,,,,46.72,25.0,0.85,0.9096,32.76,True,42.38,0,421.0,"ozy scores 32.76 with recent tournament form 46.7, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+RAFUNA,,,,,43.7,25.0,0.8688,0.942,32.7,True,39.96,1,156.0,"RAFUNA scores 32.70 with recent tournament form 43.7, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Endura,,,,,28.74,79.47,0.8875,0.9475,32.7,True,38.89,2,134.0,"Endura scores 32.70 with consistency score 79.5, recent tournament form 28.7; reliability 0.887, activity 0.948, provisional",{}
+Paracat,,,,,45.07,25.0,0.8688,0.9159,32.67,True,41.06,1,331.0,"Paracat scores 32.67 with recent tournament form 45.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Nekkid,,,,,25.51,97.98,0.8688,0.9391,32.64,True,40.0,1,169.0,"Nekkid scores 32.64 with consistency score 98.0, recent tournament form 25.5; reliability 0.869, activity 0.939, provisional",{}
+FlasTEH,,,,,43.52,25.0,0.8688,0.9423,32.6,True,39.82,1,155.0,"FlasTEH scores 32.60 with recent tournament form 43.5, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Barbone,,,,,43.41,25.0,0.8688,0.9423,32.52,True,39.73,1,155.0,"Barbone scores 32.52 with recent tournament form 43.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Read Horimiya,,,,,44.71,25.0,0.8688,0.916,32.44,True,40.77,1,330.0,"Read Horimiya scores 32.44 with recent tournament form 44.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+HandsomeMe,,,,,46.18,25.0,0.85,0.9096,32.43,True,41.94,0,421.0,"HandsomeMe scores 32.43 with recent tournament form 46.2, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Rebo,,,,,43.41,25.0,0.8688,0.9391,32.41,True,39.73,1,169.0,"Rebo scores 32.41 with recent tournament form 43.4, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Alice Carroll,,,,,23.5,98.97,0.8875,0.9407,32.22,True,38.59,2,162.0,"Alice Carroll scores 32.22 with consistency score 99.0, recent tournament form 23.5; reliability 0.887, activity 0.941, provisional",{}
+fireblaze3028,,,,,27.52,91.86,0.8688,0.918,32.21,True,40.39,1,309.0,"fireblaze3028 scores 32.21 with consistency score 91.9, recent tournament form 27.5; reliability 0.869, activity 0.918, provisional",{}
+uatzap,,,,,43.07,25.0,0.8688,0.9389,32.18,True,39.46,1,170.0,"uatzap scores 32.18 with recent tournament form 43.1, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+dracoria,,,,,25.61,89.98,0.8875,0.9407,32.13,True,38.48,2,162.0,"dracoria scores 32.13 with consistency score 90.0, recent tournament form 25.6; reliability 0.887, activity 0.941, provisional",{}
+Dream Journey,,,,,44.21,25.0,0.8688,0.9159,32.12,True,40.37,1,331.0,"Dream Journey scores 32.12 with recent tournament form 44.2, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+towny1,,,,,42.4,25.0,0.8688,0.9418,31.85,True,38.92,1,157.0,"towny1 scores 31.85 with recent tournament form 42.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+TzArtifactz,,,,,23.9,95.15,0.8875,0.9407,31.85,True,38.15,2,162.0,"TzArtifactz scores 31.85 with consistency score 95.2, recent tournament form 23.9; reliability 0.887, activity 0.941, provisional",{}
+helvetia,,,,,42.51,25.0,0.8688,0.9391,31.83,True,39.01,1,169.0,"helvetia scores 31.83 with recent tournament form 42.5, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Somay 287,,,,,43.63,25.0,0.8688,0.9172,31.8,True,39.9,1,317.0,"Somay 287 scores 31.80 with recent tournament form 43.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+Gonzah,,,,,42.22,25.0,0.8688,0.9437,31.79,True,38.78,1,149.0,"Gonzah scores 31.79 with recent tournament form 42.2, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+tomadoi,,,,,41.96,25.0,0.8688,0.942,31.56,True,38.57,1,156.0,"tomadoi scores 31.56 with recent tournament form 42.0, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+vonneti,,,,,43.08,25.0,0.8688,0.9186,31.5,True,39.46,1,303.0,"vonneti scores 31.50 with recent tournament form 43.1, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+the gloomist,,,,,29.97,69.01,0.8875,0.9387,31.47,True,37.78,2,171.0,"the gloomist scores 31.47 with consistency score 69.0, recent tournament form 30.0; reliability 0.887, activity 0.939, provisional",{}
+KEKW_,,,,,43.16,25.0,0.8688,0.9159,31.45,True,39.53,1,331.0,"KEKW_ scores 31.45 with recent tournament form 43.2, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Bairechuu,,,,,43.11,25.0,0.8688,0.9159,31.42,True,39.49,1,331.0,"Bairechuu scores 31.42 with recent tournament form 43.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+SinqHD,,,,,42.95,25.0,0.8688,0.9159,31.32,True,39.36,1,331.0,"SinqHD scores 31.32 with recent tournament form 43.0, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+godzilla,,,,,42.69,25.0,0.8688,0.9186,31.25,True,39.15,1,303.0,"godzilla scores 31.25 with recent tournament form 42.7, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+danialinoo,,,,,41.21,25.0,0.8688,0.9407,31.03,True,37.97,1,162.0,"danialinoo scores 31.03 with recent tournament form 41.2, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+-Din-,,,,,43.89,25.0,0.85,0.9096,31.01,True,40.11,0,421.0,"-Din- scores 31.01 with recent tournament form 43.9, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Meower,,,,,41.13,25.0,0.8688,0.9389,30.92,True,37.9,1,170.0,"Meower scores 30.92 with recent tournament form 41.1, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+KC Aqua,,,,,42.24,25.0,0.8688,0.9165,30.89,True,38.79,1,324.0,"KC Aqua scores 30.89 with recent tournament form 42.2, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Lesperry,,,,,40.98,25.0,0.8688,0.9407,30.88,True,37.78,1,162.0,"Lesperry scores 30.88 with recent tournament form 41.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+flyond,,,,,40.95,25.0,0.8688,0.9391,30.81,True,37.76,1,169.0,"flyond scores 30.81 with recent tournament form 41.0, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+walmart palr,,,,,43.52,25.0,0.85,0.9082,30.74,True,39.82,0,450.0,"walmart palr scores 30.74 with recent tournament form 43.5, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Hazuki-,,,,,42.01,25.0,0.8688,0.9159,30.72,True,38.61,1,331.0,"Hazuki- scores 30.72 with recent tournament form 42.0, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+PeterPen,,,,,40.77,25.0,0.8688,0.9389,30.68,True,37.62,1,170.0,"PeterPen scores 30.68 with recent tournament form 40.8, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+soyorin,,,,,41.94,25.0,0.8688,0.9153,30.66,True,38.55,1,338.0,"soyorin scores 30.66 with recent tournament form 41.9, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+227,,,,,43.27,25.0,0.85,0.9082,30.58,True,39.62,0,450.0,"227 scores 30.58 with recent tournament form 43.3, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Big Yikes,,,,,40.57,25.0,0.8688,0.9389,30.55,True,37.46,1,170.0,"Big Yikes scores 30.55 with recent tournament form 40.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Clutch,,,,,40.26,25.0,0.8688,0.942,30.45,True,37.21,1,156.0,"Clutch scores 30.45 with recent tournament form 40.3, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+ming0328ming,,,,,40.38,25.0,0.8688,0.9391,30.44,True,37.3,1,169.0,"ming0328ming scores 30.44 with recent tournament form 40.4, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+maTT4132,,,,,41.54,25.0,0.8688,0.9159,30.42,True,38.23,1,331.0,"maTT4132 scores 30.42 with recent tournament form 41.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+superi0r,,,,,39.95,25.0,0.8688,0.9472,30.42,True,36.96,1,135.0,"superi0r scores 30.42 with recent tournament form 40.0, consistency score 25.0; reliability 0.869, activity 0.947, provisional",{}
+Alyra,,,,,40.28,25.0,0.8688,0.9391,30.37,True,37.22,1,169.0,"Alyra scores 30.37 with recent tournament form 40.3, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+moosepi,,,,,41.37,25.0,0.8688,0.916,30.32,True,38.1,1,330.0,"moosepi scores 30.32 with recent tournament form 41.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+xceller,,,,,41.42,25.0,0.8688,0.9147,30.31,True,38.14,1,345.0,"xceller scores 30.31 with recent tournament form 41.4, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+-Kedama,,,,,40.09,25.0,0.8688,0.9407,30.3,True,37.07,1,162.0,"-Kedama scores 30.30 with recent tournament form 40.1, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Vagabond,,,,,41.14,25.0,0.8688,0.9186,30.26,True,37.91,1,303.0,"Vagabond scores 30.26 with recent tournament form 41.1, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Kuronora,,,,,39.96,25.0,0.8688,0.9389,30.16,True,36.97,1,170.0,"Kuronora scores 30.16 with recent tournament form 40.0, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+cyo,,,,,42.44,25.0,0.85,0.9096,30.12,True,38.95,0,421.0,"cyo scores 30.12 with recent tournament form 42.4, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+-cyber,,,,,42.3,25.0,0.85,0.9082,29.98,True,38.84,0,450.0,"-cyber scores 29.98 with recent tournament form 42.3, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Lujeol,,,,,40.56,25.0,0.8688,0.9172,29.84,True,37.45,1,317.0,"Lujeol scores 29.84 with recent tournament form 40.6, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+_Silvian,,,,,40.44,25.0,0.8688,0.9165,29.74,True,37.35,1,324.0,"_Silvian scores 29.74 with recent tournament form 40.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Lunasa,,,,,39.22,25.0,0.8688,0.9407,29.73,True,36.38,1,162.0,"Lunasa scores 29.73 with recent tournament form 39.2, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Kamensh1k,,,,,38.98,25.0,0.8688,0.9457,29.73,True,36.18,1,141.0,"Kamensh1k scores 29.73 with recent tournament form 39.0, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+Homutan,,,,,39.14,25.0,0.8688,0.942,29.72,True,36.31,1,156.0,"Homutan scores 29.72 with recent tournament form 39.1, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+aaront,,,,,40.33,25.0,0.8688,0.916,29.66,True,37.26,1,330.0,"aaront scores 29.66 with recent tournament form 40.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+pr1mary,,,,,38.95,25.0,0.8688,0.9437,29.65,True,36.16,1,149.0,"pr1mary scores 29.65 with recent tournament form 39.0, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+dragonsaga,,,,,40.28,25.0,0.8688,0.9157,29.61,True,37.22,1,333.0,"dragonsaga scores 29.61 with recent tournament form 40.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Mr Wang,,,,,40.26,25.0,0.8688,0.916,29.61,True,37.21,1,330.0,"Mr Wang scores 29.61 with recent tournament form 40.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Andros,,,,,38.42,25.0,0.8688,0.942,29.25,True,35.74,1,156.0,"Andros scores 29.25 with recent tournament form 38.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Thuya,,,,,41.01,25.0,0.85,0.9092,29.22,True,37.81,0,429.0,"Thuya scores 29.22 with recent tournament form 41.0, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+N1ghtbeat,,,,,39.44,25.0,0.8688,0.9193,29.19,True,36.55,1,296.0,"N1ghtbeat scores 29.19 with recent tournament form 39.4, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+artlost,,,,,39.55,25.0,0.8688,0.9159,29.16,True,36.64,1,331.0,"artlost scores 29.16 with recent tournament form 39.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+mikatsu,,,,,39.54,25.0,0.8688,0.9153,29.13,True,36.63,1,338.0,"mikatsu scores 29.13 with recent tournament form 39.5, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+OhLivi,,,,,40.58,25.0,0.85,0.9085,28.93,True,37.46,0,443.0,"OhLivi scores 28.93 with recent tournament form 40.6, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+my angel amuro,,,,,39.22,25.0,0.8688,0.9153,28.93,True,36.38,1,338.0,"my angel amuro scores 28.93 with recent tournament form 39.2, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+Curren Bouquet,,,,,39.12,25.0,0.8688,0.9153,28.86,True,36.3,1,338.0,"Curren Bouquet scores 28.86 with recent tournament form 39.1, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+xXChokgamerXx,,,,,37.51,25.0,0.8688,0.9437,28.7,True,35.01,1,149.0,"xXChokgamerXx scores 28.70 with recent tournament form 37.5, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+tgnalice,,,,,37.68,25.0,0.8688,0.9389,28.67,True,35.14,1,170.0,"tgnalice scores 28.67 with recent tournament form 37.7, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Rampax,,,,,37.52,25.0,0.8688,0.9407,28.62,True,35.02,1,162.0,"Rampax scores 28.62 with recent tournament form 37.5, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Moonlit111,,,,,37.27,25.0,0.8688,0.9437,28.55,True,34.82,1,149.0,"Moonlit111 scores 28.55 with recent tournament form 37.3, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+Crestive,,,,,38.33,25.0,0.8688,0.9193,28.48,True,35.66,1,296.0,"Crestive scores 28.48 with recent tournament form 38.3, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+wr8th,,,,,36.93,25.0,0.8688,0.9475,28.44,True,34.54,1,134.0,"wr8th scores 28.44 with recent tournament form 36.9, consistency score 25.0; reliability 0.869, activity 0.948, provisional",{}
+tommi,,,,,39.71,25.0,0.85,0.9082,28.38,True,36.77,0,450.0,"tommi scores 28.38 with recent tournament form 39.7, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Endless Tilt,,,,,38.26,25.0,0.8688,0.9159,28.33,True,35.61,1,331.0,"Endless Tilt scores 28.33 with recent tournament form 38.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Liery,,,,,38.12,25.0,0.8688,0.9157,28.24,True,35.5,1,333.0,"Liery scores 28.24 with recent tournament form 38.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+KirbyTwister,,,,,38.11,25.0,0.8688,0.9159,28.24,True,35.49,1,331.0,"KirbyTwister scores 28.24 with recent tournament form 38.1, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+enri,,,,,36.63,25.0,0.8688,0.9475,28.24,True,34.3,1,134.0,"enri scores 28.24 with recent tournament form 36.6, consistency score 25.0; reliability 0.869, activity 0.948, provisional",{}
+vetoed,,,,,39.43,25.0,0.85,0.9089,28.23,True,36.54,0,435.0,"vetoed scores 28.23 with recent tournament form 39.4, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+xidorn,,,,,38.02,25.0,0.8688,0.9158,28.18,True,35.42,1,332.0,"xidorn scores 28.18 with recent tournament form 38.0, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+lol-ok,,,,,37.93,25.0,0.8688,0.916,28.13,True,35.34,1,330.0,"lol-ok scores 28.13 with recent tournament form 37.9, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+pii,,,,,36.6,25.0,0.8688,0.9423,28.06,True,34.28,1,155.0,"pii scores 28.06 with recent tournament form 36.6, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Furamun,,,,,36.51,25.0,0.8688,0.942,28.0,True,34.21,1,156.0,"Furamun scores 28.00 with recent tournament form 36.5, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Roba,,,,,39.03,25.0,0.85,0.9083,27.97,True,36.22,0,449.0,"Roba scores 27.97 with recent tournament form 39.0, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+hosesan1020,,,,,36.36,25.0,0.8688,0.942,27.9,True,34.09,1,156.0,"hosesan1020 scores 27.90 with recent tournament form 36.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+Omeguii,,,,,37.45,25.0,0.8688,0.9159,27.82,True,34.96,1,331.0,"Omeguii scores 27.82 with recent tournament form 37.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+viciobylike,,,,,36.05,25.0,0.8688,0.9407,27.66,True,33.84,1,162.0,"viciobylike scores 27.66 with recent tournament form 36.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+bsm,,,,,38.43,25.0,0.85,0.9096,27.64,True,35.74,0,422.0,"bsm scores 27.64 with recent tournament form 38.4, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+PLOXARU,,,,,36.0,25.0,0.8688,0.9391,27.58,True,33.8,1,169.0,"PLOXARU scores 27.58 with recent tournament form 36.0, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Joyi,,,,,36.87,25.0,0.8688,0.9186,27.53,True,34.5,1,303.0,"Joyi scores 27.53 with recent tournament form 36.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Falnt,,,,,36.85,25.0,0.8688,0.9159,27.44,True,34.48,1,331.0,"Falnt scores 27.44 with recent tournament form 36.9, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+trushpack,,,,,35.63,25.0,0.8688,0.9391,27.34,True,33.5,1,169.0,"trushpack scores 27.34 with recent tournament form 35.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+grkn7,,,,,36.68,25.0,0.8688,0.9153,27.31,True,34.34,1,338.0,"grkn7 scores 27.31 with recent tournament form 36.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+haga1115,,,,,35.42,25.0,0.8688,0.942,27.28,True,33.34,1,156.0,"haga1115 scores 27.28 with recent tournament form 35.4, consistency score 25.0; reliability 0.869, activity 0.942, provisional",{}
+hifu,,,,,36.61,25.0,0.8688,0.9153,27.27,True,34.29,1,338.0,"hifu scores 27.27 with recent tournament form 36.6, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+LittleFede,,,,,35.5,25.0,0.8688,0.9391,27.25,True,33.4,1,169.0,"LittleFede scores 27.25 with recent tournament form 35.5, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+arekk,,,,,36.38,25.0,0.8688,0.9187,27.22,True,34.1,1,302.0,"arekk scores 27.22 with recent tournament form 36.4, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+F2X,,,,,35.38,25.0,0.8688,0.9391,27.17,True,33.3,1,169.0,"F2X scores 27.17 with recent tournament form 35.4, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Seamie,,,,,35.38,25.0,0.8688,0.9387,27.16,True,33.3,1,171.0,"Seamie scores 27.16 with recent tournament form 35.4, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+maidkedi,,,,,36.37,25.0,0.8688,0.9157,27.13,True,34.1,1,333.0,"maidkedi scores 27.13 with recent tournament form 36.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+_AfterWind,,,,,36.34,25.0,0.8688,0.916,27.12,True,34.07,1,330.0,"_AfterWind scores 27.12 with recent tournament form 36.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+120-cell,,,,,37.51,25.0,0.85,0.9104,27.09,True,35.01,0,408.0,"120-cell scores 27.09 with recent tournament form 37.5, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+mx10000,,,,,36.21,25.0,0.8688,0.9172,27.07,True,33.97,1,317.0,"mx10000 scores 27.07 with recent tournament form 36.2, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+ILBOSSDELPOPPIN,,,,,35.9,25.0,0.8688,0.9194,26.93,True,33.72,1,295.0,"ILBOSSDELPOPPIN scores 26.93 with recent tournament form 35.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Garalulu,,,,,35.94,25.0,0.8688,0.9172,26.9,True,33.75,1,317.0,"Garalulu scores 26.90 with recent tournament form 35.9, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+daanit,,,,,34.91,25.0,0.8688,0.9391,26.87,True,32.93,1,169.0,"daanit scores 26.87 with recent tournament form 34.9, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+FujiwaraNoMokou,,,,,35.9,25.0,0.8688,0.9166,26.85,True,33.72,1,323.0,"FujiwaraNoMokou scores 26.85 with recent tournament form 35.9, consistency score 25.0; reliability 0.869, activity 0.917, provisional",{}
+GodRoPoNiKa,,,,,35.68,25.0,0.8688,0.9186,26.77,True,33.54,1,303.0,"GodRoPoNiKa scores 26.77 with recent tournament form 35.7, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Rinyeki,,,,,35.41,25.0,0.8688,0.9159,26.52,True,33.33,1,331.0,"Rinyeki scores 26.52 with recent tournament form 35.4, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+KonKonKinakoN,,,,,35.41,25.0,0.8688,0.9153,26.5,True,33.33,1,338.0,"KonKonKinakoN scores 26.50 with recent tournament form 35.4, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+Eagle5324,,,,,34.23,25.0,0.8688,0.9407,26.47,True,32.38,1,162.0,"Eagle5324 scores 26.47 with recent tournament form 34.2, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Intercambing,,,,,33.48,25.0,0.8688,0.9457,26.11,True,31.78,1,141.0,"Intercambing scores 26.11 with recent tournament form 33.5, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+5joshi,,,,,33.56,25.0,0.8688,0.9391,25.98,True,31.85,1,169.0,"5joshi scores 25.98 with recent tournament form 33.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+D I O,,,,,35.79,25.0,0.85,0.9083,25.97,True,33.63,0,449.0,"D I O scores 25.97 with recent tournament form 35.8, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+iisobeyan,,,,,34.26,25.0,0.8688,0.9159,25.79,True,32.41,1,331.0,"iisobeyan scores 25.79 with recent tournament form 34.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+kusuriya,,,,,32.82,25.0,0.8688,0.9404,25.54,True,31.26,1,163.0,"kusuriya scores 25.54 with recent tournament form 32.8, consistency score 25.0; reliability 0.869, activity 0.940, provisional",{}
+Pipipupu997,,,,,32.65,25.0,0.8688,0.9407,25.43,True,31.12,1,162.0,"Pipipupu997 scores 25.43 with recent tournament form 32.6, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Deshoou,,,,,33.43,25.0,0.8688,0.9154,25.25,True,31.74,1,337.0,"Deshoou scores 25.25 with recent tournament form 33.4, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+paxyh,,,,,33.33,25.0,0.8688,0.9159,25.2,True,31.66,1,331.0,"paxyh scores 25.20 with recent tournament form 33.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+orngoos,,,,,32.96,25.0,0.8688,0.9187,25.04,True,31.37,1,302.0,"orngoos scores 25.04 with recent tournament form 33.0, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+1ncert,,,,,32.94,25.0,0.8688,0.9193,25.04,True,31.35,1,296.0,"1ncert scores 25.04 with recent tournament form 32.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Vinnie,,,,,32.07,25.0,0.8688,0.9391,25.01,True,30.66,1,169.0,"Vinnie scores 25.01 with recent tournament form 32.1, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+vljoy209,,,,,32.75,25.0,0.8688,0.9186,24.9,True,31.2,1,303.0,"vljoy209 scores 24.90 with recent tournament form 32.8, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Belladonna,,,,,32.63,25.0,0.8688,0.9186,24.82,True,31.1,1,303.0,"Belladonna scores 24.82 with recent tournament form 32.6, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Tutel,,,,,31.66,25.0,0.8688,0.9407,24.79,True,30.33,1,162.0,"Tutel scores 24.79 with recent tournament form 31.7, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+wessel_osu2,,,,,32.7,25.0,0.8688,0.9147,24.76,True,31.16,1,345.0,"wessel_osu2 scores 24.76 with recent tournament form 32.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+RAiMEi_BOTTliUM,,,,,32.7,25.0,0.8688,0.9147,24.76,True,31.16,1,345.0,"RAiMEi_BOTTliUM scores 24.76 with recent tournament form 32.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+Jokupoika24,,,,,33.39,25.0,0.85,0.9082,24.48,True,31.71,0,451.0,"Jokupoika24 scores 24.48 with recent tournament form 33.4, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+nicki1324,,,,,33.32,25.0,0.85,0.9096,24.48,True,31.66,0,422.0,"nicki1324 scores 24.48 with recent tournament form 33.3, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Seiong,,,,,31.02,25.0,0.8688,0.9407,24.37,True,29.82,1,162.0,"Seiong scores 24.37 with recent tournament form 31.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+RyooYamada,,,,,31.89,25.0,0.8688,0.9187,24.35,True,30.51,1,302.0,"RyooYamada scores 24.35 with recent tournament form 31.9, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+perthed again,,,,,31.0,25.0,0.8688,0.9407,24.35,True,29.8,1,162.0,"perthed again scores 24.35 with recent tournament form 31.0, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Bomilk,,,,,30.94,25.0,0.8688,0.9407,24.32,True,29.75,1,162.0,"Bomilk scores 24.32 with recent tournament form 30.9, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+-NyX,,,,,30.94,25.0,0.8688,0.9404,24.31,True,29.75,1,163.0,"-NyX scores 24.31 with recent tournament form 30.9, consistency score 25.0; reliability 0.869, activity 0.940, provisional",{}
+Mornis,,,,,30.94,25.0,0.8688,0.9391,24.27,True,29.75,1,169.0,"Mornis scores 24.27 with recent tournament form 30.9, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Ole,,,,,31.71,25.0,0.8688,0.916,24.17,True,30.37,1,330.0,"Ole scores 24.17 with recent tournament form 31.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Accolibed,,,,,30.53,25.0,0.8688,0.9437,24.12,True,29.42,1,149.0,"Accolibed scores 24.12 with recent tournament form 30.5, consistency score 25.0; reliability 0.869, activity 0.944, provisional",{}
+Hibiki,,,,,30.62,25.0,0.8688,0.9391,24.07,True,29.5,1,169.0,"Hibiki scores 24.07 with recent tournament form 30.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Ayoukiro,,,,,31.29,25.0,0.8688,0.9154,23.88,True,30.03,1,337.0,"Ayoukiro scores 23.88 with recent tournament form 31.3, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+ChillierPear,,,,,29.95,25.0,0.8688,0.9475,23.84,True,28.96,1,134.0,"ChillierPear scores 23.84 with recent tournament form 29.9, consistency score 25.0; reliability 0.869, activity 0.948, provisional",{}
+Rumpowl,,,,,30.83,25.0,0.8688,0.9159,23.6,True,29.66,1,331.0,"Rumpowl scores 23.60 with recent tournament form 30.8, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+KOCT9H,,,,,30.72,25.0,0.8688,0.9186,23.6,True,29.58,1,303.0,"KOCT9H scores 23.60 with recent tournament form 30.7, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Pittinger,,,,,30.71,25.0,0.8688,0.9154,23.52,True,29.57,1,337.0,"Pittinger scores 23.52 with recent tournament form 30.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+synchromic,,,,,30.62,25.0,0.8688,0.9147,23.44,True,29.5,1,345.0,"synchromic scores 23.44 with recent tournament form 30.6, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+System Sun,,,,,31.69,25.0,0.85,0.9082,23.43,True,30.35,0,451.0,"System Sun scores 23.43 with recent tournament form 31.7, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+MiguisXD,,,,,29.57,25.0,0.8688,0.9407,23.42,True,28.66,1,162.0,"MiguisXD scores 23.42 with recent tournament form 29.6, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+Daldor,,,,,29.56,25.0,0.8688,0.9391,23.37,True,28.65,1,169.0,"Daldor scores 23.37 with recent tournament form 29.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+def,,,,,29.5,25.0,0.8688,0.9387,23.32,True,28.6,1,171.0,"def scores 23.32 with recent tournament form 29.5, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+soft bunny,,,,,30.34,25.0,0.8688,0.9158,23.29,True,29.27,1,332.0,"soft bunny scores 23.29 with recent tournament form 30.3, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Mqnster,,,,,31.2,25.0,0.85,0.9089,23.15,True,29.96,0,435.0,"Mqnster scores 23.15 with recent tournament form 31.2, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+MRB,,,,,29.09,25.0,0.8688,0.9391,23.07,True,28.27,1,169.0,"MRB scores 23.07 with recent tournament form 29.1, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Kenzol,,,,,28.96,25.0,0.8688,0.9389,22.98,True,28.17,1,170.0,"Kenzol scores 22.98 with recent tournament form 29.0, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Navalus,,,,,29.79,25.0,0.8688,0.9158,22.94,True,28.83,1,332.0,"Navalus scores 22.94 with recent tournament form 29.8, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+MyAimPeeps,,,,,28.79,25.0,0.8688,0.9391,22.87,True,28.03,1,169.0,"MyAimPeeps scores 22.87 with recent tournament form 28.8, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+POMAH,,,,,28.75,25.0,0.8688,0.9391,22.84,True,28.0,1,169.0,"POMAH scores 22.84 with recent tournament form 28.8, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+zeta,,,,,29.58,25.0,0.8688,0.9153,22.79,True,28.66,1,338.0,"zeta scores 22.79 with recent tournament form 29.6, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+Oguri Cap,,,,,27.88,25.0,0.8688,0.9597,22.77,True,27.3,1,93.0,"Oguri Cap scores 22.77 with recent tournament form 27.9, consistency score 25.0; reliability 0.869, activity 0.960, provisional",{}
+My Angel Adry,,,,,28.55,25.0,0.8688,0.9407,22.75,True,27.84,1,162.0,"My Angel Adry scores 22.75 with recent tournament form 28.6, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+P r a h,,,,,28.11,25.0,0.8688,0.9407,22.47,True,27.49,1,162.0,"P r a h scores 22.47 with recent tournament form 28.1, consistency score 25.0; reliability 0.869, activity 0.941, provisional",{}
+dench,,,,,27.84,25.0,0.8688,0.9391,22.25,True,27.27,1,169.0,"dench scores 22.25 with recent tournament form 27.8, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+baoo,,,,,27.75,25.0,0.8688,0.9387,22.18,True,27.2,1,171.0,"baoo scores 22.18 with recent tournament form 27.8, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Rhetoric,,,,,15.71,69.59,0.8875,0.9437,22.18,True,26.49,2,149.0,"Rhetoric scores 22.18 with consistency score 69.6, recent tournament form 15.7; reliability 0.887, activity 0.944, provisional",{}
+Kotsik,,,,,27.67,25.0,0.8688,0.9391,22.14,True,27.14,1,169.0,"Kotsik scores 22.14 with recent tournament form 27.7, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+leny,,,,,29.25,25.0,0.85,0.9096,21.96,True,28.4,0,422.0,"leny scores 21.96 with recent tournament form 29.2, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Aphrodi,,,,,27.96,25.0,0.8688,0.9154,21.77,True,27.37,1,337.0,"Aphrodi scores 21.77 with recent tournament form 28.0, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+makkara,,,,,28.92,25.0,0.85,0.9082,21.72,True,28.14,0,450.0,"makkara scores 21.72 with recent tournament form 28.9, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Sparkxei,,,,,27.76,25.0,0.8688,0.9154,21.64,True,27.21,1,337.0,"Sparkxei scores 21.64 with recent tournament form 27.8, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+RafaMat,,,,,26.62,25.0,0.8688,0.9457,21.61,True,26.3,1,141.0,"RafaMat scores 21.61 with recent tournament form 26.6, consistency score 25.0; reliability 0.869, activity 0.946, provisional",{}
+Naapuri,,,,,28.65,25.0,0.85,0.9082,21.55,True,27.92,0,450.0,"Naapuri scores 21.55 with recent tournament form 28.6, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Another Guy,,,,,26.74,25.0,0.8688,0.9387,21.52,True,26.39,1,171.0,"Another Guy scores 21.52 with recent tournament form 26.7, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+BELLOFIGO,,,,,26.69,25.0,0.8688,0.9376,21.47,True,26.35,1,176.0,"BELLOFIGO scores 21.47 with recent tournament form 26.7, consistency score 25.0; reliability 0.869, activity 0.938, provisional",{}
+Oscar con boina,,,,,28.14,25.0,0.85,0.9093,21.26,True,27.51,0,428.0,"Oscar con boina scores 21.26 with recent tournament form 28.1, consistency score 25.0; reliability 0.850, activity 0.909, provisional",{}
+36R,,,,,27.07,25.0,0.8688,0.9153,21.2,True,26.66,1,338.0,"36R scores 21.20 with recent tournament form 27.1, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+duke,,,,,26.18,25.0,0.8688,0.9404,21.2,True,25.94,1,163.0,"duke scores 21.20 with recent tournament form 26.2, consistency score 25.0; reliability 0.869, activity 0.940, provisional",{}
+Daf0nz,,,,,26.79,25.0,0.8688,0.9154,21.02,True,26.43,1,337.0,"Daf0nz scores 21.02 with recent tournament form 26.8, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+CRIMEA,,,,,25.86,25.0,0.8688,0.9391,20.96,True,25.69,1,169.0,"CRIMEA scores 20.96 with recent tournament form 25.9, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+ded24lol,,,,,26.44,25.0,0.8688,0.9186,20.87,True,26.15,1,303.0,"ded24lol scores 20.87 with recent tournament form 26.4, consistency score 25.0; reliability 0.869, activity 0.919, provisional",{}
+Plapa,,,,,26.53,25.0,0.8688,0.9154,20.86,True,26.22,1,337.0,"Plapa scores 20.86 with recent tournament form 26.5, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+iamVill,,,,,25.64,25.0,0.8688,0.9387,20.81,True,25.51,1,171.0,"iamVill scores 20.81 with recent tournament form 25.6, consistency score 25.0; reliability 0.869, activity 0.939, provisional",{}
+Nezunyan,,,,,26.36,25.0,0.8688,0.9147,20.73,True,26.09,1,345.0,"Nezunyan scores 20.73 with recent tournament form 26.4, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+CallMeRed,,,,,25.7,25.0,0.8688,0.9159,20.34,True,25.56,1,331.0,"CallMeRed scores 20.34 with recent tournament form 25.7, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+Tsubaban,,,,,25.67,25.0,0.8688,0.9153,20.31,True,25.54,1,338.0,"Tsubaban scores 20.31 with recent tournament form 25.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+RafaelXDP,,,,,25.68,25.0,0.8688,0.9148,20.3,True,25.54,1,344.0,"RafaelXDP scores 20.30 with recent tournament form 25.7, consistency score 25.0; reliability 0.869, activity 0.915, provisional",{}
+Tsukime,,,,,24.81,25.0,0.8688,0.9391,20.27,True,24.85,1,169.0,"Tsukime scores 20.27 with consistency score 25.0, recent tournament form 24.8; reliability 0.869, activity 0.939, provisional",{}
+Milifa Lunaria,,,,,25.48,25.0,0.8688,0.9165,20.21,True,25.38,1,324.0,"Milifa Lunaria scores 20.21 with recent tournament form 25.5, consistency score 25.0; reliability 0.869, activity 0.916, provisional",{}
+hubbawubba,,,,,24.96,25.0,0.8688,0.9186,19.93,True,24.97,1,303.0,"hubbawubba scores 19.93 with consistency score 25.0, recent tournament form 25.0; reliability 0.869, activity 0.919, provisional",{}
+robotonic,,,,,24.11,25.0,0.8688,0.942,19.88,True,24.29,1,156.0,"robotonic scores 19.88 with consistency score 25.0, recent tournament form 24.1; reliability 0.869, activity 0.942, provisional",{}
+_Chonker,,,,,24.82,25.0,0.8688,0.9193,19.85,True,24.86,1,296.0,"_Chonker scores 19.85 with consistency score 25.0, recent tournament form 24.8; reliability 0.869, activity 0.919, provisional",{}
+FcEazy,,,,,17.29,48.0,0.8875,0.9475,19.7,True,23.43,2,134.0,"FcEazy scores 19.70 with consistency score 48.0, recent tournament form 17.3; reliability 0.887, activity 0.948, provisional",{}
+VineOpoly,,,,,25.41,25.0,0.85,0.9096,19.58,True,25.33,0,422.0,"VineOpoly scores 19.58 with recent tournament form 25.4, consistency score 25.0; reliability 0.850, activity 0.910, provisional",{}
+Razekon,,,,,24.36,25.0,0.8688,0.9153,19.47,True,24.49,1,338.0,"Razekon scores 19.47 with consistency score 25.0, recent tournament form 24.4; reliability 0.869, activity 0.915, provisional",{}
+xymbii,,,,,24.22,25.0,0.8688,0.9186,19.45,True,24.38,1,303.0,"xymbii scores 19.45 with consistency score 25.0, recent tournament form 24.2; reliability 0.869, activity 0.919, provisional",{}
+_Kasaezic,,,,,23.56,25.0,0.8688,0.9387,19.45,True,23.85,1,171.0,"_Kasaezic scores 19.45 with consistency score 25.0, recent tournament form 23.6; reliability 0.869, activity 0.939, provisional",{}
+Chiyuu,,,,,23.44,25.0,0.8688,0.9407,19.41,True,23.75,1,162.0,"Chiyuu scores 19.41 with consistency score 25.0, recent tournament form 23.4; reliability 0.869, activity 0.941, provisional",{}
+NoTablet,,,,,25.09,25.0,0.85,0.9079,19.35,True,25.07,0,457.0,"NoTablet scores 19.35 with recent tournament form 25.1, consistency score 25.0; reliability 0.850, activity 0.908, provisional",{}
+Gerard Way,,,,,23.3,25.0,0.8688,0.9391,19.29,True,23.64,1,169.0,"Gerard Way scores 19.29 with consistency score 25.0, recent tournament form 23.3; reliability 0.869, activity 0.939, provisional",{}
+Carlosflow,,,,,24.01,25.0,0.8688,0.9153,19.25,True,24.21,1,338.0,"Carlosflow scores 19.25 with consistency score 25.0, recent tournament form 24.0; reliability 0.869, activity 0.915, provisional",{}
+thebeastjona,,,,,23.1,25.0,0.8688,0.9387,19.15,True,23.48,1,171.0,"thebeastjona scores 19.15 with consistency score 25.0, recent tournament form 23.1; reliability 0.869, activity 0.939, provisional",{}
+UC2,,,,,23.71,25.0,0.8688,0.9154,19.06,True,23.97,1,337.0,"UC2 scores 19.06 with consistency score 25.0, recent tournament form 23.7; reliability 0.869, activity 0.915, provisional",{}
+_fefe,,,,,24.52,25.0,0.85,0.9093,19.03,True,24.62,0,428.0,"_fefe scores 19.03 with consistency score 25.0, recent tournament form 24.5; reliability 0.850, activity 0.909, provisional",{}
+stumphole145,,,,,23.66,25.0,0.8688,0.9153,19.03,True,23.93,1,338.0,"stumphole145 scores 19.03 with consistency score 25.0, recent tournament form 23.7; reliability 0.869, activity 0.915, provisional",{}
+beea66,,,,,24.56,25.0,0.85,0.9079,19.02,True,24.65,0,457.0,"beea66 scores 19.02 with consistency score 25.0, recent tournament form 24.6; reliability 0.850, activity 0.908, provisional",{}
+Goold,,,,,23.59,25.0,0.8688,0.9153,18.98,True,23.87,1,338.0,"Goold scores 18.98 with consistency score 25.0, recent tournament form 23.6; reliability 0.869, activity 0.915, provisional",{}
+Caruma,,,,,22.05,25.0,0.8688,0.9577,18.84,True,22.64,1,99.0,"Caruma scores 18.84 with consistency score 25.0, recent tournament form 22.1; reliability 0.869, activity 0.958, provisional",{}
+hedayo,,,,,23.3,25.0,0.8688,0.9147,18.79,True,23.64,1,345.0,"hedayo scores 18.79 with consistency score 25.0, recent tournament form 23.3; reliability 0.869, activity 0.915, provisional",{}
+Leftie,,,,,22.46,25.0,0.8688,0.9391,18.74,True,22.97,1,169.0,"Leftie scores 18.74 with consistency score 25.0, recent tournament form 22.5; reliability 0.869, activity 0.939, provisional",{}
+Vo Hieu Grape,,,,,22.12,25.0,0.8688,0.9387,18.51,True,22.7,1,171.0,"Vo Hieu Grape scores 18.51 with consistency score 25.0, recent tournament form 22.1; reliability 0.869, activity 0.939, provisional",{}
+Surite,,,,,22.83,25.0,0.8688,0.9153,18.5,True,23.26,1,338.0,"Surite scores 18.50 with consistency score 25.0, recent tournament form 22.8; reliability 0.869, activity 0.915, provisional",{}
+KittyLikeme,,,,,21.82,25.0,0.8688,0.9391,18.32,True,22.46,1,169.0,"KittyLikeme scores 18.32 with consistency score 25.0, recent tournament form 21.8; reliability 0.869, activity 0.939, provisional",{}
+TEQUILA BABY,,,,,22.49,25.0,0.8688,0.9148,18.27,True,22.99,1,344.0,"TEQUILA BABY scores 18.27 with consistency score 25.0, recent tournament form 22.5; reliability 0.869, activity 0.915, provisional",{}
+Alue,,,,,23.21,25.0,0.85,0.91,18.23,True,23.57,0,414.0,"Alue scores 18.23 with consistency score 25.0, recent tournament form 23.2; reliability 0.850, activity 0.910, provisional",{}
+Phel,,,,,22.29,25.0,0.8688,0.9153,18.16,True,22.83,1,338.0,"Phel scores 18.16 with consistency score 25.0, recent tournament form 22.3; reliability 0.869, activity 0.915, provisional",{}
+-Yeji,,,,,21.99,25.0,0.8688,0.9159,17.98,True,22.59,1,331.0,"-Yeji scores 17.98 with consistency score 25.0, recent tournament form 22.0; reliability 0.869, activity 0.916, provisional",{}
+J1x,,,,,21.88,25.0,0.8688,0.9148,17.89,True,22.5,1,344.0,"J1x scores 17.89 with consistency score 25.0, recent tournament form 21.9; reliability 0.869, activity 0.915, provisional",{}
+Tuffynut Latte,,,,,21.77,25.0,0.8688,0.9154,17.83,True,22.42,1,337.0,"Tuffynut Latte scores 17.83 with consistency score 25.0, recent tournament form 21.8; reliability 0.869, activity 0.915, provisional",{}
+Jekuru,,,,,20.96,25.0,0.8688,0.9153,17.31,True,21.77,1,338.0,"Jekuru scores 17.31 with consistency score 25.0, recent tournament form 21.0; reliability 0.869, activity 0.915, provisional",{}
+ExiaXD,,,,,20.32,25.0,0.8688,0.918,16.95,True,21.26,1,309.0,"ExiaXD scores 16.95 with consistency score 25.0, recent tournament form 20.3; reliability 0.869, activity 0.918, provisional",{}
+meramin,,,,,19.7,25.0,0.8688,0.9391,16.94,True,20.76,1,169.0,"meramin scores 16.94 with consistency score 25.0, recent tournament form 19.7; reliability 0.869, activity 0.939, provisional",{}
+mailman,,,,,20.26,25.0,0.8688,0.918,16.91,True,21.21,1,309.0,"mailman scores 16.91 with consistency score 25.0, recent tournament form 20.3; reliability 0.869, activity 0.918, provisional",{}
+Not Mage,,,,,20.05,25.0,0.8688,0.9154,16.73,True,21.04,1,337.0,"Not Mage scores 16.73 with consistency score 25.0, recent tournament form 20.1; reliability 0.869, activity 0.915, provisional",{}
+Azasapag,,,,,18.66,25.0,0.8688,0.9574,16.58,True,19.93,1,100.0,"Azasapag scores 16.58 with consistency score 25.0, recent tournament form 18.7; reliability 0.869, activity 0.957, provisional",{}
+Riquiria,,,,,19.78,25.0,0.8688,0.9159,16.57,True,20.82,1,331.0,"Riquiria scores 16.57 with consistency score 25.0, recent tournament form 19.8; reliability 0.869, activity 0.916, provisional",{}
+- PPKM -,,,,,19.72,25.0,0.8688,0.9158,16.53,True,20.78,1,332.0,"- PPKM - scores 16.53 with consistency score 25.0, recent tournament form 19.7; reliability 0.869, activity 0.916, provisional",{}
+Ryuzaki,,,,,18.96,25.0,0.8688,0.9404,16.48,True,20.17,1,163.0,"Ryuzaki scores 16.48 with consistency score 25.0, recent tournament form 19.0; reliability 0.869, activity 0.940, provisional",{}
+Polle,,,,,18.87,25.0,0.8688,0.9387,16.39,True,20.1,1,171.0,"Polle scores 16.39 with consistency score 25.0, recent tournament form 18.9; reliability 0.869, activity 0.939, provisional",{}
+aconite,,,,,20.15,25.0,0.85,0.908,16.3,True,21.12,0,454.0,"aconite scores 16.30 with consistency score 25.0, recent tournament form 20.1; reliability 0.850, activity 0.908, provisional",{}
+zebedee,,,,,19.28,25.0,0.8688,0.918,16.29,True,20.42,1,309.0,"zebedee scores 16.29 with consistency score 25.0, recent tournament form 19.3; reliability 0.869, activity 0.918, provisional",{}
+rlsc1109,,,,,18.64,25.0,0.8688,0.9391,16.25,True,19.91,1,169.0,"rlsc1109 scores 16.25 with consistency score 25.0, recent tournament form 18.6; reliability 0.869, activity 0.939, provisional",{}
+[MG]-iky-,,,,,18.4,25.0,0.8688,0.9407,16.12,True,19.72,1,162.0,"[MG]-iky- scores 16.12 with consistency score 25.0, recent tournament form 18.4; reliability 0.869, activity 0.941, provisional",{}
+aurora on osu,,,,,19.53,25.0,0.85,0.91,15.95,True,20.62,0,414.0,"aurora on osu scores 15.95 with consistency score 25.0, recent tournament form 19.5; reliability 0.850, activity 0.910, provisional",{}
+G4rdevoir,,,,,18.15,25.0,0.8688,0.9407,15.95,True,19.52,1,162.0,"G4rdevoir scores 15.95 with consistency score 25.0, recent tournament form 18.1; reliability 0.869, activity 0.941, provisional",{}
+Wokki,,,,,18.37,25.0,0.85,0.9079,15.2,True,19.7,0,457.0,"Wokki scores 15.20 with consistency score 25.0, recent tournament form 18.4; reliability 0.850, activity 0.908, provisional",{}
+Lineu,,,,,17.53,25.0,0.8688,0.9154,15.13,True,19.02,1,337.0,"Lineu scores 15.13 with consistency score 25.0, recent tournament form 17.5; reliability 0.869, activity 0.915, provisional",{}
+Luccachu,,,,,17.4,25.0,0.8688,0.9154,15.05,True,18.92,1,337.0,"Luccachu scores 15.05 with consistency score 25.0, recent tournament form 17.4; reliability 0.869, activity 0.915, provisional",{}
+Yoari,,,,,17.35,25.0,0.8688,0.9153,15.01,True,18.88,1,338.0,"Yoari scores 15.01 with consistency score 25.0, recent tournament form 17.4; reliability 0.869, activity 0.915, provisional",{}
+HopeRaven,,,,,18.02,25.0,0.85,0.9079,14.98,True,19.42,0,457.0,"HopeRaven scores 14.98 with consistency score 25.0, recent tournament form 18.0; reliability 0.850, activity 0.908, provisional",{}
+bob man,,,,,17.88,25.0,0.85,0.9093,14.92,True,19.3,0,428.0,"bob man scores 14.92 with consistency score 25.0, recent tournament form 17.9; reliability 0.850, activity 0.909, provisional",{}
+Seija Kijin,,,,,16.79,25.0,0.8688,0.9193,14.72,True,18.43,1,296.0,"Seija Kijin scores 14.72 with consistency score 25.0, recent tournament form 16.8; reliability 0.869, activity 0.919, provisional",{}
+Goodbye Brother,,,,,17.32,25.0,0.85,0.9079,14.55,True,18.86,0,457.0,"Goodbye Brother scores 14.55 with consistency score 25.0, recent tournament form 17.3; reliability 0.850, activity 0.908, provisional",{}
+-warb-,,,,,16.57,25.0,0.8688,0.9153,14.52,True,18.26,1,338.0,"-warb- scores 14.52 with consistency score 25.0, recent tournament form 16.6; reliability 0.869, activity 0.915, provisional",{}
+sph3re,,,,,17.05,25.0,0.85,0.9079,14.38,True,18.64,0,457.0,"sph3re scores 14.38 with consistency score 25.0, recent tournament form 17.1; reliability 0.850, activity 0.908, provisional",{}
+ImTK,,,,,17.0,25.0,0.85,0.9079,14.35,True,18.6,0,457.0,"ImTK scores 14.35 with consistency score 25.0, recent tournament form 17.0; reliability 0.850, activity 0.908, provisional",{}
+EyesNeverOpen,,,,,16.25,25.0,0.8688,0.9159,14.32,True,18.0,1,331.0,"EyesNeverOpen scores 14.32 with consistency score 25.0, recent tournament form 16.2; reliability 0.869, activity 0.916, provisional",{}
+unmei,,,,,15.43,25.0,0.8688,0.9391,14.15,True,17.34,1,169.0,"unmei scores 14.15 with consistency score 25.0, recent tournament form 15.4; reliability 0.869, activity 0.939, provisional",{}
+Jehn,,,,,15.7,25.0,0.8688,0.9158,13.97,True,17.56,1,332.0,"Jehn scores 13.97 with consistency score 25.0, recent tournament form 15.7; reliability 0.869, activity 0.916, provisional",{}
+Shylily,,,,,16.15,25.0,0.85,0.908,13.83,True,17.92,0,454.0,"Shylily scores 13.83 with consistency score 25.0, recent tournament form 16.1; reliability 0.850, activity 0.908, provisional",{}
+vdc,,,,,15.33,25.0,0.8688,0.9193,13.79,True,17.26,1,296.0,"vdc scores 13.79 with consistency score 25.0, recent tournament form 15.3; reliability 0.869, activity 0.919, provisional",{}
+APTEM,,,,,13.53,25.0,0.8688,0.9391,12.91,True,15.82,1,169.0,"APTEM scores 12.91 with consistency score 25.0, recent tournament form 13.5; reliability 0.869, activity 0.939, provisional",{}
+Nordkild,,,,,12.73,25.0,0.8688,0.9387,12.38,True,15.18,1,171.0,"Nordkild scores 12.38 with consistency score 25.0, recent tournament form 12.7; reliability 0.869, activity 0.939, provisional",{}
+OG_PannuLappu,,,,,13.39,25.0,0.85,0.9079,12.13,True,15.71,0,457.0,"OG_PannuLappu scores 12.13 with consistency score 25.0, recent tournament form 13.4; reliability 0.850, activity 0.908, provisional",{}
+Eunha,,,,,13.16,25.0,0.85,0.9093,12.0,True,15.53,0,428.0,"Eunha scores 12.00 with consistency score 25.0, recent tournament form 13.2; reliability 0.850, activity 0.909, provisional",{}
+electrostrike,,,,,11.64,25.0,0.8688,0.9387,11.67,True,14.31,1,171.0,"electrostrike scores 11.67 with consistency score 25.0, recent tournament form 11.6; reliability 0.869, activity 0.939, provisional",{}
+Fo_Ka,,,,,11.27,25.0,0.8688,0.9407,11.45,True,14.02,1,162.0,"Fo_Ka scores 11.45 with consistency score 25.0, recent tournament form 11.3; reliability 0.869, activity 0.941, provisional",{}
+Cittas,,,,,11.12,25.0,0.8688,0.9376,11.32,True,13.9,1,176.0,"Cittas scores 11.32 with consistency score 25.0, recent tournament form 11.1; reliability 0.869, activity 0.938, provisional",{}
+mads,,,,,10.83,25.0,0.8688,0.9376,11.13,True,13.66,1,176.0,"mads scores 11.13 with consistency score 25.0, recent tournament form 10.8; reliability 0.869, activity 0.938, provisional",{}
+Abdulmalik,,,,,11.22,25.0,0.8688,0.9159,11.12,True,13.98,1,331.0,"Abdulmalik scores 11.12 with consistency score 25.0, recent tournament form 11.2; reliability 0.869, activity 0.916, provisional",{}
+nuthing,,,,,8.5,25.0,0.8688,0.9391,9.63,True,11.8,1,169.0,"nuthing scores 9.63 with consistency score 25.0, recent tournament form 8.5; reliability 0.869, activity 0.939, provisional",{}
+chiv,,,,,4.82,25.0,0.8688,0.9475,7.29,True,8.86,1,134.0,"chiv scores 7.29 with consistency score 25.0, recent tournament form 4.8; reliability 0.869, activity 0.948, provisional",{}
+realshin,,,,,2.71,25.0,0.8688,0.9387,5.85,True,7.17,1,171.0,"realshin scores 5.85 with consistency score 25.0, recent tournament form 2.7; reliability 0.869, activity 0.939, provisional",{}

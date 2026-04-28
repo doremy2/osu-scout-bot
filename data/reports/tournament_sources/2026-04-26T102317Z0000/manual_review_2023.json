@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-04-26T10:23:20+00:00",
+  "year": 2023,
+  "total": 13,
+  "quality_counts": {
+    "partial": 13
+  },
+  "status_counts": {
+    "discovered": 13
+  },
+  "manual_review_count": 13,
+  "manual_review": [
+    {
+      "tournament_key": "2bf86e1ed9493593296f",
+      "tournament_name": "4DM 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4DM/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "47b223995a03c364cb79",
+      "tournament_name": "AIT 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/AIT/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "bee8fb46d709cea60a27",
+      "tournament_name": "CIC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CIC/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "47a14360e80412fdb0da",
+      "tournament_name": "CWC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "bda71f7e627abdfb18f2",
+      "tournament_name": "DACH4K 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/DACH4K/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "a0f92d41e4e8892735c3",
+      "tournament_name": "NDC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6b216a651ae0bc78d399",
+      "tournament_name": "o!cCO 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!cCO/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "6af69090bac581ed4079",
+      "tournament_name": "o!RT 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/o!RT/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "22123db940d4a798ea03",
+      "tournament_name": "OIT 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "bf194e8d94a96c0e8418",
+      "tournament_name": "OWC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "220e24943a62509acd69",
+      "tournament_name": "RESC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "0ddeca7fdcc989978b58",
+      "tournament_name": "SOL 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/SOL/2023",
+      "notes": "has at least one structured source"
+    },
+    {
+      "tournament_key": "f320f76e67f816f8a397",
+      "tournament_name": "TWC 2023",
+      "year": 2023,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2023",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

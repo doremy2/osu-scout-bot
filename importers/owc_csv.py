@@ -90,6 +90,7 @@ def _read_csv_rows(csv_path: str | Path) -> list[list[str]]:
 # stage examples: "finals", "semifinals", "quarterfinals",
 #                 "round of 16", "group stage"
 _STAGE_TITLES = {
+    "qualifiers": "Qualifiers",
     "group stage": "Group Stage",
     "round of 16": "Round of 16",
     "round of 32": "Round of 32",
@@ -99,17 +100,33 @@ _STAGE_TITLES = {
     "grand finals": "Grand Finals",
 }
 
+_STAGE_PATTERNS = (
+    ("grand finals", "Grand Finals"),
+    ("semifinals", "Semifinals"),
+    ("quarterfinals", "Quarterfinals"),
+    ("round of 16", "Round of 16"),
+    ("round of 32", "Round of 32"),
+    ("group stage", "Group Stage"),
+    ("finals", "Finals"),
+    ("qualifier", "Qualifiers"),
+)
+
 
 def derive_event_and_stage(csv_path: str | Path, default_event: str = "OWC 2025") -> tuple[str, str]:
     """Pull the round name out of an OWC CSV filename."""
-    name = Path(csv_path).stem.lower()
-    # strip trailing " - sheet type"
-    name = re.sub(r"\s*-\s*[a-z ]+$", "", name)
-    # strip trailing "statistics _ osu! world cup 2025"
-    name = re.sub(r"\s+statistics\s*_\s*osu!?\s*world cup\s*\d{4}\s*$", "", name)
-    name = name.strip()
+    stem = Path(csv_path).stem.lower()
+    normalized = re.sub(r"[_()\-]+", " ", stem)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
 
-    stage = _STAGE_TITLES.get(name, name.title() if name else "Unknown Stage")
+    stage = None
+    for needle, label in _STAGE_PATTERNS:
+        if needle in normalized:
+            stage = label
+            break
+
+    if stage is None:
+        candidate = normalized.strip()
+        stage = _STAGE_TITLES.get(candidate, candidate.title() if candidate else "Unknown Stage")
     return default_event, stage
 
 

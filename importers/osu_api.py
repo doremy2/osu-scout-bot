@@ -23,7 +23,12 @@ path is wired in end to end, it supplants name-based search entirely for
 tournament data; name search stays as a fallback for stray CSV rows.
 
 Usage:
-    from importers.osu_api import OsuApiClient, enrich_database, parse_match_id
+    from importers.osu_api import (
+        OsuApiClient,
+        enrich_database,
+        parse_match_id,
+        parse_room_id,
+    )
 
     client = OsuApiClient.from_env()
 
@@ -49,7 +54,10 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-import requests
+try:
+    import requests
+except ImportError:  # pragma: no cover - optional runtime dependency
+    requests = None
 
 from storage import fetch_unenriched_map_keys, update_enrichment_for_map
 
@@ -130,6 +138,10 @@ _MATCH_LINK_RE = re.compile(
     r"(?:https?://)?osu\.ppy\.sh/community/matches/(?P<id>\d+)",
     re.IGNORECASE,
 )
+_ROOM_LINK_RE = re.compile(
+    r"(?:https?://)?osu\.ppy\.sh/multiplayer/rooms/(?P<id>\d+)",
+    re.IGNORECASE,
+)
 
 
 def parse_match_id(value: str | int | None) -> int | None:
@@ -149,6 +161,23 @@ def parse_match_id(value: str | int | None) -> int | None:
     return None
 
 
+def parse_room_id(value: str | int | None) -> int | None:
+    """Accept a bare int, a lazer room URL, or None; return the room_id."""
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    text = str(value).strip()
+    if not text:
+        return None
+    if text.isdigit():
+        return int(text)
+    m = _ROOM_LINK_RE.search(text)
+    if m:
+        return int(m.group("id"))
+    return None
+
+
 class OsuApiClient:
     def __init__(
         self,
@@ -157,6 +186,11 @@ class OsuApiClient:
         *,
         request_delay: float = DEFAULT_REQUEST_DELAY_SECONDS,
     ) -> None:
+        if requests is None:
+            raise OsuApiError(
+                "The 'requests' package is required for OsuApiClient. "
+                "Install project dependencies or use a stdlib-based caller."
+            )
         if not client_id or not client_secret:
             raise OsuApiError(
                 "OSU_CLIENT_ID and OSU_CLIENT_SECRET must be set. "
@@ -311,7 +345,10 @@ class OsuApiClient:
         start_time: str | None = None
         end_time: str | None = None
 
-        after: int | None = None
+        # The endpoint's default page is the tail of the event list. Start
+        # from `after=0` so we walk forward from the beginning and collect
+        # every game in long tournament lobbies.
+        after: int | None = 0
         safety = 50  # hard cap to avoid runaway pagination
 
         while safety > 0:
@@ -383,6 +420,89 @@ class OsuApiClient:
             blue_score=blue_score,
             users=users,
         )
+
+    def get_room(self, room_id: int | str) -> dict[str, Any] | None:
+        """Fetch a lazer multiplayer room from /rooms/{id}."""
+        parsed_id = parse_room_id(room_id)
+        if parsed_id is None:
+            raise OsuApiError(f"Cannot parse room id from: {room_id!r}")
+
+        url = f"{OSU_API_BASE}/rooms/{parsed_id}"
+        response = self._session.get(
+            url,
+            headers=self._auth_headers(),
+            timeout=20,
+        )
+        time.sleep(self._request_delay)
+
+        if response.status_code == 404:
+            return None
+        if response.status_code != 200:
+            raise OsuApiError(
+                f"GET room {parsed_id} -> {response.status_code} {response.text[:200]}"
+            )
+        payload = response.json() or {}
+        if not isinstance(payload, dict):
+            return None
+        return payload
+
+    def get_room_leaderboard(self, room_id: int | str) -> list[dict[str, Any]]:
+        """Fetch leaderboard rows for a lazer multiplayer room."""
+        parsed_id = parse_room_id(room_id)
+        if parsed_id is None:
+            raise OsuApiError(f"Cannot parse room id from: {room_id!r}")
+
+        url = f"{OSU_API_BASE}/rooms/{parsed_id}/leaderboard"
+        response = self._session.get(
+            url,
+            headers=self._auth_headers(),
+            timeout=20,
+        )
+        time.sleep(self._request_delay)
+
+        if response.status_code == 404:
+            return []
+        if response.status_code != 200:
+            raise OsuApiError(
+                f"GET room leaderboard {parsed_id} -> {response.status_code} {response.text[:200]}"
+            )
+        payload = response.json() or {}
+        leaderboard = payload.get("leaderboard") or []
+        return leaderboard if isinstance(leaderboard, list) else []
+
+    def get_room_playlist_scores(
+        self,
+        room_id: int | str,
+        playlist_item_id: int | str,
+    ) -> list[dict[str, Any]]:
+        """Fetch score rows for one lazer room playlist item."""
+        parsed_room_id = parse_room_id(room_id)
+        if parsed_room_id is None:
+            raise OsuApiError(f"Cannot parse room id from: {room_id!r}")
+        try:
+            parsed_playlist_id = int(str(playlist_item_id).strip())
+        except (TypeError, ValueError) as exc:
+            raise OsuApiError(f"Cannot parse playlist id from: {playlist_item_id!r}") from exc
+
+        url = f"{OSU_API_BASE}/rooms/{parsed_room_id}/playlist/{parsed_playlist_id}/scores"
+        response = self._session.get(
+            url,
+            headers=self._auth_headers(),
+            timeout=20,
+        )
+        time.sleep(self._request_delay)
+
+        if response.status_code == 404:
+            return []
+        if response.status_code != 200:
+            raise OsuApiError(
+                "GET room playlist scores "
+                f"{parsed_room_id}/{parsed_playlist_id} -> {response.status_code} "
+                f"{response.text[:200]}"
+            )
+        payload = response.json() or {}
+        scores = payload.get("scores") or []
+        return scores if isinstance(scores, list) else []
 
     def close(self) -> None:
         self._session.close()

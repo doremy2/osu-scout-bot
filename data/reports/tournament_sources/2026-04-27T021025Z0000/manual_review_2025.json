@@ -1,0 +1,144 @@
+{
+  "generated_at": "2026-04-27T02:10:26+00:00",
+  "year": 2025,
+  "total": 10,
+  "quality_counts": {
+    "verified": 8,
+    "high": 1,
+    "partial": 1
+  },
+  "status_counts": {
+    "discovered": 10
+  },
+  "manual_review_count": 10,
+  "manual_review": [
+    {
+      "tournament_key": "09035ca287272f0a82a7",
+      "tournament_name": "3WC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/3WC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "b23931caeadc9a1f37d7",
+      "tournament_name": "4WC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/4WC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "cea4c66fd23f7947c615",
+      "tournament_name": "CWC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/CWC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "a432eb9f2467658bb41d",
+      "tournament_name": "FDC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/FDC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "88c9158efcaec5b3dffa",
+      "tournament_name": "LGA 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "match_links",
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/LGA/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "9080b18966f14ec1dd4f",
+      "tournament_name": "OIT 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OIT/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "0ff582fcfd75d761a495",
+      "tournament_name": "OWC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/OWC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "75aa543091af76d4c077",
+      "tournament_name": "TWC 2025",
+      "year": 2025,
+      "data_quality": "verified",
+      "status": "discovered",
+      "missing": [
+        "rank_range",
+        "team_size_or_format"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/TWC/2025",
+      "notes": "has match, spreadsheet, and bracket links"
+    },
+    {
+      "tournament_key": "7cadc9a04c3f76c70f5a",
+      "tournament_name": "RESC 2025",
+      "year": 2025,
+      "data_quality": "high",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/RESC/2025",
+      "notes": "has match links plus structured metadata"
+    },
+    {
+      "tournament_key": "3493357e172887bd773a",
+      "tournament_name": "NDC 2025",
+      "year": 2025,
+      "data_quality": "partial",
+      "status": "discovered",
+      "missing": [
+        "spreadsheet_url",
+        "bracket_url",
+        "rank_range"
+      ],
+      "source_url": "https://osu.ppy.sh/wiki/en/Tournaments/NDC/2025",
+      "notes": "has at least one structured source"
+    }
+  ]
+}

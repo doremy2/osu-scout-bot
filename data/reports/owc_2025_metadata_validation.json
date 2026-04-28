@@ -1,0 +1,129 @@
+{
+  "generated_at": "2026-04-20T08:43:29+00:00",
+  "matches": {
+    "existing_row_count": 190,
+    "canonical_row_count": 190,
+    "duplicate_key_count": 0,
+    "blank_match_link_count": 0,
+    "blank_date_count": 0,
+    "invalid_date_count": 0,
+    "unknown_team_code_count": 0,
+    "missing_from_csv_count": 0,
+    "extra_row_count": 0,
+    "changed_row_count": 0,
+    "duplicate_keys": [],
+    "invalid_dates": [],
+    "unknown_team_codes": [],
+    "missing_from_csv": [],
+    "extra_rows": [],
+    "changed_rows": []
+  },
+  "maps": {
+    "existing_row_count": 123,
+    "observed_pool_row_count": 116,
+    "wiki_pool_row_count": 123,
+    "generated_row_count": 123,
+    "missing_wiki_slot_count": 0,
+    "missing_observed_slot_count": 7,
+    "name_mismatch_count": 1,
+    "missing_beatmap_id_count": 0,
+    "missing_star_rating_count": 0,
+    "broken_reference_count": 0,
+    "missing_wiki_slots": [],
+    "missing_observed_slots": [
+      {
+        "stage": "Semifinals",
+        "slot": "TB",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Semifinals",
+          "slot": "TB",
+          "map_name": "ELFENSJoN - Hexen Noir",
+          "difficulty_name": "Crimson Goddess",
+          "beatmap_id": 5405933
+        }
+      },
+      {
+        "stage": "Finals",
+        "slot": "HD2",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Finals",
+          "slot": "HD2",
+          "map_name": "syumagi - Bad Day, Good-Bye. feat. Suisoh",
+          "difficulty_name": "ar8",
+          "beatmap_id": 4772296
+        }
+      },
+      {
+        "stage": "Grand Finals",
+        "slot": "NM4",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Grand Finals",
+          "slot": "NM4",
+          "map_name": "Billain - Afterburner (Cut Ver.)",
+          "difficulty_name": "Azrulk x Ishtiaq | Void Shift",
+          "beatmap_id": 5426152
+        }
+      },
+      {
+        "stage": "Grand Finals",
+        "slot": "HD2",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Grand Finals",
+          "slot": "HD2",
+          "map_name": "Kenshi Yonezu - Shitodo Seiten Daimeiwaku",
+          "difficulty_name": "Helter-skelter",
+          "beatmap_id": 5425751
+        }
+      },
+      {
+        "stage": "Grand Finals",
+        "slot": "HR1",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Grand Finals",
+          "slot": "HR1",
+          "map_name": "Ave Mujica - DIVINE",
+          "difficulty_name": "CLAIRVOYANCE",
+          "beatmap_id": 5424868
+        }
+      },
+      {
+        "stage": "Grand Finals",
+        "slot": "FM3",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Grand Finals",
+          "slot": "FM3",
+          "map_name": "Inferi - The Abhorrent Art",
+          "difficulty_name": "Massacre",
+          "beatmap_id": 5426165
+        }
+      },
+      {
+        "stage": "Grand Finals",
+        "slot": "FM4",
+        "wiki": {
+          "event": "OWC 2025",
+          "stage": "Grand Finals",
+          "slot": "FM4",
+          "map_name": "Kobaryo - Kick To The Sky",
+          "difficulty_name": "Revolution",
+          "beatmap_id": 5426252
+        }
+      }
+    ],
+    "name_mismatches": [
+      {
+        "stage": "Quarterfinals",
+        "slot": "NM3",
+        "observed_map_name": "La Maquina de Hacer Pajaros - Hipercandombe",
+        "wiki_map_name": "La Maquina De Hacer Pajaros - Hipercandombe"
+      }
+    ],
+    "broken_references": []
+  }
+}
