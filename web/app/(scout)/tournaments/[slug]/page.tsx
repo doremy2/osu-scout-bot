@@ -12,7 +12,7 @@ export default async function OverviewPage({ params }: { params: Promise<{ slug:
   const s = encodeURIComponent(slug);
   const [o, board] = await Promise.all([
     scoutGet<Overview>(`/tournaments/${s}`),
-    scoutGet<LeaderboardData>(`/tournaments/${s}/leaderboard?mode=overall&limit=25`)
+    scoutGet<LeaderboardData>(`/tournaments/${s}/leaderboard?mode=tournament&limit=25`)
   ]);
   const { tournament: t, mvp } = o;
   const highlight = o.awards.filter((a) => a.winner && ["most_consistent", "best_carry", "best_accuracy", "best_finals", "best_performance"].includes(a.key)).slice(0, 4);

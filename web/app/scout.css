@@ -281,3 +281,10 @@
 @keyframes sc-pulse { 50% { box-shadow: 0 0 0 6px rgba(255, 102, 171, 0.2); } }
 .sc-bar { height: 8px; width: min(420px, 100%); background: var(--sc-bg2); border-radius: 99px; overflow: hidden; }
 .sc-bar div { height: 100%; background: linear-gradient(90deg, var(--sc-accent2), var(--sc-accent)); transition: width 0.4s; }
+
+.sc-conf { font-variant-numeric: tabular-nums; color: var(--sc-dim); font-size: 0.85rem; }
+.sc-conf-low { color: var(--sc-warn); }
+.sc-breakdown { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+.sc-breakdown .sc-stat-value { display: flex; align-items: baseline; gap: 8px; }
+.sc-breakdown small { color: var(--sc-dim); font-size: 0.9rem; font-weight: 600; }
+.sc-explain { color: var(--sc-dim); font-size: 0.85rem; margin: 12px 0 0; }

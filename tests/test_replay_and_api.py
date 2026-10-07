@@ -201,6 +201,10 @@ def test_api_tournament_pages(client):
     assert ov["mvp"]["username"] == "Alpha" and ov["mod_leaders"] and ov["top_teams"]
     lb = client.get("/api/tournaments/fake/leaderboard", params={"mode": "mod", "key": "DT"}).json()
     assert lb["rows"][0]["rank"] == 1 and lb["options"]["mods"]
+    perf = client.get("/api/tournaments/fake/leaderboard", params={"mode": "performance"}).json()
+    default = client.get("/api/tournaments/fake/leaderboard").json()
+    assert perf["mode"] == "performance" and default["mode"] == "tournament"
+    assert {"confidence", "performance_rating", "tournament_rating"} <= set(default["rows"][0])
     assert client.get("/api/tournaments/fake/leaderboard", params={"q": "bra"}).json()["rows"][0]["username"] == "Bravo"
     assert client.get("/api/tournaments/fake/leaderboard", params={"mode": "round", "key": "ZZ"}).status_code == 422
     assert client.get("/api/tournaments/fake/search", params={"q": "gol"}).json()[0]["username"] == "Golf"

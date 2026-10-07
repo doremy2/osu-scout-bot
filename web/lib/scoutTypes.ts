@@ -45,7 +45,14 @@ export type Summary = {
   round_names: Record<string, string>;
 };
 
-export type RankedRating = { rating: number; maps: number; rank: number; rank_of: number };
+export type RankedRating = {
+  rating: number;
+  maps: number;
+  rank: number;
+  rank_of: number;
+  confidence: number;
+  low_confidence?: boolean;
+};
 
 export type PlayerSummary = {
   rank: number;
@@ -56,8 +63,14 @@ export type PlayerSummary = {
   country: string | null;
   country_name: string | null;
   team: TeamRef | null;
-  rating: number;
+  rating: number; // Tournament Rating (default ranking)
+  performance_rating: number;
+  performance_rank: number;
   rating_raw: number;
+  confidence: number;
+  deepest_round: string | null;
+  deepest_round_name: string | null;
+  qualifier: { rating: number; maps: number; rank: number; rank_of: number } | null;
   maps_played: number;
   consistency_sigma: number | null;
   mod_ratings: Record<string, RankedRating>;
@@ -136,9 +149,19 @@ export type RosterRow = {
 
 export type PlayerPage = PlayerSummary & {
   rank_of: number;
+  breakdown: {
+    tournament: { rating: number; rank: number };
+    performance: { rating: number; rank: number };
+    confidence: number;
+    maps: number;
+    observed_rating: number;
+    deepest_round: string | null;
+    deepest_round_name: string | null;
+    qualifier: { rating: number; maps: number; rank: number; rank_of: number } | null;
+  };
   carry_index: number | null;
-  by_round: { round: string; round_name: string; rating: number; maps: number; rank: number; rank_of: number }[];
-  by_mod: { mod: string; rating: number; maps: number; rank: number; rank_of: number }[];
+  by_round: { round: string; round_name: string; rating: number; maps: number; confidence: number; rank: number; rank_of: number }[];
+  by_mod: { mod: string; rating: number; maps: number; confidence: number; low_confidence: boolean; rank: number; rank_of: number }[];
   best_performances: Performance[];
   worst_performances: Performance[];
   match_history: HistoryItem[];
@@ -217,9 +240,14 @@ export type LeaderboardRow = {
   rating: number;
   maps: number;
   extra?: number;
+  confidence?: number;
+  low_confidence?: boolean;
+  tournament_rating?: number;
+  performance_rating?: number;
+  deepest_round_name?: string | null;
 };
 
-export type LeaderboardMode = "overall" | "round" | "mod" | "consistency" | "maps";
+export type LeaderboardMode = "tournament" | "performance" | "round" | "mod" | "consistency" | "maps";
 
 export type LeaderboardData = {
   mode: LeaderboardMode;

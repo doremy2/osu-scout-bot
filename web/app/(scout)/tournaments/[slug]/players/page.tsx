@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function PlayersPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const board = await scoutGet<LeaderboardData>(`/tournaments/${encodeURIComponent(slug)}/leaderboard?mode=overall&limit=50`);
+  const board = await scoutGet<LeaderboardData>(`/tournaments/${encodeURIComponent(slug)}/leaderboard?mode=tournament&limit=50`);
   const t = await scoutGet<{ tournament: { has_teams: boolean } }>(`/tournaments/${encodeURIComponent(slug)}`);
   return (
     <Card title="All players">

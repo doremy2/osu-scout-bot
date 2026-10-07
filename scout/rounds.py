@@ -1,6 +1,6 @@
 """Round name normalization + importance weights.
 
-Weights are deliberately small: they nudge the rating, they never dominate it.
+Weights are deliberately small: later rounds count as slightly more evidence, they never dominate.
 """
 from __future__ import annotations
 
@@ -8,16 +8,16 @@ import re
 
 # code -> (display name, sort order, weight)
 ROUNDS: dict[str, tuple[str, int, float]] = {
-    "Q":     ("Qualifiers",     0, 0.90),
+    "Q":     ("Qualifiers",     0, 0.85),
     "GS":    ("Group Stage",    1, 1.00),
     "RO128": ("Round of 128",   2, 1.00),
     "RO64":  ("Round of 64",    3, 1.00),
     "RO32":  ("Round of 32",    4, 1.00),
-    "RO16":  ("Round of 16",    5, 1.03),
-    "QF":    ("Quarterfinals",  6, 1.06),
-    "SF":    ("Semifinals",     7, 1.10),
-    "F":     ("Finals",         8, 1.15),
-    "GF":    ("Grand Finals",   9, 1.20),
+    "RO16":  ("Round of 16",    5, 1.05),
+    "QF":    ("Quarterfinals",  6, 1.10),
+    "SF":    ("Semifinals",     7, 1.15),
+    "F":     ("Finals",         8, 1.20),
+    "GF":    ("Grand Finals",   9, 1.25),
 }
 
 # Order matters: more specific patterns first ("grand final" before "final", "semi" before "final").

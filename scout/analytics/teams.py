@@ -1,13 +1,14 @@
 """Team-level analytics. Kept apart so the team rating formula can be replaced on its own.
 
-V1 team rating: pool every counted score of the team's players (same z-scores the player
-ratings use, same round weights and small-sample shrinkage) and convert like a player rating.
+V1 team rating: pool every counted score of the team's players (same field-adjusted z-scores,
+round weights and sample-confidence formula as the player Tournament Rating) and convert like a
+player rating.
 That makes a team's rating "how far above the field its players performed on average",
 independent of bracket luck or tournament placement.
 """
 from __future__ import annotations
 
-from .ratings import RatingConfig, Slice, to_rating
+from .ratings import ModelParams, RatingConfig, Slice, to_rating
 
 
 def merge_slices(slices: list[Slice]) -> Slice:
@@ -22,3 +23,9 @@ def merge_slices(slices: list[Slice]) -> Slice:
 
 def team_rating(player_slices: list[Slice], cfg: RatingConfig) -> float:
     return to_rating(merge_slices(player_slices).z_adj(cfg.shrink_k), cfg)
+
+
+def team_tournament_rating(adj: Slice, model: ModelParams) -> float:
+    """Z_T of a team from the merged `adj` slices of its players (convert with to_rating)."""
+    conf = adj.confidence(model.k)
+    return conf * adj.z_mean() + (1 - conf) * model.prior

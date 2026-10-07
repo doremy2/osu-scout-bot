@@ -6,10 +6,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { scoutClient } from "@/lib/scout";
 import { fmtRecord, tournamentHref } from "@/lib/scoutFormat";
 import type { LeaderboardData, LeaderboardMode, TeamListItem } from "@/lib/scoutTypes";
-import { Avatar, Flag, ModBadge, Rating } from "./ui";
+import { Avatar, Confidence, Flag, ModBadge, Rating } from "./ui";
 
 const MODES: { key: LeaderboardMode; label: string }[] = [
-  { key: "overall", label: "Overall" },
+  { key: "tournament", label: "Tournament Rating" },
+  { key: "performance", label: "Performance Rating" },
   { key: "round", label: "By Round" },
   { key: "mod", label: "By Mod" },
   { key: "consistency", label: "Consistency" },
@@ -125,8 +126,12 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
                   <th>Player</th>
                   {showTeam && <th className="sc-hide-sm">Team</th>}
                   {data.columns.extra_label && <th className="sc-num">{data.columns.extra_label}</th>}
-                  <th className="sc-num">Rating</th>
+                  <th className="sc-num">{data.columns.value_label}</th>
+                  {data.mode === "tournament" && <th className="sc-num sc-hide-sm">Perf.</th>}
+                  {data.mode === "performance" && <th className="sc-num sc-hide-sm">Tourn.</th>}
                   <th className="sc-num">Maps</th>
+                  <th className="sc-num sc-hide-sm">Conf.</th>
+                  {!compact && <th className="sc-hide-sm">Deepest</th>}
                 </tr>
               </thead>
               <tbody>
@@ -151,11 +156,15 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
                     )}
                     {data.columns.extra_label && <td className="sc-num sc-dim">{r.extra?.toFixed(2)}</td>}
                     <td className="sc-num"><Rating value={r.rating} /></td>
+                    {data.mode === "tournament" && <td className="sc-num sc-hide-sm"><Rating value={r.performance_rating} /></td>}
+                    {data.mode === "performance" && <td className="sc-num sc-hide-sm"><Rating value={r.tournament_rating} /></td>}
                     <td className="sc-num sc-dim">{r.maps}</td>
+                    <td className="sc-num sc-hide-sm"><Confidence value={r.confidence} low={r.low_confidence} /></td>
+                    {!compact && <td className="sc-hide-sm sc-dim">{r.deepest_round_name ?? ""}</td>}
                   </tr>
                 ))}
                 {data.rows.length === 0 && !loading && (
-                  <tr><td colSpan={6} className="sc-empty">No players match.</td></tr>
+                  <tr><td colSpan={9} className="sc-empty">No players match.</td></tr>
                 )}
               </tbody>
             </table>

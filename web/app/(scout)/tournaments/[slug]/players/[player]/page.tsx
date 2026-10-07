@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Avatar, Card, Flag, ModBadge, Rating, Stat, TeamLink } from "@/components/scout/ui";
+import { Avatar, Card, Confidence, Flag, ModBadge, Rating, Stat, TeamLink } from "@/components/scout/ui";
 import { scoutGet } from "@/lib/scout";
 import { coverSrc, fmtInt, fmtPct, fmtRecord, tournamentHref } from "@/lib/scoutFormat";
 import type { Performance, PlayerPage, Tournament } from "@/lib/scoutTypes";
@@ -31,10 +31,28 @@ export default async function PlayerProfile({ params }: { params: Promise<{ slug
           </div>
         </div>
         <div className="sc-phead-rating">
-          <div className="sc-stat-label">Overall tournament rating</div>
+          <div className="sc-stat-label">Tournament rating</div>
           <Rating value={p.rating} big />
           <div className="sc-rankline">Rank <b>#{p.rank}</b> <span className="sc-dim">/ {p.rank_of}</span></div>
         </div>
+      </Card>
+
+      <Card title="Rating breakdown">
+        <div className="sc-breakdown">
+          <Stat label="Tournament rating" value={<><Rating value={p.breakdown.tournament.rating} /><small>#{p.breakdown.tournament.rank}</small></>} />
+          <Stat label="Performance rating" value={<><Rating value={p.breakdown.performance.rating} /><small>#{p.breakdown.performance.rank}</small></>} />
+          <Stat label="Sample confidence" value={<Confidence value={p.breakdown.confidence} />} sub={`${p.breakdown.maps} maps`} />
+          <Stat label="Deepest round" value={p.breakdown.deepest_round_name ?? "–"} />
+          {p.breakdown.qualifier && (
+            <Stat label="Qualifier rating" value={<><Rating value={p.breakdown.qualifier.rating} /><small>#{p.breakdown.qualifier.rank} / {p.breakdown.qualifier.rank_of}</small></>}
+                  sub={`${p.breakdown.qualifier.maps} maps`} />
+          )}
+        </div>
+        <p className="sc-explain">
+          Performance rating is how strong the scores were when {p.username} played. Tournament rating also weighs how much evidence
+          there is (maps played, later rounds count slightly more) and the strength of the field faced, so a short run is
+          pulled toward the average without being punished.
+        </p>
       </Card>
 
       <div className="sc-grid-4">
@@ -51,9 +69,7 @@ export default async function PlayerProfile({ params }: { params: Promise<{ slug
             {p.by_mod.map((m) => (
               <li key={m.mod}>
                 <ModBadge mod={m.mod} />
-                <Link className="sc-grow sc-link-plain" href={`${tournamentHref(slug, "leaderboards")}`}>
-                  <span className="sc-dim">{m.maps} maps</span>
-                </Link>
+                <span className="sc-grow sc-dim">{m.maps} maps · <Confidence value={m.confidence} low={m.low_confidence} /></span>
                 <Rating value={m.rating} />
                 <span className="sc-rankchip">#{m.rank} <small>/ {m.rank_of}</small></span>
               </li>

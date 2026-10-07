@@ -14,11 +14,12 @@ from ..db.repo import get_tournament, slugify
 from ..formats import get_format
 from ..rounds import is_versus_round, round_name, round_order
 from .dataset import Dataset, load_dataset
-from .ratings import PlayerStats, RatingConfig, Slice, compute_player_stats, to_rating
-from .teams import merge_slices
+from .ratings import (ModelParams, PlayerStats, RatingConfig, Slice, compute_player_stats, field_strength, resolve_model,
+                      to_rating, tournament_z)
+from .teams import merge_slices, team_tournament_rating
 
 MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "TB"]
-LEADERBOARD_MODES = ("overall", "round", "mod", "consistency", "maps")
+LEADERBOARD_MODES = ("tournament", "performance", "round", "mod", "consistency", "maps")
 
 
 @dataclass
@@ -61,7 +62,8 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
     fmt = get_format(t["format"])
     ds = load_dataset(conn, t["id"])
     stats, z, game_out, match_out = compute_player_stats(ds, cfg)
-    k = cfg.shrink_k
+    k = cfg.perf_k                      # light shrinkage for performance / slice ratings
+    model = resolve_model(stats, cfg)  # confidence prior for the Tournament Rating
 
     def name(uid: int) -> str:
         return ds.players.get(uid, {}).get("username") or str(uid)
@@ -90,8 +92,11 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
         return {"name": tm["name"], "slug": tm["slug"], "country": tm["country_code"]} if tm else None
 
     # ---- rankings -------------------------------------------------------
-    ranked = sorted(stats.values(), key=lambda p: p.overall.z_adj(k), reverse=True)
+    t_z = {uid: tournament_z(p, model) for uid, p in stats.items()}          # (Z_T, confidence, observed)
+    ranked = sorted(stats.values(), key=lambda p: t_z[p.user_id][0], reverse=True)
     rank_of = {p.user_id: i for i, p in enumerate(ranked, 1)}
+    perf_ranked = sorted(stats.values(), key=lambda p: p.overall.z_adj(k), reverse=True)
+    perf_rank_of = {p.user_id: i for i, p in enumerate(perf_ranked, 1)}
     mods_present = sorted({s.bucket for s in ds.scores}, key=lambda m: (MOD_ORDER.index(m) if m in MOD_ORDER else 99, m))
     rounds_present = sorted({s.round for s in ds.scores if s.round}, key=round_order)
 
@@ -102,7 +107,8 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
             "rank": i, "user_id": p.user_id, "username": name(p.user_id), "slug": slugs[p.user_id],
             "avatar_url": avatar(p.user_id), "country": ds.players.get(p.user_id, {}).get("country_code"),
             "team": team_ref(p.user_id), "rating": rating_of(sl), "rating_raw": to_rating(sl.z_mean(), cfg),
-            "maps": sl.n, "eligible_for_award": sl.n >= acfg.min_maps_mod,
+            "maps": sl.n, "confidence": round(sl.confidence(cfg.slice_confidence_k), 3),
+            "eligible_for_award": sl.n >= acfg.min_maps_mod and sl.confidence(cfg.slice_confidence_k) >= cfg.min_slice_confidence,
         } for i, (p, sl) in enumerate(rows, 1)]
 
     mod_leaderboards = {m: board([(p, p.by_mod[m]) for p in stats.values() if p.by_mod.get(m)]) for m in mods_present}
@@ -123,14 +129,25 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
             "country": ds.players.get(p.user_id, {}).get("country_code"),
             "country_name": ds.players.get(p.user_id, {}).get("country_name"),
             "team": team_ref(p.user_id),
-            "rating": rating_of(p.overall),
+            "rating": to_rating(t_z[p.user_id][0], cfg),            # Tournament Rating (the default ranking)
+            "performance_rating": rating_of(p.overall),             # how good the scores were
+            "performance_rank": perf_rank_of[p.user_id],
             "rating_raw": to_rating(p.overall.z_mean(), cfg),
+            "confidence": round(t_z[p.user_id][1], 3),
+            "deepest_round": p.deepest_round,
+            "deepest_round_name": round_name(p.deepest_round) if p.deepest_round else None,
+            "qualifier": ({"rating": rating_of(p.by_round["Q"]), "maps": p.by_round["Q"].n,
+                           "rank": round_rank["Q"][p.user_id][0], "rank_of": round_rank["Q"][p.user_id][1]}
+                          if p.by_round.get("Q") and p.by_round["Q"].n and "Q" in round_rank else None),
             "maps_played": n,
             "consistency_sigma": round(sigma, 3) if sigma is not None else None,
             "mod_ratings": {m: {"rating": rating_of(p.by_mod[m]), "maps": p.by_mod[m].n,
+                                "confidence": round(p.by_mod[m].confidence(cfg.slice_confidence_k), 3),
+                                "low_confidence": p.by_mod[m].confidence(cfg.slice_confidence_k) < cfg.min_slice_confidence,
                                 "rank": mod_rank[m][p.user_id][0], "rank_of": mod_rank[m][p.user_id][1]}
                             for m in mods_present if p.by_mod.get(m) and p.by_mod[m].n},
             "round_ratings": {r: {"rating": rating_of(p.by_round[r]), "maps": p.by_round[r].n,
+                                  "confidence": round(p.by_round[r].confidence(cfg.slice_confidence_k), 3),
                                   "rank": round_rank[r][p.user_id][0], "rank_of": round_rank[r][p.user_id][1]}
                               for r in rounds_present if p.by_round.get(r) and p.by_round[r].n},
             "avg_score": round(p.score_sum / n) if n else None,
@@ -156,16 +173,17 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
             "avatar_url": avatar(best.user_id), "value": value_fn(best)}})
 
     elig = [p for p in stats.values() if p.overall.n >= acfg.min_maps_overall]
-    award("mvp", "Tournament MVP", elig, lambda p: p.overall.z_adj(k),
-          lambda p: rating_of(p.overall), f">= {acfg.min_maps_overall} maps, highest overall rating")
+    award("mvp", "Tournament MVP", elig, lambda p: t_z[p.user_id][0],
+          lambda p: to_rating(t_z[p.user_id][0], cfg), f">= {acfg.min_maps_overall} maps, highest Tournament Rating")
     for m in mods_present:
         if m == "TB":
             continue
         award(f"best_{m.lower()}", f"Best {m} Player",
-              [p for p in stats.values() if p.by_mod.get(m) and p.by_mod[m].n >= acfg.min_maps_mod],
+              [p for p in stats.values() if p.by_mod.get(m) and p.by_mod[m].n >= acfg.min_maps_mod
+               and p.by_mod[m].confidence(cfg.slice_confidence_k) >= cfg.min_slice_confidence],
               lambda p, m=m: p.by_mod[m].z_adj(k),
               lambda p, m=m: f"{rating_of(p.by_mod[m])} over {p.by_mod[m].n} maps",
-              f">= {acfg.min_maps_mod} {m} maps")
+              f">= {acfg.min_maps_mod} {m} maps and {int(cfg.min_slice_confidence * 100)}% sample confidence")
     award("most_consistent", "Most Consistent",
           [p for p in elig if p.overall.z_mean() >= 0 and p.overall.z_std() is not None],
           lambda p: -p.overall.z_std(), lambda p: f"σ = {p.overall.z_std():.2f}",
@@ -278,18 +296,19 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
             if not mem:
                 continue
             overall = merge_slices([p.overall for p in mem])
+            team_z = team_tournament_rating(merge_slices([p.adj for p in mem]), model)
             wins = sum(1 for mid, side in t_matches[tid] if match_out[mid].winner == side)
             losses = sum(1 for mid, side in t_matches[tid] if match_out[mid].winner not in (None, side))
-            raw_teams.append((tid, tm, mem, overall, wins, losses))
-        raw_teams.sort(key=lambda r: r[3].z_adj(k), reverse=True)
+            raw_teams.append((tid, tm, mem, overall, wins, losses, team_z))
+        raw_teams.sort(key=lambda r: r[6], reverse=True)
         n_teams = len(raw_teams)
 
-        for rank, (tid, tm, mem, overall, wins, losses) in enumerate(raw_teams, 1):
-            mem_sorted = sorted(mem, key=lambda p: p.overall.z_adj(k), reverse=True)
+        for rank, (tid, tm, mem, overall, wins, losses, team_z) in enumerate(raw_teams, 1):
+            mem_sorted = sorted(mem, key=lambda p: t_z[p.user_id][0], reverse=True)
             roster = [{
                 "team_rank": i, "user_id": p.user_id, "username": name(p.user_id), "slug": slugs[p.user_id],
                 "avatar_url": avatar(p.user_id), "country": ds.players.get(p.user_id, {}).get("country_code"),
-                "rating": rating_of(p.overall), "rank": rank_of[p.user_id], "rank_of": len(ranked),
+                "rating": to_rating(t_z[p.user_id][0], cfg), "rank": rank_of[p.user_id], "rank_of": len(ranked),
                 "maps": p.overall.n,
             } for i, p in enumerate(mem_sorted, 1)]
 
@@ -322,11 +341,11 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
                 "slug": tm["slug"], "name": tm["name"], "country": tm["country_code"],
                 "country_name": country_names.get(tm["country_code"]), "flag_url": flag_url(tm["country_code"]),
                 "rank": rank, "rank_of": n_teams,
-                "rating": to_rating(overall.z_adj(k), cfg),
+                "rating": to_rating(team_z, cfg),
                 "match_record": [wins, losses], "map_record": [t_games_won[tid], t_games_lost[tid]],
                 "maps_won": t_games_won[tid],
                 "maps_played": overall.n, "players": len(mem),
-                "avg_player_rating": round(sum(rating_of(p.overall) for p in mem) / len(mem), 2),
+                "avg_player_rating": round(sum(to_rating(t_z[p.user_id][0], cfg) for p in mem) / len(mem), 2),
                 "furthest_round": fr, "furthest_round_name": round_name(fr) if fr else None,
                 "best_round": max(qualified, key=lambda x: x["rating"]) if qualified else None,
                 "worst_round": min(qualified, key=lambda x: x["rating"]) if qualified else None,
@@ -352,11 +371,22 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
         page["rank_of"] = len(ranked)
         page["carry_index"] = round(p.carry_sum / p.carry_n, 3) if p.carry_n else None
         page["by_round"] = [{"round": r, "round_name": round_name(r), "rating": rating_of(sl), "maps": sl.n,
+                             "confidence": round(sl.confidence(cfg.slice_confidence_k), 3),
                              "rank": round_rank[r][p.user_id][0], "rank_of": round_rank[r][p.user_id][1]}
                             for r, sl in sorted(p.by_round.items(), key=lambda kv: round_order(kv[0])) if r in round_rank]
         page["by_mod"] = [{"mod": m, "rating": rating_of(p.by_mod[m]), "maps": p.by_mod[m].n,
+                           "confidence": round(p.by_mod[m].confidence(cfg.slice_confidence_k), 3),
+                           "low_confidence": p.by_mod[m].confidence(cfg.slice_confidence_k) < cfg.min_slice_confidence,
                            "rank": mod_rank[m][p.user_id][0], "rank_of": mod_rank[m][p.user_id][1]}
                           for m in mods_present if p.by_mod.get(m) and p.by_mod[m].n]
+        page["breakdown"] = {
+            "tournament": {"rating": page["rating"], "rank": page["rank"]},
+            "performance": {"rating": page["performance_rating"], "rank": page["performance_rank"]},
+            "confidence": page["confidence"], "maps": p.overall.n,
+            "observed_rating": to_rating(t_z[p.user_id][2], cfg),   # field-adjusted, before confidence
+            "deepest_round": page["deepest_round"], "deepest_round_name": page["deepest_round_name"],
+            "qualifier": page["qualifier"],
+        }
         runs = sorted(perf[p.user_id], key=lambda x: x["z"], reverse=True)
         page["best_performances"] = runs[:5]
         page["worst_performances"] = list(reversed(runs[-3:])) if len(runs) > 5 else []
@@ -401,7 +431,10 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
                     "beatmaps": len(ds.beatmaps), "empty_matches": ds.empty_matches,
                     "mods": mods_present, "rounds": rounds_present,
                     "round_names": {r: round_name(r) for r in rounds_present}},
-        "config": {"rating": cfg.__dict__, "awards": acfg.__dict__},
+        "config": {"rating": cfg.__dict__, "awards": acfg.__dict__,
+                   "model": {"confidence_k": round(model.k, 2), "k_noise": round(model.k_noise, 2),
+                             "k_workload": round(model.k_workload, 2), "prior": round(model.prior, 3),
+                             "field_strength": {r: round(v, 3) for r, v in field_strength(ds, stats, cfg).items() if r}}},
         "mvp": ({**next(r for r in rankings if r["user_id"] == mvp["user_id"])} if mvp else None),
         "rankings": rankings,
         "mod_leaderboards": mod_leaderboards,
@@ -416,49 +449,66 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
 
 
 # ---- views over a finished report (still no rating maths) ---------------------
-def leaderboard(rep: dict, mode: str = "overall", key: str | None = None,
+def leaderboard(rep: dict, mode: str = "tournament", key: str | None = None,
                 limit: int | None = None, offset: int = 0) -> dict:
-    """One ranking table. mode: overall | round (key = round code) | mod (key = mod) | consistency | maps."""
+    """One ranking table. mode: tournament (default) | performance | round (key = code) | mod (key = mod) |
+    consistency | maps. "overall" is accepted as an alias of "tournament"."""
+    mode = "tournament" if mode == "overall" else mode
     if mode not in LEADERBOARD_MODES:
         raise ValueError(f"mode must be one of {', '.join(LEADERBOARD_MODES)}")
     awards_min = rep["config"]["awards"]["min_maps_overall"]
-    columns = {"value_label": "Rating"}
-    if mode == "overall":
-        rows = [_lb_row(r, r["rating"], r["maps_played"]) for r in rep["rankings"]]
+    columns = {"value_label": "Tournament Rating" if mode == "tournament" else "Rating"}
+    if mode == "tournament":
+        rows = [_lb_row(r, r["rating"], r["maps_played"], r) for r in rep["rankings"]]
+    elif mode == "performance":
+        columns = {"value_label": "Performance Rating"}
+        pool = sorted(rep["rankings"], key=lambda r: r["performance_rank"])
+        rows = []
+        for r in pool:
+            row = _lb_row(r, r["performance_rating"], r["maps_played"], r)
+            row["rank"] = r["performance_rank"]
+            rows.append(row)
     elif mode == "round":
         if key not in rep["round_leaderboards"]:
             raise KeyError(f"No round '{key}' in this tournament")
-        rows = [_lb_row(r, r["rating"], r["maps"]) for r in rep["round_leaderboards"][key]]
+        rows = [_lb_row(r, r["rating"], r["maps"]) | {"confidence": r["confidence"]} for r in rep["round_leaderboards"][key]]
     elif mode == "mod":
         if key not in rep["mod_leaderboards"]:
             raise KeyError(f"No mod '{key}' in this tournament")
-        rows = [_lb_row(r, r["rating"], r["maps"]) for r in rep["mod_leaderboards"][key]]
+        rows = [_lb_row(r, r["rating"], r["maps"]) | {"confidence": r["confidence"], "low_confidence": not r["eligible_for_award"]}
+                for r in rep["mod_leaderboards"][key]]
     elif mode == "consistency":
-        columns = {"value_label": "Rating", "extra_label": "σ (lower = steadier)"}
+        columns = {"value_label": "Tournament Rating", "extra_label": "σ (lower = steadier)"}
         pool = [r for r in rep["rankings"] if r["consistency_sigma"] is not None and r["maps_played"] >= awards_min]
         pool.sort(key=lambda r: r["consistency_sigma"])
         rows = []
         for i, r in enumerate(pool, 1):
-            row = _lb_row(r, r["rating"], r["maps_played"])
+            row = _lb_row(r, r["rating"], r["maps_played"], r)
             row.update(rank=i, extra=r["consistency_sigma"])
             rows.append(row)
     else:  # maps
         pool = sorted(rep["rankings"], key=lambda r: (-r["maps_played"], r["rank"]))
         rows = []
         for i, r in enumerate(pool, 1):
-            row = _lb_row(r, r["rating"], r["maps_played"])
+            row = _lb_row(r, r["rating"], r["maps_played"], r)
             row["rank"] = i
             rows.append(row)
     total = len(rows)
     rows = rows[offset: offset + limit] if limit else rows[offset:]
     note = f"Players need at least {awards_min} maps." if mode == "consistency" else None
+    if mode == "performance":
+        note = "Performance Rating is how strong the scores were when the player played, regardless of how many maps or rounds that was."
     return {"mode": mode, "key": key, "total": total, "columns": columns, "note": note, "rows": rows}
 
 
-def _lb_row(r: dict, rating: float, maps: int) -> dict:
-    return {"rank": r["rank"], "user_id": r["user_id"], "username": r["username"], "slug": r["slug"],
-            "avatar_url": r.get("avatar_url"), "country": r.get("country"), "team": r.get("team"),
-            "rating": rating, "maps": maps}
+def _lb_row(r: dict, rating: float, maps: int, full: dict | None = None) -> dict:
+    row = {"rank": r["rank"], "user_id": r["user_id"], "username": r["username"], "slug": r["slug"],
+           "avatar_url": r.get("avatar_url"), "country": r.get("country"), "team": r.get("team"),
+           "rating": rating, "maps": maps}
+    if full:   # whole-tournament rows also carry the explainers
+        row.update(tournament_rating=full["rating"], performance_rating=full["performance_rating"],
+                   confidence=full["confidence"], deepest_round_name=full["deepest_round_name"])
+    return row
 
 
 def search_players(rep: dict, query: str, limit: int = 8) -> list[dict]:

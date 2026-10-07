@@ -8,6 +8,8 @@ from __future__ import annotations
 import re
 import sqlite3
 
+from .rounds import is_versus_round
+
 # Mods that don't change what a map "is" for pool purposes.
 NEUTRAL_MODS = {"NF", "SD", "PF", "TD", "SO", "MR", "CL", "RX0"}
 _SLOT_PREFIX = re.compile(r"^([A-Za-z]+)")
@@ -45,7 +47,7 @@ def infer_bucket(game_mods: list[str], score_mods: list[list[str]]) -> str:
     return bucket_from_mods(base)
 
 
-def _superseded_games(conn: sqlite3.Connection, games: list[sqlite3.Row]) -> set[int]:
+def _superseded_games(conn: sqlite3.Connection, games: list[sqlite3.Row], min_scores: int = 2) -> set[int]:
     """Game ids that were genuinely remade inside one lobby.
 
     A replay is the *same beatmap played again straight away by the same players* (abort / lag /
@@ -68,7 +70,7 @@ def _superseded_games(conn: sqlite3.Connection, games: list[sqlite3.Row]) -> set
     def flush() -> None:
         if len(group) < 2:
             return
-        good = [i for i, (g, users) in enumerate(group) if g["end_time"] and len(users) >= 2]
+        good = [i for i, (g, users) in enumerate(group) if g["end_time"] and len(users) >= min_scores]
         if good:
             out.update(g["id"] for g, _ in group[: good[-1]])  # everything before the last completed attempt
 
@@ -105,7 +107,8 @@ def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[st
             "SELECT id, beatmap_id, mods, end_time, order_index FROM match_games WHERE match_id = ? ORDER BY order_index",
             (match["id"],),
         ).fetchall()
-        superseded = _superseded_games(conn, games)
+        min_scores = 2 if is_versus_round(match["round"]) else 1   # qualifier lobbies may be one player at a time
+        superseded = _superseded_games(conn, games, min_scores)
 
         for g in games:
             stats["games"] += 1
@@ -116,8 +119,8 @@ def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[st
                 slot = pool.get((match["round"] or "", g["beatmap_id"])) or pool.get(("", g["beatmap_id"]))
 
             reason, warm = None, 0
-            if len(score_rows) < 2:
-                reason = "fewer than 2 scores"
+            if len(score_rows) < min_scores:
+                reason = f"fewer than {min_scores} scores" if min_scores > 1 else "no scores"
             elif not g["end_time"]:
                 reason = "aborted"
             elif g["id"] in superseded:

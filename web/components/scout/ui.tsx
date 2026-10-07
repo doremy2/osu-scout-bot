@@ -30,6 +30,13 @@ export function Rating({ value, big = false }: { value: number | null | undefine
   return <span className={`sc-rating sc-tier-${ratingTier(value)}${big ? " sc-rating-big" : ""}`}>{fmtRating(value)}</span>;
 }
 
+/** Sample confidence as a percentage; flags thin samples. */
+export function Confidence({ value, low }: { value: number | null | undefined; low?: boolean }) {
+  if (value == null) return null;
+  const pct = Math.round(value * 100);
+  return <span className={`sc-conf${low || value < 0.5 ? " sc-conf-low" : ""}`} title="How much evidence the rating rests on">{pct}%{low ? " · low" : ""}</span>;
+}
+
 export function PlayerLink({ slug, tournament, name, avatar, country, size = 28 }: {
   slug: string; tournament: string; name: string; avatar?: string | null; country?: string | null; size?: number;
 }) {

@@ -9,7 +9,7 @@ export default async function LeaderboardsPage({ params }: { params: Promise<{ s
   const { slug } = await params;
   const s = encodeURIComponent(slug);
   const [board, o] = await Promise.all([
-    scoutGet<LeaderboardData>(`/tournaments/${s}/leaderboard?mode=overall&limit=50`),
+    scoutGet<LeaderboardData>(`/tournaments/${s}/leaderboard?mode=tournament&limit=50`),
     scoutGet<Overview>(`/tournaments/${s}`)
   ]);
   const teams = o.tournament.has_teams ? (await scoutGet<{ teams: TeamListItem[] }>(`/tournaments/${s}/teams`)).teams : undefined;
