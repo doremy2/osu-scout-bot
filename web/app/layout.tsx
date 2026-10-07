@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "osu! scout Power Rankings",
-  description: "Current osu! tournament player power rankings"
+  title: { default: "osu! scout", template: "%s · osu! scout" },
+  description: "osu! tournament analytics and scouting"
 };
 
 export default function RootLayout({

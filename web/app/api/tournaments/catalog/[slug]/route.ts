@@ -1,4 +1,4 @@
-const BACKEND_API_BASE = (process.env.API_BASE_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+import { loadTournamentDetail } from "@/lib/tournamentCatalog";
 
 type RouteContext = {
   params: Promise<{ slug: string }>;
@@ -6,16 +6,8 @@ type RouteContext = {
 
 export async function GET(request: Request, context: RouteContext) {
   const { slug } = await context.params;
-  const upstream = await fetch(
-    `${BACKEND_API_BASE}/tournaments/catalog/${encodeURIComponent(slug)}`,
-    { cache: "no-store" }
-  );
-  const body = await upstream.text();
+  const entry = loadTournamentDetail(slug);
+  if (!entry) return Response.json({ detail: "Tournament not found" }, { status: 404 });
 
-  return new Response(body, {
-    status: upstream.status,
-    headers: {
-      "content-type": upstream.headers.get("content-type") || "application/json"
-    }
-  });
+  return Response.json(entry);
 }

@@ -136,14 +136,19 @@ def score_event(
 
     tier_weight = max(0.0, float(event.event_tier_weight or 0.0))
     recency_weight = math.exp(-days_since_event / config.event_recency_decay_days)
-    combined_weight = tier_weight * recency_weight
-    event_score = combined_weight * base_performance
+    quality_multiplier = max(
+        config.event_quality_floor,
+        min(config.event_quality_ceiling, tier_weight),
+    )
+    combined_weight = recency_weight
+    event_score = combined_weight * base_performance * quality_multiplier
 
     return {
         "event_name": event.event_name or f"{event.username}-event",
         "days_since_event": round(days_since_event, 2),
         "recency_weight": round(recency_weight, 4),
         "event_tier_weight": round(tier_weight, 4),
+        "event_quality_multiplier": round(quality_multiplier, 4),
         "combined_weight": round(combined_weight, 4),
         "base_performance": round(base_performance, 2),
         "event_score": round(event_score, 2),
@@ -237,7 +242,13 @@ def compute_activity_multiplier(
     if days_since_last_event is None:
         return round(config.activity_base, 4)
     days = max(0.0, float(days_since_last_event))
-    return round(config.activity_base + (config.activity_bonus * math.exp(-days / config.activity_decay_days)), 4)
+    if days <= 90:
+        return 1.0
+    if days <= 180:
+        return round(1.0 - (0.06 * ((days - 90.0) / 90.0)), 4)
+    if days <= 365:
+        return round(0.94 - (0.16 * ((days - 180.0) / 185.0)), 4)
+    return round(0.65 + (0.13 * math.exp(-(days - 365.0) / config.activity_decay_days)), 4)
 
 
 def _derive_tournaments_played(events: Iterable[EventInput], reference_date: date) -> int:

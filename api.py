@@ -113,7 +113,7 @@ def _matches_username(row: dict[str, Any], username: str) -> bool:
 
 def _public_leaderboard_row(row: dict[str, Any]) -> dict[str, Any]:
     user_id = row.get("user_id")
-    country_code = row.get("country") or row.get("country_code")
+    country_code = row.get("country_code") or row.get("country")
     payload = {
         "rank": row.get("rank"),
         "username": row.get("username"),
@@ -287,10 +287,10 @@ async def player_power(
         "aliases": row.get("aliases") or [],
         "rank": row.get("rank"),
         "tier": row.get("tier"),
-        "country_code": row.get("country") or row.get("country_code"),
+        "country_code": row.get("country_code") or row.get("country"),
         "country_flag_url": (
-            f"https://flagcdn.com/w40/{str(row.get('country') or row.get('country_code')).lower()}.png"
-            if (row.get("country") or row.get("country_code"))
+            f"https://flagcdn.com/w40/{str(row.get('country_code') or row.get('country')).lower()}.png"
+            if (row.get("country_code") or row.get("country"))
             else None
         ),
         "score_breakdown": _score_breakdown(row),

@@ -349,13 +349,14 @@ def enrich_players_with_osu_profiles(
     *,
     cache_ttl_hours: float | None = DEFAULT_PROFILE_CACHE_TTL_HOURS,
     db_path: str | Path | None = None,
+    fetch_missing_profiles: bool = True,
 ) -> tuple[list[PlayerInput], list[EventInput], dict[str, int]]:
     if not players:
         return players, events, {"cached": 0, "fetched": 0, "not_found": 0, "errors": 0, "skipped": 0}
 
     stats = {"cached": 0, "fetched": 0, "not_found": 0, "errors": 0, "skipped": 0}
     try:
-        client = OsuProfileClient.from_env()
+        client = OsuProfileClient.from_env() if fetch_missing_profiles else None
     except OsuProfileError:
         client = None
         stats["skipped"] = len(players)

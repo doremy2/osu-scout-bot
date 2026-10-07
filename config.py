@@ -27,24 +27,26 @@ class PowerRankingConfig:
     event_strength_of_schedule_weight: float = 0.15
     event_match_cost_weight: float = 0.05
 
-    event_recency_decay_days: float = 180.0
-    activity_decay_days: float = 180.0
+    event_recency_decay_days: float = 140.0
+    activity_decay_days: float = 90.0
+    event_quality_floor: float = 0.25
+    event_quality_ceiling: float = 1.30
 
     reliability_base: float = 0.85
     reliability_bonus: float = 0.15
     reliability_target_tournaments: float = 8.0
 
-    activity_base: float = 0.90
-    activity_bonus: float = 0.10
+    activity_base: float = 0.78
+    activity_bonus: float = 0.22
 
     consistency_penalty_scale: float = 1.75
     default_consistency_score: float = 25.0
     minimum_consistency_events: int = 2
     provisional_tournament_threshold: int = 3
-    missing_elitebotix_score_default: float | None = 50.0
-    missing_skill_issue_score_default: float | None = 50.0
-    missing_bancho_score_default: float | None = 50.0
-    missing_lazer_score_default: float | None = 50.0
+    missing_elitebotix_score_default: float | None = None
+    missing_skill_issue_score_default: float | None = None
+    missing_bancho_score_default: float | None = None
+    missing_lazer_score_default: float | None = None
 
     rating_ranges: dict[str, RatingRange] = field(
         default_factory=lambda: {

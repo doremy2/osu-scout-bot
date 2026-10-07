@@ -160,8 +160,16 @@ def _event_performance_value(event: EventInput) -> float:
 
 def _event_contribution(event: EventInput) -> float:
     days_since_event = event.days_since_event
-    recency_weight = math.exp(-(days_since_event or 0.0) / 120.0) if days_since_event is not None else 0.0
-    return max(0.0, (event.event_tier_weight or 0.0) * recency_weight * _event_performance_value(event))
+    recency_weight = (
+        math.exp(-(days_since_event or 0.0) / DEFAULT_CONFIG.event_recency_decay_days)
+        if days_since_event is not None
+        else 0.0
+    )
+    quality_multiplier = max(
+        DEFAULT_CONFIG.event_quality_floor,
+        min(DEFAULT_CONFIG.event_quality_ceiling, float(event.event_tier_weight or 0.0)),
+    )
+    return max(0.0, quality_multiplier * recency_weight * _event_performance_value(event))
 
 
 def _load_previous_ranks(path: str | Path | None) -> dict[str, int]:
@@ -277,6 +285,7 @@ def _top_recent_events(events: list[EventInput], *, limit: int = 5) -> list[dict
                 "event_tier_weight": event.event_tier_weight,
                 "map_total": event.metadata.get("map_total"),
                 "map_wins": event.metadata.get("map_wins"),
+                "metadata": event.metadata,
             }
         )
     return rows
@@ -301,7 +310,7 @@ def _build_leaderboard_output(
     rows: list[dict[str, Any]] = []
     for rank, result in enumerate(results, start=1):
         player = players_by_name.get(result.username.casefold())
-        country = player.country_code if player else None
+        country_code = player.country_code if player else None
         player_events = events_by_name.get(result.username.casefold(), [])
         confidence = _confidence_payload(
             result=result,
@@ -316,7 +325,8 @@ def _build_leaderboard_output(
                 "profile_username": player.profile_username if player else result.username,
                 "aliases": aliases_by_player.get(result.username.casefold(), []),
                 "user_id": player.user_id if player else None,
-                "country": country,
+                "country_code": country_code,
+                "country": country_code,
                 "country_rank": player.country_rank if player else None,
                 "bancho_rank": player.bancho_rank if player else None,
                 "pp": player.pp if player else None,
@@ -418,11 +428,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--event-filter", action="append", default=None, help="Repeatable event filter for --from-db mode, e.g. --event-filter \"OWC 2025\".")
     parser.add_argument("--include-undated-stages", action="store_true", help="Keep stage rows even when no match-detail timestamp exists.")
     parser.add_argument("--skip-osu-enrichment", action="store_true", help="Disable Bancho profile enrichment in --from-db mode.")
+    parser.add_argument("--osu-enrichment-cache-only", action="store_true", help="Use cached osu! profiles only; do not fetch missing profiles live.")
     parser.add_argument("--profile-cache-ttl-hours", type=float, default=DEFAULT_PROFILE_CACHE_TTL_HOURS, help="Maximum cache age in hours for osu! profile enrichment.")
     parser.add_argument("--players-out", default=None, help="Optional JSON export path for generated player inputs.")
     parser.add_argument("--events-out", default=None, help="Optional JSON export path for generated event inputs.")
     parser.add_argument("--reference-date", default=None, help="ISO date used for recency calculations.")
     parser.add_argument("--format", choices=("table", "json"), default="table", help="stdout output format.")
+    parser.add_argument("--quiet", action="store_true", help="Do not print rankings to stdout.")
     parser.add_argument("--csv-out", default=None, help="Optional CSV export path.")
     parser.add_argument("--leaderboard-out", default=None, help="Optional website-ready leaderboard JSON export path.")
     parser.add_argument("--previous-leaderboard", default=None, help="Optional previous leaderboard JSON used only for movement/confidence flags.")
@@ -452,6 +464,7 @@ def main() -> None:
             reference_date=args.reference_date,
             include_undated_stages=args.include_undated_stages,
             enrich_osu_profiles=not args.skip_osu_enrichment,
+            fetch_missing_osu_profiles=not args.osu_enrichment_cache_only,
             profile_cache_ttl_hours=args.profile_cache_ttl_hours,
         )
     else:
@@ -470,14 +483,15 @@ def main() -> None:
         reference_date=args.reference_date,
     )
 
-    if args.format == "json":
-        print(json.dumps(_results_to_output(results, include_debug=args.debug), indent=2))
-    else:
-        print(_render_table(results))
-        if args.debug:
-            print()
-            for result in results:
-                print(f"- {result.username}: {result.explanation}")
+    if not args.quiet:
+        if args.format == "json":
+            print(json.dumps(_results_to_output(results, include_debug=args.debug), indent=2))
+        else:
+            print(_render_table(results))
+            if args.debug:
+                print()
+                for result in results:
+                    print(f"- {result.username}: {result.explanation}")
 
     if args.csv_out:
         _write_csv(

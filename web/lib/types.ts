@@ -9,6 +9,7 @@ export type LeaderboardRow = {
   country_code: string | null;
   country_name?: string | null;
   country_flag_url?: string | null;
+  formats?: string[];
   tier: Tier;
   final_power_score: number;
   recent_tournament_form: number;
@@ -28,12 +29,29 @@ export type LeaderboardRow = {
   explanation: string;
 };
 
+export type LeaderboardFormat = "overall" | "1v1" | "2v2" | "3v3" | "4v4";
+
+export type CountryPowerRow = {
+  rank: number;
+  country_code: string;
+  country_name: string;
+  country_flag_url: string;
+  power_score: number;
+  player_count: number;
+  top_players: Array<{
+    username: string;
+    final_power_score: number;
+    rank: number;
+  }>;
+};
+
 export type RecentTournamentEvent = {
   event_name: string;
   event: string | null;
   stage: string | null;
   event_date: string | null;
   days_since_event: number | null;
+  impact_score?: number | null;
   match_cost: number | null;
   win_rate: number | null;
   placement_percentile: number | null;
@@ -41,6 +59,7 @@ export type RecentTournamentEvent = {
   event_tier_weight: number | null;
   map_total: number | null;
   map_wins: number | null;
+  metadata?: Record<string, unknown>;
 };
 
 export type RecentMatch = {
@@ -106,10 +125,12 @@ export type PlayerPower = {
 export type TournamentEntry = {
   slug: string;
   name: string;
+  acronym: string | null;
   year: number;
   game_mode: string;
   format: string | null;
   rank_range: string | null;
+  rank_type: "open" | "restricted" | "unknown";
   team_size: string | null;
   start_date: string | null;
   end_date: string | null;
@@ -120,6 +141,7 @@ export type TournamentEntry = {
   player_count: number | null;
   match_count: number | null;
   map_score_count: number | null;
+  verified_ratio: number | null;
   classification: "imported" | "production_safe" | "likely_importable" | "stage_only" | "partial" | "ignore";
   import_status: "imported" | "discovered";
   tier: string | null;
@@ -131,4 +153,17 @@ export type TournamentCatalog = {
   imported_count: number;
   discovered_count: number;
   rows: TournamentEntry[];
+};
+
+export type TournamentStat = {
+  tournament: string;
+  maps_played: number;
+  map_wins: number;
+  map_losses: number;
+  win_rate: number;
+  avg_accuracy: number;
+  avg_score: number;
+  stages: string[];
+  first_date: string | null;
+  last_date: string | null;
 };

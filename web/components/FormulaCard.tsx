@@ -1,7 +1,7 @@
 export function FormulaCard() {
   return (
     <aside className="info-stack" aria-label="Ranking explanation">
-      <section className="panel side-card">
+      <section className="panel side-card" id="methodology">
         <p className="eyebrow">Overview</p>
         <h2>What are osu! Tournament Power Rankings?</h2>
         <p>

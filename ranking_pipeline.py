@@ -55,12 +55,27 @@ def _to_float(value: Any) -> float | None:
     return float(text)
 
 
+def _to_int(value: Any) -> int | None:
+    number = _to_float(value)
+    if number is None:
+        return None
+    return int(number)
+
+
 def _normalize_player_key(value: Any) -> str | None:
     text = _clean_text(value)
     if text is None:
         return None
     normalized = "".join(ch for ch in text.casefold() if ch.isalnum())
     return normalized or text.casefold()
+
+
+def _compact_key(value: Any) -> str | None:
+    text = _clean_text(value)
+    if text is None:
+        return None
+    normalized = "".join(ch for ch in text.casefold() if ch.isalnum())
+    return normalized or None
 
 
 def _normalize_team_key(value: Any) -> str | None:
@@ -422,21 +437,142 @@ def _load_tournament_metadata(connection: sqlite3.Connection) -> dict[str, dict[
     return meta
 
 
+def _load_imported_event_keys(connection: sqlite3.Connection) -> set[str]:
+    keys: set[str] = set()
+    try:
+        rows = connection.execute(
+            """
+            SELECT event, display_name, short_name
+            FROM tournament_events
+            WHERE event IS NOT NULL
+            """
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return keys
+    for row in rows:
+        for column in ("event", "display_name", "short_name"):
+            key = _compact_key(row[column])
+            if key:
+                keys.add(key)
+    # Stage uses long display names for some events already imported from
+    # wiki/API packages. Keep Stage as enrichment, not a duplicate scorer.
+    imported_aliases = {
+        "owc2025": ["osuworldcup2025"],
+        "resc2025": ["resurrectioncup2025"],
+        "3wc2025": ["3digitworldcup2025"],
+        "4wc2025": ["4digitworldcup2025"],
+        "fdc2025": ["finnishduocup2025"],
+    }
+    for canonical, aliases in imported_aliases.items():
+        if canonical in keys:
+            keys.update(aliases)
+    return keys
+
+
+def _load_known_user_id_names(connection: sqlite3.Connection, alias_map: dict[str, str]) -> dict[int, str]:
+    """Map osu! user IDs to canonical names already known by the project."""
+    user_names: dict[int, str] = {}
+    try:
+        rows = connection.execute(
+            """
+            SELECT user_id, player AS name
+            FROM tournament_players
+            WHERE user_id IS NOT NULL
+              AND player IS NOT NULL
+            UNION ALL
+            SELECT user_id, canonical_name AS name
+            FROM player_aliases
+            WHERE user_id IS NOT NULL
+              AND canonical_name IS NOT NULL
+            """
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return user_names
+    for row in rows:
+        user_id = row["user_id"]
+        if user_id is None:
+            continue
+        name = _canonical_player_name(row["name"], alias_map)
+        if name:
+            user_names.setdefault(int(user_id), name)
+    return user_names
+
+
+def _load_stage_player_tournament_rows(connection: sqlite3.Connection) -> list[sqlite3.Row]:
+    """Load Stage/o!TR tournament-level player summaries if synced locally."""
+    try:
+        return connection.execute(
+            """
+            SELECT
+                tournament_id,
+                tournament_name,
+                abbreviation,
+                year,
+                forum_url,
+                stage_url,
+                rank_range_lower_bound,
+                lobby_size,
+                verification_status,
+                start_date,
+                end_date,
+                player_id,
+                osu_id,
+                username,
+                country,
+                average_rating_delta,
+                average_match_cost,
+                average_score,
+                average_placement,
+                average_accuracy,
+                matches_played,
+                matches_won,
+                matches_lost,
+                games_played,
+                games_won,
+                games_lost,
+                match_win_rate,
+                rating_before,
+                rating_after,
+                source_url
+            FROM stage_player_tournament_stats
+            WHERE tournament_name IS NOT NULL
+              AND username IS NOT NULL
+              AND end_date IS NOT NULL
+              AND COALESCE(verification_status, 0) >= 4
+            """
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return []
+
+
+def _normalize_inverse_linear(values: dict[Any, float]) -> dict[Any, float]:
+    """Normalize lower-is-better values onto a 0-100 higher-is-better scale."""
+    if not values:
+        return {}
+    min_value = min(values.values())
+    max_value = max(values.values())
+    if min_value == max_value:
+        return {key: 50.0 for key in values}
+    return {
+        key: max(0.0, min(100.0, 100.0 * ((max_value - value) / (max_value - min_value))))
+        for key, value in values.items()
+    }
+
+
 def _tournament_size_score(player_count: int) -> float:
     """Scale event weight by tournament size.
 
-    size_score = clamp(log(player_count) / log(256), 0.75, 1.10)
-    A 16-player invitational gets ~0.75, a 256-player open gets 1.0,
-    a 330-player world cup gets ~1.05.
+    Larger brackets should make placements count more. Small invitationals
+    still count, but no longer average like premier/world-cup fields.
     """
     import math
     if player_count <= 1:
-        return 0.75
+        return 0.55
     raw = math.log(player_count) / math.log(256)
-    return max(0.75, min(1.10, raw))
+    return max(0.55, min(1.15, raw))
 
 
-def _field_strength_score(tier: str | None, player_count: int) -> float:
+def _field_strength_score(tier: str | None, player_count: int, *, rank_range_lower_bound: int | None = None) -> float:
     """Estimate field strength from tier and size.
 
     Open-rank stacked events get higher weight; small restricted
@@ -454,12 +590,58 @@ def _field_strength_score(tier: str | None, player_count: int) -> float:
         base = 0.85
     else:
         base = 0.90
+    base *= _rank_range_quality_score(rank_range_lower_bound)
     # Small field penalty
     if player_count < 32:
-        base *= 0.90
+        base *= 0.82
     elif player_count < 64:
-        base *= 0.95
-    return max(0.80, min(1.25, base))
+        base *= 0.90
+    return max(0.20, min(1.30, base))
+
+
+def _rank_range_quality_score(rank_range_lower_bound: int | None) -> float:
+    """Estimate how much a rank-restricted field should affect open power ranking."""
+    if rank_range_lower_bound is None:
+        return 0.90
+    try:
+        rank_floor = int(rank_range_lower_bound)
+    except (TypeError, ValueError):
+        return 0.90
+    if rank_floor <= 2:
+        return 1.08
+    if rank_floor <= 100:
+        return 1.00
+    if rank_floor <= 1_000:
+        return 0.82
+    if rank_floor <= 10_000:
+        return 0.62
+    if rank_floor <= 50_000:
+        return 0.42
+    return 0.24
+
+
+def _division_quality_score(event_name: str | None) -> float:
+    text = (event_name or "").casefold()
+    if any(token in text for token in ("division ii", "division 2", "tier 2")):
+        return 0.86
+    if any(token in text for token in ("division iii", "division 3", "tier 3")):
+        return 0.70
+    if "minor league" in text or "novice" in text:
+        return 0.60
+    if any(token in text for token in ("division i", "division 1", "tier 1", "open rank", "open division")):
+        return 1.08
+    return 1.0
+
+
+def _stage_rating_delta_score(bucket: dict[str, Any]) -> float | None:
+    before = _to_float(bucket.get("rating_before"))
+    after = _to_float(bucket.get("rating_after"))
+    if before is None or after is None:
+        average_delta = _to_float(bucket.get("average_rating_delta"))
+        if average_delta is None:
+            return None
+        return _clamp_score(50.0 + (average_delta * 2.5))
+    return _clamp_score(50.0 + (after - before))
 
 
 def _clamp_score(value: float | None, minimum: float = 0.0, maximum: float = 100.0) -> float | None:
@@ -484,6 +666,7 @@ def _derive_impact_score(
     placement_percentile: float | None,
     strength_of_schedule: float | None,
     stage_tier_weight: float,
+    rating_delta_score: float | None = None,
 ) -> float | None:
     """Reward performance that contributes to winning instead of raw score farming."""
     parts = {
@@ -492,14 +675,24 @@ def _derive_impact_score(
         "match_result_proxy": _clamp_score(placement_percentile),
         "stage_importance": _normalize_stage_importance(stage_tier_weight),
         "opponent_strength": _clamp_score(strength_of_schedule),
+        "rating_delta": _clamp_score(rating_delta_score),
     }
-    weights = {
-        "map_performance": 0.35,
-        "map_wins": 0.25,
-        "match_result_proxy": 0.20,
-        "stage_importance": 0.10,
-        "opponent_strength": 0.10,
-    }
+    if rating_delta_score is None:
+        weights = {
+            "map_performance": 0.35,
+            "map_wins": 0.25,
+            "match_result_proxy": 0.20,
+            "stage_importance": 0.10,
+            "opponent_strength": 0.10,
+        }
+    else:
+        weights = {
+            "map_performance": 0.25,
+            "map_wins": 0.25,
+            "match_result_proxy": 0.20,
+            "opponent_strength": 0.15,
+            "rating_delta": 0.15,
+        }
     total = 0.0
     total_weight = 0.0
     for key, weight in weights.items():
@@ -529,6 +722,7 @@ def build_power_ranking_inputs_from_db(
     reference_date: date | str | None = None,
     include_undated_stages: bool = False,
     enrich_osu_profiles: bool = True,
+    fetch_missing_osu_profiles: bool = True,
     profile_cache_ttl_hours: float | None = DEFAULT_PROFILE_CACHE_TTL_HOURS,
 ) -> tuple[list[PlayerInput], list[EventInput]]:
     reference_day = _parse_reference_date(reference_date)
@@ -540,6 +734,7 @@ def build_power_ranking_inputs_from_db(
         alias_map = _load_alias_map(connection)
         tournament_tiers = _load_tournament_tiers(connection)
         tournament_meta = _load_tournament_metadata(connection)
+        imported_event_keys = _load_imported_event_keys(connection)
         player_stage: dict[tuple[str, str, str, str | None], dict[str, Any]] = {}
 
         for row in _load_match_stage_rows(connection):
@@ -658,6 +853,102 @@ def build_power_ranking_inputs_from_db(
                 bucket["avg_score"] = _to_float(row["avg_score"])
             if bucket.get("avg_accuracy") is None:
                 bucket["avg_accuracy"] = _to_float(row["avg_accuracy"])
+
+        user_id_names = _load_known_user_id_names(connection, alias_map)
+        stage_rows = _load_stage_player_tournament_rows(connection)
+        stage_tournament_player_counts: dict[str, int] = {}
+        for row in stage_rows:
+            event_name = _clean_text(row["tournament_name"])
+            if event_name:
+                stage_tournament_player_counts[event_name] = stage_tournament_player_counts.get(event_name, 0) + 1
+        placement_values: dict[tuple[int, int], float] = {}
+        rating_before_values: dict[tuple[int, int], float] = {}
+        for row in stage_rows:
+            tournament_id = row["tournament_id"]
+            player_id = row["player_id"]
+            if tournament_id is None or player_id is None:
+                continue
+            key = (int(tournament_id), int(player_id))
+            placement = _to_float(row["average_placement"])
+            rating_before = _to_float(row["rating_before"])
+            if placement is not None:
+                placement_values[key] = placement
+            if rating_before is not None:
+                rating_before_values[key] = rating_before
+
+        stage_placement_scores = _normalize_inverse_linear(placement_values)
+        stage_schedule_scores = _normalize_linear(rating_before_values)
+
+        for row in stage_rows:
+            event = _clean_text(row["tournament_name"])
+            if not event:
+                continue
+            if (_compact_key(event) in imported_event_keys) or (_compact_key(row["abbreviation"]) in imported_event_keys):
+                continue
+            if event_filter_set and event not in event_filter_set:
+                continue
+            osu_id = row["osu_id"]
+            canonical_name = user_id_names.get(int(osu_id)) if osu_id is not None else None
+            if canonical_name is None:
+                canonical_name = _canonical_player_name(row["username"], alias_map)
+            if canonical_name is None:
+                continue
+
+            stage = "Tournament Summary"
+            tournament_id = int(row["tournament_id"])
+            player_id = int(row["player_id"])
+            row_key = (tournament_id, player_id)
+            team_code = _clean_text(row["country"])
+            key = (canonical_name, event, stage, team_code)
+            match_win_rate = _to_float(row["match_win_rate"])
+            if match_win_rate is not None and match_win_rate <= 1.0:
+                match_win_rate *= 100.0
+            avg_accuracy = _to_float(row["average_accuracy"])
+            if avg_accuracy is not None and avg_accuracy <= 1.0:
+                avg_accuracy *= 100.0
+            bucket = player_stage.setdefault(
+                key,
+                {
+                    "username": canonical_name,
+                    "event": event,
+                    "stage": stage,
+                    "team_code": team_code,
+                    "pscore": _to_float(row["average_match_cost"]),
+                    "avg_score": _to_float(row["average_score"]),
+                    "avg_accuracy": avg_accuracy,
+                    "performance_ratio": None,
+                    "map_total": int(row["matches_played"] or 0),
+                    "map_wins": int(row["matches_won"] or 0),
+                    "last_played_at": _clean_text(row["end_date"]),
+                    "has_match_detail": False,
+                    "source": "stage_player_tournament_stats",
+                    "stage_win_rate": match_win_rate,
+                    "stage_placement_percentile": stage_placement_scores.get(row_key),
+                    "stage_strength_of_schedule": stage_schedule_scores.get(row_key),
+                    "stage_tournament_id": tournament_id,
+                    "stage_player_id": player_id,
+                    "stage_osu_id": row["osu_id"],
+                    "stage_url": _clean_text(row["stage_url"]) or _clean_text(row["source_url"]),
+                    "forum_url": _clean_text(row["forum_url"]),
+                    "abbreviation": _clean_text(row["abbreviation"]),
+                    "rank_range_lower_bound": row["rank_range_lower_bound"],
+                    "lobby_size": row["lobby_size"],
+                    "matches_played": int(row["matches_played"] or 0),
+                    "matches_won": int(row["matches_won"] or 0),
+                    "matches_lost": int(row["matches_lost"] or 0),
+                    "games_played": int(row["games_played"] or 0),
+                    "games_won": int(row["games_won"] or 0),
+                    "games_lost": int(row["games_lost"] or 0),
+                    "average_rating_delta": _to_float(row["average_rating_delta"]),
+                    "rating_before": _to_float(row["rating_before"]),
+                    "rating_after": _to_float(row["rating_after"]),
+                },
+            )
+            # If a verified package later provides detailed rows for the same
+            # event/player, keep the detailed rows and only fill missing Stage
+            # metadata. Stage is enrichment, not the sole source of truth.
+            if bucket.get("source") != "stage_player_tournament_stats":
+                bucket.setdefault("stage_url", _clean_text(row["stage_url"]) or _clean_text(row["source_url"]))
 
         if not player_stage:
             return [], []
@@ -806,15 +1097,20 @@ def build_power_ranking_inputs_from_db(
             map_total = int(bucket.get("map_total") or 0)
             map_wins = int(bucket.get("map_wins") or 0)
             win_rate = (100.0 * map_wins / map_total) if map_total > 0 else None
+            if bucket.get("stage_win_rate") is not None:
+                win_rate = _clamp_score(_to_float(bucket.get("stage_win_rate")))
 
             match_cost = normalized_match_cost.get(key)
             team_lookup = _normalize_team_key(team_code)
-            placement_percentile = (
-                team_stage_result.get((event, stage, team_lookup))
-                if team_lookup
-                else None
-            )
-            placement_result_source = "match_result" if placement_percentile is not None else "team_strength_fallback"
+            placement_percentile = _clamp_score(_to_float(bucket.get("stage_placement_percentile")))
+            placement_result_source = "stage_average_placement" if placement_percentile is not None else "team_strength_fallback"
+            if placement_percentile is None:
+                placement_percentile = (
+                    team_stage_result.get((event, stage, team_lookup))
+                    if team_lookup
+                    else None
+                )
+                placement_result_source = "match_result" if placement_percentile is not None else "team_strength_fallback"
             if placement_percentile is None:
                 placement_percentile = (
                     team_stage_strength.get((event, stage, team_lookup))
@@ -824,30 +1120,43 @@ def build_power_ranking_inputs_from_db(
             if placement_percentile is None:
                 placement_percentile = match_cost
                 placement_result_source = "match_cost_fallback"
-            schedule_raw = opponent_strengths.get((event, stage, team_lookup or ""))
-            if schedule_raw:
-                total, total_weight = schedule_raw
-                strength_of_schedule = total / total_weight if total_weight else None
+            stage_strength = _clamp_score(_to_float(bucket.get("stage_strength_of_schedule")))
+            if stage_strength is not None:
+                strength_of_schedule = stage_strength
             else:
-                strength_of_schedule = None
+                schedule_raw = opponent_strengths.get((event, stage, team_lookup or ""))
+                if schedule_raw:
+                    total, total_weight = schedule_raw
+                    strength_of_schedule = total / total_weight if total_weight else None
+                else:
+                    strength_of_schedule = None
 
             stage_tier_weight = STAGE_TIER_WEIGHTS.get(stage, 1.0)
+            rating_delta_score = _stage_rating_delta_score(bucket)
             impact_score = _derive_impact_score(
                 match_cost=match_cost,
                 win_rate=win_rate,
                 placement_percentile=placement_percentile,
                 strength_of_schedule=strength_of_schedule,
                 stage_tier_weight=stage_tier_weight,
+                rating_delta_score=rating_delta_score,
             )
             tournament_tier = tournament_tiers.get(event)
             tournament_tier_weight = _tournament_tier_weight(tournament_tier)
             tmeta = tournament_meta.get(event, {})
             t_player_count = tmeta.get("player_count", 0) or tmeta.get("active_player_count", 0)
+            if not t_player_count and bucket.get("source") == "stage_player_tournament_stats":
+                t_player_count = stage_tournament_player_counts.get(event, 0)
             size_score = _tournament_size_score(t_player_count)
-            field_score = _field_strength_score(tournament_tier, t_player_count)
-            # event_weight = prestige * stage * size * field_strength, clamped [0.70, 1.60]
-            raw_event_weight = tournament_tier_weight * size_score * field_score
-            event_tier_weight = stage_tier_weight * max(0.70, min(1.60, raw_event_weight))
+            rank_range_lower_bound = bucket.get("rank_range_lower_bound")
+            field_score = _field_strength_score(
+                tournament_tier,
+                t_player_count,
+                rank_range_lower_bound=_to_int(rank_range_lower_bound),
+            )
+            division_score = _division_quality_score(event)
+            raw_event_weight = tournament_tier_weight * size_score * field_score * division_score
+            event_tier_weight = stage_tier_weight * max(0.20, min(1.75, raw_event_weight))
             event_name = f"{event} - {stage}"
 
             events.append(
@@ -873,17 +1182,37 @@ def build_power_ranking_inputs_from_db(
                             "placement_result_source": placement_result_source,
                             "stage_importance": _normalize_stage_importance(stage_tier_weight),
                             "opponent_strength": strength_of_schedule,
+                            "rating_delta": rating_delta_score,
                         },
                         "tournament_tier": tournament_tier,
                         "tournament_tier_weight": tournament_tier_weight,
                         "tournament_size_score": round(size_score, 3),
                         "field_strength_score": round(field_score, 3),
+                        "division_quality_score": round(division_score, 3),
                         "tournament_player_count": t_player_count,
                         "team_code": team_code,
                         "raw_pscore": bucket.get("pscore"),
                         "performance_ratio": bucket.get("performance_ratio"),
                         "map_total": map_total,
                         "map_wins": map_wins,
+                        "source": bucket.get("source") or "sqlite_pipeline",
+                        "stage_tournament_id": bucket.get("stage_tournament_id"),
+                        "stage_player_id": bucket.get("stage_player_id"),
+                        "stage_osu_id": bucket.get("stage_osu_id"),
+                        "stage_url": bucket.get("stage_url"),
+                        "forum_url": bucket.get("forum_url"),
+                        "abbreviation": bucket.get("abbreviation"),
+                        "rank_range_lower_bound": bucket.get("rank_range_lower_bound"),
+                        "lobby_size": bucket.get("lobby_size"),
+                        "matches_played": bucket.get("matches_played"),
+                        "matches_won": bucket.get("matches_won"),
+                        "matches_lost": bucket.get("matches_lost"),
+                        "games_played": bucket.get("games_played"),
+                        "games_won": bucket.get("games_won"),
+                        "games_lost": bucket.get("games_lost"),
+                        "average_rating_delta": bucket.get("average_rating_delta"),
+                        "rating_before": bucket.get("rating_before"),
+                        "rating_after": bucket.get("rating_after"),
                     },
                 )
             )
@@ -932,6 +1261,28 @@ def build_power_ranking_inputs_from_db(
                     if cc:
                         _player_identity[key]["country_code"] = cc
 
+        for stage_row in stage_rows:
+            osu_id = stage_row["osu_id"]
+            stage_name = _clean_text(stage_row["username"])
+            if stage_name is None:
+                continue
+            canonical = user_id_names.get(int(osu_id)) if osu_id is not None else None
+            if canonical is None:
+                canonical = _canonical_player_name(stage_name, alias_map)
+            if canonical is None:
+                continue
+            key = canonical.casefold()
+            if key not in _player_identity:
+                _player_identity[key] = {
+                    "user_id": osu_id,
+                    "country_code": _clean_text(stage_row["country"]),
+                }
+            else:
+                if _player_identity[key].get("user_id") is None:
+                    _player_identity[key]["user_id"] = osu_id
+                if _player_identity[key].get("country_code") is None:
+                    _player_identity[key]["country_code"] = _clean_text(stage_row["country"])
+
         players: list[PlayerInput] = []
         seen_players: set[str] = set()
         for event_row in events:
@@ -965,6 +1316,7 @@ def build_power_ranking_inputs_from_db(
                 events,
                 cache_ttl_hours=profile_cache_ttl_hours,
                 db_path=db_path,
+                fetch_missing_profiles=fetch_missing_osu_profiles,
             )
         return players, events
     finally:

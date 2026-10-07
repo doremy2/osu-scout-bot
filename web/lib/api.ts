@@ -1,4 +1,4 @@
-import type { LeaderboardRow, PlayerPower, TournamentCatalog, TournamentEntry } from "./types";
+import type { LeaderboardFormat, LeaderboardRow, PlayerPower, TournamentCatalog, TournamentEntry, TournamentStat } from "./types";
 
 const DEFAULT_BACKEND_API_BASE = "http://127.0.0.1:8000";
 const DEFAULT_BROWSER_API_BASE = "/api";
@@ -26,6 +26,7 @@ export type LeaderboardQuery = {
   tier?: string;
   country?: string;
   provisional?: boolean;
+  format?: LeaderboardFormat;
   limit?: number;
   offset?: number;
 };
@@ -46,6 +47,7 @@ export async function fetchLeaderboard(query: LeaderboardQuery = {}): Promise<Le
   if (query.tier) params.set("tier", query.tier);
   if (query.country) params.set("country", query.country);
   if (query.provisional !== undefined) params.set("provisional", String(query.provisional));
+  if (query.format) params.set("format", query.format);
   params.set("limit", String(query.limit ?? 100));
   params.set("offset", String(query.offset ?? 0));
   const suffix = params.toString();
@@ -77,4 +79,8 @@ export async function fetchTournamentCatalog(query: TournamentQuery = {}): Promi
 
 export async function fetchTournamentDetail(slug: string): Promise<TournamentEntry> {
   return getJson<TournamentEntry>(`/tournaments/catalog/${encodeURIComponent(slug)}`);
+}
+
+export async function fetchTournamentStats(username: string): Promise<TournamentStat[]> {
+  return getJson<TournamentStat[]>(`/player/${encodeURIComponent(username)}/tournament-stats`);
 }

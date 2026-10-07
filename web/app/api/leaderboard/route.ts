@@ -1,16 +1,16 @@
-const BACKEND_API_BASE = (process.env.API_BASE_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+import { loadLeaderboardRows } from "@/lib/leaderboardData";
+import type { LeaderboardFormat } from "@/lib/types";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const upstream = await fetch(`${BACKEND_API_BASE}/leaderboard${url.search}`, {
-    cache: "no-store"
+  const format = url.searchParams.get("format") as LeaderboardFormat | null;
+  const rows = loadLeaderboardRows({
+    tier: url.searchParams.get("tier") || undefined,
+    country: url.searchParams.get("country") || undefined,
+    format: format || "overall",
+    limit: Number(url.searchParams.get("limit")) || 100,
+    offset: Number(url.searchParams.get("offset")) || 0,
   });
-  const body = await upstream.text();
 
-  return new Response(body, {
-    status: upstream.status,
-    headers: {
-      "content-type": upstream.headers.get("content-type") || "application/json"
-    }
-  });
+  return Response.json(rows);
 }

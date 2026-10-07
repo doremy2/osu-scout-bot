@@ -181,6 +181,33 @@ select {
   background: var(--accent);
 }
 
+.format-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 22px;
+}
+
+.format-tab {
+  min-width: 96px;
+  padding: 11px 18px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.format-tab-active,
+.format-tab:hover,
+.format-tab:focus-visible {
+  color: #050505;
+  background: var(--accent);
+}
+
 .hero-card {
   min-width: 260px;
   padding: 18px;
@@ -234,6 +261,10 @@ select {
 .controls-with-apply {
   grid-template-columns: repeat(3, minmax(150px, 1fr)) minmax(92px, auto);
   align-items: end;
+}
+
+.tournament-controls {
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
 }
 
 .field {
@@ -292,6 +323,22 @@ select {
   background: #e5e5e5;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.13);
   transform: translateY(-1px);
+}
+
+.view-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .table-wrap {
@@ -569,6 +616,39 @@ select {
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
+.country-ranking-panel {
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.section-heading {
+  padding: 22px 22px 10px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.section-heading p:last-child {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.country-cell {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-weight: 900;
+}
+
+.country-table {
+  min-width: 820px;
+}
+
 .flag:hover .flag-tooltip,
 .flag:focus-visible .flag-tooltip,
 .profile-country:hover .flag-tooltip,
@@ -842,6 +922,10 @@ select {
     grid-template-columns: 1fr 1fr;
   }
 
+  .tournament-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .controls-with-apply {
     grid-template-columns: 1fr;
   }
@@ -864,7 +948,50 @@ select {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 16px;
-  margin-top: 16px;
+}
+
+#tournaments {
+  grid-column: 1 / -1;
+}
+
+.tournament-groups {
+  display: grid;
+  gap: 28px;
+  padding: 18px;
+}
+
+.tournament-year-group {
+  display: grid;
+  gap: 14px;
+}
+
+.year-group-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 4px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.year-group-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+.year-group-header span,
+.tournament-acronym {
+  color: var(--muted-2);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tournament-acronym {
+  margin: 0 0 5px;
 }
 
 .tournament-card {
@@ -895,6 +1022,13 @@ select {
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.3;
+}
+
+.tournament-card-header h3 a:hover,
+.tournament-card-header h3 a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 .tournament-card-meta {
@@ -979,21 +1113,21 @@ select {
 }
 
 .cls-imported {
-  color: #0c1a0f;
-  background: #5bc96e;
-  border: 1px solid #5bc96e;
+  color: #050607;
+  background: #f4f4f4;
+  border: 1px solid #f4f4f4;
 }
 
 .cls-production-safe {
-  color: #1a1400;
-  background: #d4a72c;
-  border: 1px solid #d4a72c;
+  color: #050607;
+  background: #d9d9d9;
+  border: 1px solid #d9d9d9;
 }
 
 .cls-likely {
-  color: #0c1322;
-  background: #6ba3d6;
-  border: 1px solid #6ba3d6;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--line-strong);
 }
 
 .cls-partial {
@@ -1044,4 +1178,33 @@ select {
   .tournament-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* ── Leaderboard tournament badges ────────────────────────────── */
+
+.tournament-badges-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 180px;
+}
+
+.tournament-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--accent-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tournament-pill-more {
+  color: var(--muted-2);
+  font-weight: 600;
 }

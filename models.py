@@ -292,16 +292,18 @@ class EventInput:
             "placement_percentile",
             "strength_of_schedule",
             "event_tier_weight",
+            "metadata",
         }
         username = _clean_text(row.get("username"))
         if username is None:
             raise ValueError(f"Event row is missing username: {row}")
 
-        metadata = {
+        metadata = dict(row.get("metadata") or {}) if isinstance(row.get("metadata"), dict) else {}
+        metadata.update({
             key: value
             for key, value in row.items()
             if key not in reserved
-        }
+        })
 
         return cls(
             username=username,

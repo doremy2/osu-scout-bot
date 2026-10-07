@@ -1,16 +1,15 @@
-const BACKEND_API_BASE = (process.env.API_BASE_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
+import { loadTournamentCatalog } from "@/lib/tournamentCatalog";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const upstream = await fetch(`${BACKEND_API_BASE}/tournaments/catalog${url.search}`, {
-    cache: "no-store"
+  const year = Number(url.searchParams.get("year"));
+  const catalog = loadTournamentCatalog({
+    year: Number.isFinite(year) ? year : undefined,
+    game_mode: url.searchParams.get("game_mode") || undefined,
+    classification: url.searchParams.get("classification") || undefined,
+    import_status: url.searchParams.get("import_status") || undefined,
+    limit: Number(url.searchParams.get("limit")) || undefined,
   });
-  const body = await upstream.text();
 
-  return new Response(body, {
-    status: upstream.status,
-    headers: {
-      "content-type": upstream.headers.get("content-type") || "application/json"
-    }
-  });
+  return Response.json(catalog);
 }
