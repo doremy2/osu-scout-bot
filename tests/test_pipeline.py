@@ -164,3 +164,21 @@ def test_small_sample_shrinkage(tourney):
         b.add(1.2, 1.0)
     assert a.z_mean() > b.z_mean()
     assert a.z_adj(3.0) < b.z_adj(3.0)
+
+
+def test_decorated_headers_and_bare_ids():
+    """Sheets like Corsace's: 'SEMIFINALS / BEST OF 1 | ━ ━ ━ | STATISTICS' headers and ids pasted without a URL."""
+    from scout.sources.extract import Cell, Table, extract_links
+    rule = "━  " * 30
+    rows = [
+        [Cell("MAP"), Cell("MP LINK")],
+        [Cell("SEMIFINALS / BEST OF 1"), Cell(rule), Cell("STATISTICS")],
+        [Cell("17"), Cell("criller"), Cell("+"), Cell("113747385")],
+        [Cell("18"), Cell("x"), Cell("113749253", link="https://osu.ppy.sh/community/matches/113749253")],
+        [Cell("GRAND FINALS / BEST OF 1"), Cell(rule)],
+        [Cell("29"), Cell("enri"), Cell("113947963")],
+    ]
+    got = {l.osu_match_id: normalize_round(l.round_raw) for l in extract_links([Table("schedules", rows)])}
+    assert got == {113747385: "SF", 113749253: "SF", 113947963: "GF"}
+    # without an MP LINK column a bare number is not treated as a match id
+    assert extract_links([Table("t", [[Cell("17"), Cell("113747385")]])]) == []

@@ -13,6 +13,8 @@ MP_LINK_RE = re.compile(
     re.IGNORECASE,
 )
 _URL_RE = re.compile(r"https?://\S+")
+_DECOR_RE = re.compile(r"[─-▟■-◿]+")     # box-drawing rules like ━  ━  ━ in section headers
+_BARE_ID_RE = re.compile(r"^\d{7,10}$")                        # a lone match id typed without its URL
 
 
 @dataclass
@@ -36,7 +38,8 @@ def find_match_ids(text: str) -> list[int]:
 
 def _row_label(row: list[Cell]) -> str:
     """Row text without URLs, used for round detection."""
-    return " | ".join(_URL_RE.sub("", c.text).strip() for c in row if c.text.strip())
+    parts = (_DECOR_RE.sub("", _URL_RE.sub("", c.text)).strip() for c in row)
+    return " | ".join(p for p in parts if p)
 
 
 def extract_links(tables: list[Table]) -> list[MatchLink]:
@@ -49,10 +52,14 @@ def extract_links(tables: list[Table]) -> list[MatchLink]:
     out: list[MatchLink] = []
     for table in tables:
         section_raw = table.name if normalize_round(table.name) else None
+        # Some sheets lose the hyperlink and keep only the numeric id under an "MP LINK" column.
+        bare_ids_ok = any("mp link" in c.text.lower() for r in table.rows for c in r)
         for row in table.rows:
             ids: list[int] = []
             for cell in row:
                 ids.extend(find_match_ids(cell.blob()))
+                if bare_ids_ok and not cell.link and _BARE_ID_RE.match(cell.text.strip()):
+                    ids.append(int(cell.text.strip()))
             label = _row_label(row)
             if not ids:
                 if label and normalize_round(label) and len(label) < 80:

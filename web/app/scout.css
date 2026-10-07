@@ -1,6 +1,6 @@
-/* osu! scout — tournament site. Every class is prefixed sc- so it never collides with the legacy pages.
+/* osu! scout — tournament site. Every class is prefixed sc-.
    Look: dense data-site layout (thin rules, mono micro-labels, pill filters, score bars) in a black /
-   hot-pink / pale-grey palette with checkerboard + blueprint motifs. */
+   hot-pink / pale-grey palette. */
 .sc-root {
   --sc-bg: #090909;
   --sc-bg2: #0e0e0f;
@@ -62,8 +62,6 @@
 .sc-empty { color: var(--sc-dim); text-align: center; padding: 18px; }
 .sc-code { background: #000; padding: 10px 14px; border-radius: 6px; display: inline-block; font-family: var(--sc-mono); }
 
-/* checkerboard motif */
-.sc-checker { height: 12px; background: conic-gradient(#050505 25%, #d6d6da 0 50%, #050505 0 75%, #d6d6da 0) 0 0 / 12px 12px; }
 
 /* header */
 .sc-topbar { background: rgba(9, 9, 9, 0.92); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--sc-line); }
@@ -101,11 +99,6 @@
 .sc-hero h1 em { font-style: normal; color: var(--sc-accent); }
 .sc-hero-sub { color: var(--sc-dim); font-size: 1rem; max-width: 600px; }
 .sc-hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-.sc-hero-art { position: relative; aspect-ratio: 1; border: 1px solid var(--sc-line2); border-radius: 12px; overflow: hidden;
-  background: conic-gradient(#050505 25%, #d6d6da 0 50%, #050505 0 75%, #d6d6da 0) 0 0 / 36px 36px; }
-.sc-hero-art::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 38%, var(--sc-accent) 38%, var(--sc-accent) 100%); mix-blend-mode: multiply; opacity: 0.95; }
-.sc-hero-art span { position: absolute; left: 14px; bottom: 12px; font-family: var(--sc-mono); font-size: 0.68rem; color: #000; background: #d6d6da; padding: 2px 6px; letter-spacing: 0.1em; }
-@media (max-width: 760px) { .sc-hero { grid-template-columns: 1fr; } .sc-hero-art { display: none; } }
 .sc-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 34px; }
 .sc-features h3 { font-family: var(--sc-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .sc-features p { color: var(--sc-dim); font-size: 0.88rem; margin: 0; }
@@ -174,7 +167,7 @@
 .sc-mod { display: inline-block; min-width: 32px; text-align: center; padding: 1px 6px; border-radius: 4px; font-family: var(--sc-mono); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.06em; color: #0a0a0a; background: #9a9aa2; }
 .sc-mod-nm { background: #ffffff; } .sc-mod-hd { background: #ffd23f; } .sc-mod-hr { background: #ff3b47; color: #fff; }
 .sc-mod-dt { background: #3b8cff; color: #fff; } .sc-mod-ez { background: transparent; color: #d6d6da; box-shadow: inset 0 0 0 1px #d6d6da; }
-.sc-mod-fm { background: conic-gradient(#050505 25%, #d6d6da 0 50%, #050505 0 75%, #d6d6da 0) 0 0 / 8px 8px; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+.sc-mod-fm { background: #ff9f5a; }
 .sc-mod-tb { background: var(--sc-accent); color: #fff; } .sc-mod-fl { background: #222; color: #fff; } .sc-mod-ht { background: #62626a; color: #fff; }
 
 /* ratings */
@@ -226,7 +219,6 @@
 
 /* overview widgets */
 .sc-mvp { border-color: var(--sc-line2); position: relative; overflow: hidden; }
-.sc-mvp::after { content: ""; position: absolute; right: -1px; top: -1px; width: 56px; height: 14px; background: conic-gradient(#050505 25%, #d6d6da 0 50%, #050505 0 75%, #d6d6da 0) 0 0 / 14px 14px; }
 .sc-mvp-body { display: flex; align-items: center; gap: 16px; }
 .sc-mvp-body .sc-avatar { border-radius: 10px; }
 .sc-mvp-name { font-family: var(--sc-display); font-size: 1.5rem; text-transform: uppercase; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
@@ -253,7 +245,6 @@
 
 /* profiles */
 .sc-phead { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; position: relative; overflow: hidden; }
-.sc-phead::after { content: ""; position: absolute; right: -1px; top: -1px; width: 84px; height: 14px; background: conic-gradient(#050505 25%, #d6d6da 0 50%, #050505 0 75%, #d6d6da 0) 0 0 / 14px 14px; }
 .sc-phead .sc-avatar { border-radius: 12px; }
 .sc-phead-main { flex: 1; min-width: 200px; }
 .sc-phead-main h2 { font-family: var(--sc-display); font-size: clamp(1.7rem, 3.4vw, 2.5rem); text-transform: uppercase; letter-spacing: -0.03em; color: var(--sc-text); }

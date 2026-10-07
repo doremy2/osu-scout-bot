@@ -19,7 +19,6 @@ export default async function ScoutLayout({ children }: { children: ReactNode })
   return (
     <div className="sc-root">
       <header className="sc-topbar">
-        <div className="sc-checker" aria-hidden />
         <div className="sc-wrap sc-head1">
           <Link href="/" className="sc-brand">osu!<b>scout</b><span className="sc-brand-dot" /><span className="sc-beta-tag">beta</span></Link>
           <span className="sc-head-meta">{meta}</span>
@@ -33,9 +32,6 @@ export default async function ScoutLayout({ children }: { children: ReactNode })
             <Link href="/tournaments">Tournaments</Link>
             <Link href="/import">Import</Link>
           </nav>
-          <div className="sc-topnav-r">
-            <Link href="/legacy">OWC rankings</Link>
-          </div>
         </div>
       </header>
       <main className="sc-wrap sc-main">{children}</main>
