@@ -8,7 +8,7 @@ Two processes make up the site, and they must run on the same machine:
 | `scout-web` | Next.js site; proxies `/api/scout/*` to the API | `127.0.0.1:3000` |
 | Caddy | HTTPS + public entry point | `:80` / `:443` |
 
-Only Caddy is exposed to the internet. Frontend-only hosts (Netlify, a plain Vercel Next.js project) will not work, because the API owns the database; Vercel works only in the read-only snapshot setup of route C.
+Only Caddy is exposed to the internet. Frontend-only hosts (Netlify, a plain Vercel Next.js project) will not work, because the API owns the database; Vercel needs route C (snapshot, or a hosted Turso database for live imports).
 
 Pick one route: **A. systemd on a VPS** (simplest), **B. Docker Compose**, or **C. Vercel** (read-only snapshot, see the end).
 
@@ -103,16 +103,52 @@ Data lives in the `scoutdata` volume; back it up with
 
 ## C. Vercel (multi-service project)
 
-`vercel.json` defines two services: `web` (Next.js, public at `/`) and `scout_api` (FastAPI from `scout_api.py`, internal only).
+`vercel.json` defines two services: `web` (Next.js, public at `/`) and `scout_api` (FastAPI from `scout_api:app`, internal only).
 `web` gets the API's internal address through a service binding, injected as `SCOUT_API_URL`; the browser only ever calls
 `/api/scout/*`, which the web app proxies at runtime (`web/app/api/scout/[...path]/route.ts`).
 
-**Serverless limits that shape this setup**
-- The deployed filesystem is read-only and functions are short-lived, so the API serves a bundled **snapshot** of the database
-  (`deploy/scout.db`) and **web imports are off**. To add or update tournaments: import locally, run
-  `python scripts/make_deploy_db.py`, commit `deploy/scout.db`, and redeploy.
-- No secrets are needed on Vercel (the osu! credentials are only used when importing, which happens locally).
-- The old Discord bot is not deployed.
+Vercel functions have no persistent disk and cannot run background work, so the API has two modes, picked by the environment:
 
-**Steps:** import the repo into Vercel as a project with the *Services* preset (or `vercel` / `vercel dev` with the CLI), keep the
-framework preset from `vercel.json`, and deploy. `vercel dev` runs both services together locally.
+| Mode | When | Data | Imports |
+|---|---|---|---|
+| **Snapshot** | `TURSO_DATABASE_URL` not set | read-only `deploy/scout.db` bundled with the deploy | off (the Import button is greyed out) |
+| **Hosted database** | `TURSO_DATABASE_URL` set | your Turso database (SQLite-compatible) | live, **invite code required** |
+
+### Turn on live imports
+
+1. **Create the database** (free tier is plenty). With the Turso CLI:
+   ```bash
+   turso auth login
+   turso db create osu-scout
+   turso db show osu-scout --url          # libsql://osu-scout-<you>.turso.io
+   turso db tokens create osu-scout       # the auth token
+   ```
+2. **Copy your current data into it** (once; `pip install libsql` first):
+   ```bash
+   TURSO_DATABASE_URL=libsql://... TURSO_AUTH_TOKEN=... python scripts/seed_turso.py
+   ```
+3. **Add environment variables** in Vercel (Project → Settings → Environment Variables), for Production and Preview:
+
+   | Variable | Value |
+   |---|---|
+   | `TURSO_DATABASE_URL` | the `libsql://...` URL |
+   | `TURSO_AUTH_TOKEN` | the token from step 1 |
+   | `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET` | your osu! OAuth app |
+   | `SCOUT_ADMIN_TOKEN` | the **invite code** people must enter to import (`openssl rand -hex 24`) |
+   | `SCOUT_MAX_MATCHES` | optional, default 300: refuse bigger sheets |
+
+4. **Redeploy** (`vercel deploy --prod`). The Import button becomes active and asks for the invite code.
+
+How an import runs on Vercel: the browser starts a job (stored in the database) and then keeps asking the server to do the
+next ~40-second slice of work (scan the sheet, fetch lobbies at 1 per second, calculate ratings), showing live progress.
+Only one import runs at a time. If a request drops the browser simply asks again; the job continues where it stopped.
+
+Give the invite code only to people you trust: every import spends your osu! API quota and writes to your database.
+Rotate it any time by changing `SCOUT_ADMIN_TOKEN` and redeploying.
+
+### Snapshot mode (no database)
+
+Import locally, run `python scripts/make_deploy_db.py`, commit `deploy/scout.db`, and redeploy. No secrets needed.
+
+**Steps:** import the repo into Vercel as a project (the services come from `vercel.json`), or use the CLI
+(`vercel link`, `vercel deploy`, `vercel deploy --prod`). `vercel dev -L` runs both services locally.

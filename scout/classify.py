@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 import sqlite3
 
+from .db.batch import run_batch
 from .rounds import is_versus_round
 
 # Mods that don't change what a map "is" for pool purposes.
@@ -98,6 +99,7 @@ def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[st
     has_pool = bool(pool)
 
     stats = {"games": 0, "used": 0, "excluded": 0}
+    updates: list = []
     matches = conn.execute(
         "SELECT id, round FROM tournament_matches WHERE tournament_id = ? AND status = 'imported'",
         (tournament_id,),
@@ -135,10 +137,10 @@ def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[st
             else:
                 bucket = infer_bucket(game_mods, [[m for m in r["mods"].split(",") if m] for r in score_rows])
 
-            conn.execute(
+            updates.append((
                 "UPDATE match_games SET mod_bucket = ?, pool_slot = ?, is_warmup = ?, excluded = ?, exclude_reason = ? WHERE id = ?",
                 (bucket, slot, warm, 1 if reason else 0, reason, g["id"]),
-            )
+            ))
             stats["excluded" if reason else "used"] += 1
-    conn.commit()
+    run_batch(conn, updates)
     return stats

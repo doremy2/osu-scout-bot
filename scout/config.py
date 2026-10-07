@@ -39,6 +39,16 @@ class Settings:
     imports_mode: str = os.environ.get("SCOUT_IMPORTS", "auto").lower()
     # Serve a bundled, read-only snapshot (serverless hosts). Set automatically on Vercel.
     readonly: bool = os.environ.get("SCOUT_READONLY", "").lower() in ("1", "true", "yes") or bool(os.environ.get("VERCEL"))
+    # --- hosted database (Turso / libsql) -----------------------------------
+    # With TURSO_DATABASE_URL set, data lives in the hosted database and a local replica file serves reads.
+    turso_url: str = os.environ.get("TURSO_DATABASE_URL", "")
+    turso_token: str = os.environ.get("TURSO_AUTH_TOKEN", "")
+    replica_path: str = os.environ.get("SCOUT_REPLICA", str(Path(os.environ.get("TMPDIR") or os.environ.get("TEMP") or "/tmp") / "scout-replica.db"))
+    # How imports run: "thread" = a background thread does it all (local / VPS);
+    # "step" = the browser drives it with short requests (serverless, where nothing may run in the background).
+    import_mode: str = os.environ.get("SCOUT_IMPORT_MODE", "").lower()
+    step_budget: float = float(os.environ.get("SCOUT_STEP_BUDGET", "40"))      # seconds of work per step request
+    max_matches: int = int(os.environ.get("SCOUT_MAX_MATCHES", "300"))         # refuse sheets with more lobbies than this
     host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
     port: int = int(os.environ.get("SCOUT_PORT", "8001"))
     allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")

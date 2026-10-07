@@ -4,6 +4,7 @@
 import { scoutApiUrl } from "@/lib/scout";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;   // an import step can run for up to ~45 s
 
 async function proxy(request: Request, ctx: { params: Promise<{ path: string[] }> }): Promise<Response> {
   const { path } = await ctx.params;

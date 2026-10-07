@@ -43,29 +43,35 @@ def fetch(conn: sqlite3.Connection, tournament_id: int, client: MatchFetcher,
     if on_match:
         on_match(0, len(todo), dict(counts))
     for i, m in enumerate(todo, 1):
-        mid = m["osu_match_id"]
-        try:
-            payload = repo.load_raw(conn, mid) if use_cache else None
-            if payload is None:
-                payload = client.get_match_full(mid)
-                repo.cache_raw(conn, mid, payload)
-            parsed = parse_match(payload)
-            repo.save_parsed_match(conn, m["id"], parsed)
-            repo.mark_match(conn, m["id"], "imported")
-            counts["imported"] += 1
-            progress(f"[{i}/{len(todo)}] {mid}: {parsed.name} — {len(parsed.games)} games")
-        except MatchNotFound:
-            repo.mark_match(conn, m["id"], "not_found", "osu! API returned 404 (deleted or wrong id)")
-            counts["not_found"] += 1
-            progress(f"[{i}/{len(todo)}] {mid}: not found")
-        except (OsuApiError, KeyError, ValueError, TypeError) as e:
-            repo.mark_match(conn, m["id"], "failed", str(e)[:500])
-            counts["failed"] += 1
-            progress(f"[{i}/{len(todo)}] {mid}: FAILED {e}")
+        status, detail = fetch_one(conn, m, client, use_cache=use_cache)
+        counts[status] += 1
+        progress(f"[{i}/{len(todo)}] {m['osu_match_id']}: {detail}")
         if on_match:
             on_match(i, len(todo), dict(counts))
     finalize(conn, tournament_id)
     return counts
+
+
+def fetch_one(conn: sqlite3.Connection, m, client: MatchFetcher, use_cache: bool = True) -> tuple[str, str]:
+    """Import one pending lobby. Returns ("imported" | "not_found" | "failed", human-readable detail).
+    The raw API payload is cached for later re-parsing, except on the hosted database where it would be dead weight."""
+    mid = m["osu_match_id"]
+    try:
+        payload = repo.load_raw(conn, mid) if use_cache else None
+        if payload is None:
+            payload = client.get_match_full(mid)
+            if not getattr(conn, "is_remote", False):
+                repo.cache_raw(conn, mid, payload)
+        parsed = parse_match(payload)
+        repo.save_parsed_match(conn, m["id"], parsed)
+        repo.mark_match(conn, m["id"], "imported")
+        return "imported", f"{parsed.name} — {len(parsed.games)} games"
+    except MatchNotFound:
+        repo.mark_match(conn, m["id"], "not_found", "osu! API returned 404 (deleted or wrong id)")
+        return "not_found", "not found"
+    except (OsuApiError, KeyError, ValueError, TypeError) as e:
+        repo.mark_match(conn, m["id"], "failed", str(e)[:500])
+        return "failed", f"FAILED {e}"
 
 
 def reparse(conn: sqlite3.Connection, tournament_id: int) -> int:

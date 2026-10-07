@@ -52,9 +52,10 @@ def import_policy(admin_token: str, mode: str) -> str:
 
 
 def create_app(db_path: str | Path | None = None, client_factory=None, threaded_imports: bool = True,
+               import_mode: str | None = None,
                admin_token: str | None = None, imports_mode: str | None = None) -> FastAPI:
     db_path = Path(db_path or settings.db_path)
-    if settings.readonly and str(db_path) != ":memory:":
+    if settings.readonly and not settings.turso_url and str(db_path) != ":memory:":
         db_path = writable_copy(db_path)
     token = settings.admin_token if admin_token is None else admin_token
     policy = import_policy(token, settings.imports_mode if imports_mode is None else imports_mode)
@@ -62,8 +63,15 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
                   redoc_url=None, openapi_url="/api/openapi.json" if settings.enable_docs else None)
     app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in settings.allowed_origins.split(",") if o.strip()],
                        allow_methods=["GET", "POST"], allow_headers=["*"])
-    jobs = JobRegistry()
+    jobs = JobRegistry(db_path)
     app.state.jobs = jobs
+    mode = "inline" if threaded_imports is False else (import_mode or settings.import_mode or ("step" if settings.turso_url else "thread"))
+
+    def require_import_access(x_admin_token: str | None) -> None:
+        if policy == "off":
+            raise HTTPException(403, "Importing is disabled on this server.")
+        if policy == "token" and not (x_admin_token and hmac.compare_digest(x_admin_token.encode(), token.encode())):
+            raise HTTPException(401, "Imports need the admin token.")
 
     def db() -> sqlite3.Connection:
         return connect(db_path)
@@ -113,10 +121,7 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     # ---- imports ------------------------------------------------------------
     @app.post("/api/imports", status_code=202)
     def start_import(body: ImportBody, x_admin_token: str | None = Header(default=None)):
-        if policy == "off":
-            raise HTTPException(403, "Importing is disabled on this server.")
-        if policy == "token" and not (x_admin_token and hmac.compare_digest(x_admin_token.encode(), token.encode())):
-            raise HTTPException(401, "Imports need the admin token.")
+        require_import_access(x_admin_token)
         if jobs.any_running():
             raise HTTPException(429, "Another import is already running. Try again when it has finished.")
         req = ImportRequest(name=body.name.strip(), acronym=body.acronym.strip(), slug=body.slug.strip().lower(),
@@ -132,8 +137,17 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
             existing = conn.execute("SELECT 1 FROM tournaments WHERE slug = ?", (req.slug,)).fetchone() is not None
         finally:
             conn.close()
-        job = jobs.start(db_path, req, client_factory=client_factory, threaded=threaded_imports)
-        return {**job.public(), "existing": existing}
+        job = jobs.start(req, client_factory=client_factory, mode=mode)
+        return {**job.public(), "existing": existing, "mode": mode}
+
+    @app.post("/api/imports/{job_id}/step")
+    def import_step(job_id: str, x_admin_token: str | None = Header(default=None)):
+        """Advance a job by one short slice of work. In "step" mode the browser calls this until the job is done."""
+        require_import_access(x_admin_token)
+        if jobs.get(job_id) is None:
+            raise HTTPException(404, "Unknown import job")
+        job = jobs.step(job_id, client_factory) if mode == "step" else jobs.get(job_id)
+        return {**job.public(), "mode": mode}
 
     @app.get("/api/imports/{job_id}")
     def import_status(job_id: str):

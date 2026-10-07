@@ -36,8 +36,12 @@ export function ImportForm() {
   const [token, setToken] = useState("");
   const [job, setJob] = useState<ImportStatus | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cancelled = useRef(false);
 
-  useEffect(() => () => { if (timer.current) clearInterval(timer.current); }, []);
+  useEffect(() => {
+    cancelled.current = false;       // (React StrictMode mounts twice in dev)
+    return () => { cancelled.current = true; if (timer.current) clearInterval(timer.current); };
+  }, []);
 
   // Public deployments protect imports: ask the server whether they are open, token-gated or off.
   useEffect(() => {
@@ -60,13 +64,39 @@ export function ImportForm() {
         body: JSON.stringify({ name, acronym, slug, sheet_url: sheet, format })
       });
       setJob(started);
+      const finish = (s: ImportStatus) => {
+        if (s.phase === "done") setTimeout(() => router.push(tournamentHref(s.slug)), 1200);
+      };
+      if (started.mode === "step") {
+        // Serverless host: nothing runs in the background, so keep asking the server to do the next slice of work.
+        // Each request is short; the job lives in the database, so a dropped request just means asking again.
+        let failures = 0;
+        while (!cancelled.current) {
+          try {
+            const s = await scoutClient<ImportStatus>(`/imports/${started.id}/step`, {
+              method: "POST",
+              headers: token ? { "X-Admin-Token": token } : {}
+            });
+            failures = 0;
+            setJob(s);
+            if (s.phase === "done" || s.phase === "error") { finish(s); break; }
+          } catch (err) {
+            if (++failures >= 4) {
+              setError(err instanceof Error ? err.message : "Lost contact with the server");
+              break;
+            }
+            await new Promise((r) => setTimeout(r, 1500));
+          }
+        }
+        return;
+      }
       timer.current = setInterval(async () => {
         try {
           const s = await scoutClient<ImportStatus>(`/imports/${started.id}`);
           setJob(s);
           if (s.phase === "done" || s.phase === "error") {
             if (timer.current) clearInterval(timer.current);
-            if (s.phase === "done") setTimeout(() => router.push(tournamentHref(s.slug)), 1200);
+            finish(s);
           }
         } catch (err) {
           if (timer.current) clearInterval(timer.current);
@@ -78,7 +108,7 @@ export function ImportForm() {
     }
   }
 
-  if (job) return <Progress job={job} onRetry={() => { setJob(null); }} />;
+  if (job) return <Progress job={job} error={error} onRetry={() => { setJob(null); setError(null); }} />;
   if (policy === "off") {
     return (
       <p className="sc-empty">
@@ -125,10 +155,10 @@ export function ImportForm() {
       </fieldset>
       {policy === "token" && (
         <label className="sc-field-block">
-          <span>Admin token</span>
+          <span>Invite code</span>
           <input className="sc-input" required type="password" autoComplete="off" value={token}
-                 onChange={(e) => setToken(e.target.value)} placeholder="Ask the site owner" />
-          <small>Imports on this server are restricted. Your token is only sent to this site.</small>
+                 onChange={(e) => setToken(e.target.value)} placeholder="Invite code" />
+          <small>Imports are invite-only to protect the osu! API quota. Enter the invite code you were given; it is only sent to this site.</small>
         </label>
       )}
       {error && <p className="sc-error" role="alert">{error}</p>}
@@ -137,7 +167,7 @@ export function ImportForm() {
   );
 }
 
-function Progress({ job, onRetry }: { job: ImportStatus; onRetry: () => void }) {
+function Progress({ job, error, onRetry }: { job: ImportStatus; error: string | null; onRetry: () => void }) {
   const idx = job.phase === "error" ? -1 : STEPS.findIndex((s) => s.phase === job.phase);
   const pct = job.total ? Math.round((job.done / job.total) * 100) : job.phase === "done" ? 100 : 0;
   return (
@@ -160,7 +190,8 @@ function Progress({ job, onRetry }: { job: ImportStatus; onRetry: () => void }) 
           </li>
         ))}
       </ol>
-      {job.error && <p className="sc-error" role="alert">{job.error}</p>}
+      {(job.error || error) && <p className="sc-error" role="alert">{job.error ?? error}</p>}
+      {error && job.phase !== "error" && <button className="sc-btn" onClick={onRetry}>Back to the form</button>}
       {job.phase === "error" && <button className="sc-btn" onClick={onRetry}>Back to the form</button>}
       {job.phase === "done" && <Link className="sc-btn sc-btn-primary" href={tournamentHref(job.slug)}>Open tournament report</Link>}
     </div>

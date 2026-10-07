@@ -35,9 +35,11 @@ export default async function Landing() {
           <p className="sc-dim">
             The rating model is still being tuned, so numbers and rankings can change as it improves. Treat them as a
             scouting aid, not a verdict.{" "}
-            {canImport
-              ? "The best way to help is to add more tournaments: the more data the model sees, the better it gets."
-              : "Imports currently run locally, so new tournaments are added by the site owner for now."}
+            {!canImport
+              ? "Imports currently run locally, so new tournaments are added by the site owner for now."
+              : imports === "token"
+                ? "The best way to help is to add more tournaments: the more data the model sees, the better it gets. Imports need an invite code, so ask for one."
+                : "The best way to help is to add more tournaments: the more data the model sees, the better it gets."}
           </p>
           <ImportButton policy={imports} variant="primary">Add a tournament</ImportButton>
         </section>

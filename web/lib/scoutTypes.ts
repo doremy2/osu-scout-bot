@@ -317,6 +317,7 @@ export type ImportStatus = {
   not_found: number;
   error: string | null;
   existing?: boolean;
+  mode?: "thread" | "step" | "inline";
 };
 
 // ---- draft simulator ----

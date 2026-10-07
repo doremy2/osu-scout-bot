@@ -242,10 +242,10 @@ def test_import_job_flow(tmp_path, monkeypatch):
     real = importer.ingest.discover
     monkeypatch.setattr(importer.ingest, "discover", lambda conn, tid, loc, kind=None, **kw: real(conn, tid, str(sheet)))
     db = tmp_path / "imp.db"
-    reg = JobRegistry()
+    reg = JobRegistry(db)
     req = ImportRequest(name="Fake", acronym="FK", slug="fake-imp", format="team",
                         sheet_url="https://docs.google.com/spreadsheets/d/abc/edit")
-    job = reg.start(db, req, client_factory=lambda: ft.FakeClient(payloads), threaded=False)
+    job = reg.start(req, client_factory=lambda: ft.FakeClient(payloads), mode="inline")
     assert job.phase == "done", job.error
     n = sum(1 for r in rounds.values() if r == "Group Stage")
     assert job.found == job.total == job.done == n and job.failed == 0
@@ -263,7 +263,7 @@ def test_import_validation_and_missing_credentials(tmp_path, monkeypatch):
     from scout import server
     monkeypatch.setattr(server.settings.__class__, "osu_client_id", "", raising=False)
     monkeypatch.setattr(server, "settings", type("S", (), {"osu_client_id": "", "osu_client_secret": "", "db_path": tmp_path / "x.db", "admin_token": "",
-                                                "imports_mode": "auto", "allowed_origins": "", "enable_docs": False,
+                                                "imports_mode": "auto", "import_mode": "", "turso_url": "", "allowed_origins": "", "enable_docs": False,
                                                 "readonly": False})())
     c = TestClient(create_app(tmp_path / "x.db"))
     r = c.post("/api/imports", json={"name": "N", "acronym": "N", "slug": "ok", "format": "1v1",
@@ -281,9 +281,9 @@ def test_failed_import_leaves_no_ghost_tournament(tmp_path, monkeypatch):
     real = importer.ingest.discover
     monkeypatch.setattr(importer.ingest, "discover", lambda conn, tid, loc, kind=None, **kw: real(conn, tid, str(empty)))
     db = tmp_path / "g.db"
-    job = JobRegistry().start(db, ImportRequest(name="N", acronym="N", slug="ghost", format="1v1",
-                                                sheet_url="https://docs.google.com/spreadsheets/d/a/edit"),
-                              client_factory=lambda: ft.FakeClient({}), threaded=False)
+    job = JobRegistry(db).start(ImportRequest(name="N", acronym="N", slug="ghost", format="1v1",
+                                              sheet_url="https://docs.google.com/spreadsheets/d/a/edit"),
+                                client_factory=lambda: ft.FakeClient({}), mode="inline")
     assert job.phase == "error" and "No osu! multiplayer links" in job.error
     assert repo.get_tournament(connect(db), "ghost") is None
 
@@ -339,13 +339,15 @@ def test_imports_can_be_switched_off(tmp_path):
 
 
 def test_only_one_import_runs_at_a_time(tmp_path):
-    from scout.importer import ImportJob
     c = _protected(tmp_path, admin_token="")
     assert c.get("/api/health").json()["imports"] == "open"
-    busy = ImportJob(id="busy", request=ImportRequest(**IMPORT_BODY), phase="importing")
-    c.app.state.jobs.jobs["busy"] = busy
+    store = c.app.state.jobs.store
+    busy = store.create(ImportRequest(**IMPORT_BODY))
+    busy.phase = "importing"
+    store.save(busy)
     assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 429
     busy.phase = "done"
+    store.save(busy)
     assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 202
 
 
@@ -474,3 +476,57 @@ def test_vercel_json_is_consistent_with_the_code():
     assert hasattr(importlib.import_module(module), attr)
     # build/runtime keys must live inside services, not at the top level
     assert not {"framework", "buildCommand", "installCommand", "functions", "outputDirectory"} & set(cfg)
+
+
+# ---------- stepped imports (serverless): the browser drives the job with short requests -------------
+def test_stepped_import_runs_to_completion_in_slices(tmp_path, monkeypatch):
+    import dataclasses
+
+    from scout import importer
+    payloads, rounds = ft.build()
+    sheet = tmp_path / "sheet.txt"
+    sheet.write_text("Group Stage\n" + "\n".join(
+        f"https://osu.ppy.sh/community/matches/{m}" for m, r in rounds.items() if r == "Group Stage"))
+    real = importer.ingest.discover
+    monkeypatch.setattr(importer.ingest, "discover", lambda conn, tid, loc, kind=None, **kw: real(conn, tid, str(sheet)))
+    monkeypatch.setattr(importer, "settings", dataclasses.replace(importer.settings, step_budget=0.0))   # one lobby per step
+    app = create_app(tmp_path / "s.db", client_factory=lambda: ft.FakeClient(payloads), import_mode="step",
+                     admin_token="invite")
+    c = TestClient(app)
+    body = {"name": "Stepped", "acronym": "ST", "slug": "stepped", "format": "team",
+            "sheet_url": "https://docs.google.com/spreadsheets/d/abc/edit"}
+    assert c.post("/api/imports", json=body).status_code == 401                      # invite code required
+    started = c.post("/api/imports", json=body, headers={"X-Admin-Token": "invite"})
+    assert started.status_code == 202 and started.json()["mode"] == "step" and started.json()["phase"] == "queued"
+    job_id = started.json()["id"]
+    assert c.post(f"/api/imports/{job_id}/step").status_code == 401                  # steps are protected too
+
+    seen, last = [], None
+    for _ in range(60):
+        last = c.post(f"/api/imports/{job_id}/step", headers={"X-Admin-Token": "invite"}).json()
+        seen.append((last["phase"], last["done"]))
+        if last["phase"] in ("done", "error"):
+            break
+    assert last["phase"] == "done", last
+    n = sum(1 for r in rounds.values() if r == "Group Stage")
+    assert last["total"] == last["done"] == n
+    assert len([s for s in seen if s[0] == "importing"]) >= 2                        # genuinely spread over several requests
+    assert c.get(f"/api/imports/{job_id}").json()["phase"] == "done"                 # status readable by anyone with the id
+    assert c.get("/api/tournaments/stepped").status_code == 200
+    # a second import can start now that the first is finished
+    assert c.post("/api/imports", json={**body, "slug": "stepped-2"}, headers={"X-Admin-Token": "invite"}).status_code == 202
+
+
+def test_seeding_copies_a_database_into_a_libsql_target(team_db, tmp_path):
+    from scout.seed import copy_database
+    path, conn = team_db
+    conn.close()
+    dst = connect(tmp_path / "target.db", backend="libsql")
+    counts = copy_database(path, dst, progress=lambda *_: None)
+    assert counts["tournaments"] == 1 and counts["game_scores"] > 100 and counts["tournament_teams"] == 4
+    src_report = build_report(connect(path), "fake")
+    dst_report = build_report(dst, "fake")
+    assert [r["username"] for r in dst_report["rankings"]] == [r["username"] for r in src_report["rankings"]]
+    assert [t["slug"] for t in dst_report["teams"]] == [t["slug"] for t in src_report["teams"]]
+    copy_database(path, dst, progress=lambda *_: None)          # re-running replaces rows instead of duplicating them
+    assert dst.execute("SELECT COUNT(*) FROM game_scores").fetchone()[0] == counts["game_scores"]

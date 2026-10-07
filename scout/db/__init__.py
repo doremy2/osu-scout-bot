@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
 
@@ -20,7 +20,26 @@ def writable_copy(src: str | Path, name: str = "scout-readonly.db") -> Path:
     return dest
 
 
-def connect(db_path: str | Path) -> sqlite3.Connection:
+def connect(db_path: str | Path, backend: str | None = None):
+    """sqlite3 file by default; a libsql embedded replica of the hosted database when TURSO_DATABASE_URL is set;
+    backend="libsql" forces the libsql wrapper over a plain local file (used by the tests)."""
+    import os
+
+    from ..config import settings
+    from .remote import open_remote
+
+    if backend is None:
+        backend = "turso" if settings.turso_url else ("libsql" if os.environ.get("SCOUT_BACKEND") == "libsql" else "sqlite")
+    if backend == "turso":
+        conn = open_remote(settings.replica_path, settings.turso_url, settings.turso_token)
+        conn.sync(min_interval=3.0)          # other instances' imports show up within a few seconds
+        init_schema(conn)
+        return conn
+    if backend == "libsql":
+        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+        conn = open_remote(str(db_path))
+        init_schema(conn)
+        return conn
     db_path = Path(db_path)
     if str(db_path) != ":memory:":
         db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -37,7 +56,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
         row = conn.execute("SELECT version FROM schema_version").fetchone()
         if row is not None and row["version"] >= SCHEMA_VERSION:
             return
-    except sqlite3.OperationalError:
+    except Exception:   # noqa: BLE001 - no schema_version table yet (sqlite3.OperationalError / libsql error)
         pass
     conn.executescript(_SCHEMA.read_text(encoding="utf-8"))
     row = conn.execute("SELECT version FROM schema_version").fetchone()

@@ -14,6 +14,7 @@
       "entrypoint": "scout_api:app",
       "functions": {
         "scout_api.py": {
+          "maxDuration": 60,
           "excludeFiles": "{data/**,web/**,tests/**,docs/**,venv/**,**/*.png,**/*.bak}"
         }
       }

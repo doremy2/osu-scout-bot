@@ -127,6 +127,27 @@ CREATE INDEX IF NOT EXISTS ix_games_beatmap ON match_games(beatmap_id);
 CREATE INDEX IF NOT EXISTS ix_scores_game ON game_scores(game_id);
 CREATE INDEX IF NOT EXISTS ix_scores_user ON game_scores(user_id);
 
+-- Web import jobs live in the database (not in memory) so any server instance can continue them.
+CREATE TABLE IF NOT EXISTS import_jobs (
+    id          TEXT PRIMARY KEY,
+    slug        TEXT NOT NULL,
+    request     TEXT NOT NULL,                 -- JSON of the ImportRequest
+    phase       TEXT NOT NULL DEFAULT 'queued',
+    message     TEXT NOT NULL DEFAULT '',
+    found       INTEGER NOT NULL DEFAULT 0,
+    done        INTEGER NOT NULL DEFAULT 0,
+    total       INTEGER NOT NULL DEFAULT 0,
+    failed      INTEGER NOT NULL DEFAULT 0,
+    not_found   INTEGER NOT NULL DEFAULT 0,
+    error       TEXT,
+    created     INTEGER NOT NULL DEFAULT 0,    -- 1 = this job created the tournament row (cleaned up on failure)
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- one row, rewritten at the end of every batch script, so a script that silently stopped halfway is detectable
+CREATE TABLE IF NOT EXISTS _batch_marker (id INTEGER PRIMARY KEY, token TEXT);
+
 -- ---- v2: tournament format + tournament-scoped teams -----------------------
 -- A team only exists *inside* a tournament (a country cup's "Vietnam" is not part of
 -- the global player identity). Players stay global; memberships are per tournament.

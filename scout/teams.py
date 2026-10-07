@@ -15,6 +15,7 @@ import re
 import sqlite3
 from collections import Counter, defaultdict
 
+from .db.batch import run_batch
 from .db.repo import slugify
 from .formats import get_format
 
@@ -114,19 +115,23 @@ def derive_teams(conn: sqlite3.Connection, tournament_id: int) -> dict[str, int]
             team_country[k] = cc
         member_key[uid] = (k, "country")
 
-    team_id: dict[str, int] = {}
-    for k in sorted({k for k, _ in member_key.values()} | {k for pair in match_teams.values() for k in pair}):
-        cur = conn.execute(
-            "INSERT INTO tournament_teams (tournament_id, slug, name, country_code) VALUES (?, ?, ?, ?)",
-            (tournament_id, k, display[k], team_country.get(k)),
-        )
-        team_id[k] = cur.lastrowid
-    for uid, (k, source) in member_key.items():
-        if uid in set(players):
-            conn.execute("INSERT INTO team_memberships (tournament_id, team_id, user_id, source) VALUES (?, ?, ?, ?)",
-                         (tournament_id, team_id[k], uid, source))
-    for mid, (kr, kb) in match_teams.items():
-        conn.execute("UPDATE tournament_matches SET team_red_id = ?, team_blue_id = ? WHERE id = ?",
-                     (team_id[kr], team_id[kb], mid))
-    conn.commit()
+    team_keys = sorted({k for k, _ in member_key.values()} | {k for pair in match_teams.values() for k in pair})
+    run_batch(conn, [
+        ("INSERT INTO tournament_teams (tournament_id, slug, name, country_code) VALUES (?, ?, ?, ?)",
+         (tournament_id, k, display[k], team_country.get(k)))
+        for k in team_keys
+    ])
+    team_id: dict[str, int] = {r["slug"]: r["id"] for r in conn.execute(
+        "SELECT id, slug FROM tournament_teams WHERE tournament_id = ?", (tournament_id,))}
+    in_tournament = set(players)
+    writes = [
+        ("INSERT INTO team_memberships (tournament_id, team_id, user_id, source) VALUES (?, ?, ?, ?)",
+         (tournament_id, team_id[k], uid, source))
+        for uid, (k, source) in member_key.items() if uid in in_tournament
+    ]
+    writes += [
+        ("UPDATE tournament_matches SET team_red_id = ?, team_blue_id = ? WHERE id = ?", (team_id[kr], team_id[kb], mid))
+        for mid, (kr, kb) in match_teams.items()
+    ]
+    run_batch(conn, writes)
     return {"teams": len(team_id), "players": len(players)}

@@ -8,6 +8,7 @@ import unicodedata
 import zlib
 
 from ..formats import DEFAULT_FORMAT, validate_format
+from .batch import Statement, run_batch
 from ..models import MatchLink, ParsedMatch
 from ..rounds import normalize_round
 
@@ -70,24 +71,25 @@ def add_match_links(conn: sqlite3.Connection, tournament_id: int, links: list[Ma
                     round_override: str | None = None) -> int:
     """Insert newly discovered lobbies as 'pending'. Existing rows keep their status,
     but get a round if they didn't have one. Returns number of new matches."""
+    known = {r[0] for r in conn.execute(
+        "SELECT osu_match_id FROM tournament_matches WHERE tournament_id = ?", (tournament_id,))}
+    stmts: list[Statement] = []
     new = 0
     for link in links:
         raw = round_override or link.round_raw
         code = normalize_round(raw)
-        exists = conn.execute(
-            "SELECT 1 FROM tournament_matches WHERE tournament_id = ? AND osu_match_id = ?",
-            (tournament_id, link.osu_match_id),
-        ).fetchone()
-        new += 0 if exists else 1
-        conn.execute(
+        if link.osu_match_id not in known:
+            new += 1
+            known.add(link.osu_match_id)
+        stmts.append((
             """INSERT INTO tournament_matches (tournament_id, osu_match_id, round, round_raw, source_context)
                VALUES (?, ?, ?, ?, ?)
                ON CONFLICT(tournament_id, osu_match_id) DO UPDATE SET
                  round = COALESCE(tournament_matches.round, excluded.round),
                  round_raw = COALESCE(tournament_matches.round_raw, excluded.round_raw)""",
             (tournament_id, link.osu_match_id, code, raw, link.context),
-        )
-    conn.commit()
+        ))
+    run_batch(conn, stmts)
     return new
 
 
@@ -130,57 +132,51 @@ def load_raw(conn: sqlite3.Connection, osu_match_id: int) -> dict | None:
 
 # --- parsed match ---------------------------------------------------------
 def save_parsed_match(conn: sqlite3.Connection, match_row_id: int, pm: ParsedMatch) -> None:
-    """Replace this lobby's games/scores with the parsed version (idempotent)."""
-    with conn:
-        for p in pm.players:
-            conn.execute(
-                """INSERT INTO players (user_id, username, country_code, country_name, avatar_url) VALUES (?, ?, ?, ?, ?)
-                   ON CONFLICT(user_id) DO UPDATE SET username = excluded.username,
-                     country_code = COALESCE(excluded.country_code, players.country_code),
-                     country_name = COALESCE(excluded.country_name, players.country_name),
-                     avatar_url = COALESCE(excluded.avatar_url, players.avatar_url),
-                     updated_at = datetime('now')""",
-                (p.user_id, p.username, p.country_code, p.country_name, p.avatar_url),
-            )
-        for b in pm.beatmaps:
-            conn.execute(
-                """INSERT INTO beatmaps (beatmap_id, beatmapset_id, artist, title, version, star_rating, mode)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)
-                   ON CONFLICT(beatmap_id) DO UPDATE SET
-                     beatmapset_id = COALESCE(excluded.beatmapset_id, beatmaps.beatmapset_id),
-                     artist = COALESCE(excluded.artist, beatmaps.artist),
-                     title = COALESCE(excluded.title, beatmaps.title),
-                     version = COALESCE(excluded.version, beatmaps.version),
-                     star_rating = COALESCE(excluded.star_rating, beatmaps.star_rating),
-                     mode = COALESCE(excluded.mode, beatmaps.mode)""",
-                (b.beatmap_id, b.beatmapset_id, b.artist, b.title, b.version, b.star_rating, b.mode),
-            )
-        conn.execute(
-            "UPDATE tournament_matches SET name = ?, team_red = ?, team_blue = ?, start_time = ?, end_time = ? WHERE id = ?",
-            (pm.name, pm.team_red, pm.team_blue, pm.start_time, pm.end_time, match_row_id),
-        )
-        conn.execute("DELETE FROM match_games WHERE match_id = ?", (match_row_id,))
-        known_users = {p.user_id for p in pm.players}
-        for g in pm.games:
-            cur = conn.execute(
-                """INSERT INTO match_games (match_id, osu_game_id, order_index, beatmap_id, mods, scoring_type,
-                                            team_type, start_time, end_time)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (match_row_id, g.osu_game_id, g.order_index, g.beatmap_id, ",".join(g.mods),
-                 g.scoring_type, g.team_type, g.start_time, g.end_time),
-            )
-            game_id = cur.lastrowid
-            for s in g.scores:
-                if s.user_id not in known_users:  # restricted/deleted users can be missing from `users`
-                    conn.execute("INSERT OR IGNORE INTO players (user_id, username) VALUES (?, ?)",
-                                 (s.user_id, f"user {s.user_id}"))
-                conn.execute(
-                    """INSERT OR REPLACE INTO game_scores (game_id, user_id, score, accuracy, max_combo, count_300,
-                         count_100, count_50, count_miss, mods, team, slot, passed)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                    (game_id, s.user_id, s.score, s.accuracy, s.max_combo, s.count_300, s.count_100,
-                     s.count_50, s.count_miss, ",".join(s.mods), s.team, s.slot, int(s.passed)),
-                )
+    """Replace this lobby's games/scores with the parsed version (idempotent), as one batch."""
+    st: list[Statement] = []
+    for p in pm.players:
+        st.append((
+            """INSERT INTO players (user_id, username, country_code, country_name, avatar_url) VALUES (?, ?, ?, ?, ?)
+               ON CONFLICT(user_id) DO UPDATE SET username = excluded.username,
+                 country_code = COALESCE(excluded.country_code, players.country_code),
+                 country_name = COALESCE(excluded.country_name, players.country_name),
+                 avatar_url = COALESCE(excluded.avatar_url, players.avatar_url),
+                 updated_at = datetime('now')""",
+            (p.user_id, p.username, p.country_code, p.country_name, p.avatar_url)))
+    for b in pm.beatmaps:
+        st.append((
+            """INSERT INTO beatmaps (beatmap_id, beatmapset_id, artist, title, version, star_rating, mode)
+               VALUES (?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(beatmap_id) DO UPDATE SET
+                 beatmapset_id = COALESCE(excluded.beatmapset_id, beatmaps.beatmapset_id),
+                 artist = COALESCE(excluded.artist, beatmaps.artist),
+                 title = COALESCE(excluded.title, beatmaps.title),
+                 version = COALESCE(excluded.version, beatmaps.version),
+                 star_rating = COALESCE(excluded.star_rating, beatmaps.star_rating),
+                 mode = COALESCE(excluded.mode, beatmaps.mode)""",
+            (b.beatmap_id, b.beatmapset_id, b.artist, b.title, b.version, b.star_rating, b.mode)))
+    st.append(("UPDATE tournament_matches SET name = ?, team_red = ?, team_blue = ?, start_time = ?, end_time = ? WHERE id = ?",
+               (pm.name, pm.team_red, pm.team_blue, pm.start_time, pm.end_time, match_row_id)))
+    st.append(("DELETE FROM match_games WHERE match_id = ?", (match_row_id,)))
+    known_users = {p.user_id for p in pm.players}
+    for g in pm.games:
+        st.append((
+            """INSERT INTO match_games (match_id, osu_game_id, order_index, beatmap_id, mods, scoring_type,
+                                        team_type, start_time, end_time)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (match_row_id, g.osu_game_id, g.order_index, g.beatmap_id, ",".join(g.mods),
+             g.scoring_type, g.team_type, g.start_time, g.end_time)))
+        for s in g.scores:
+            if s.user_id not in known_users:  # restricted/deleted users can be missing from `users`
+                st.append(("INSERT OR IGNORE INTO players (user_id, username) VALUES (?, ?)", (s.user_id, f"user {s.user_id}")))
+            st.append((
+                """INSERT OR REPLACE INTO game_scores (game_id, user_id, score, accuracy, max_combo, count_300,
+                     count_100, count_50, count_miss, mods, team, slot, passed)
+                   VALUES ((SELECT id FROM match_games WHERE match_id = ? AND osu_game_id = ?),
+                           ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (match_row_id, g.osu_game_id, s.user_id, s.score, s.accuracy, s.max_combo, s.count_300, s.count_100,
+                 s.count_50, s.count_miss, ",".join(s.mods), s.team, s.slot, int(s.passed))))
+    run_batch(conn, st)
 
 
 # --- pool slots (display order) -----------------------------------------------
