@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { TournamentList } from "@/components/scout/TournamentList";
+import { ImportButton } from "@/components/scout/ui";
 import { importsPolicy, scoutGet } from "@/lib/scout";
 import type { TournamentListItem } from "@/lib/scoutTypes";
 
@@ -13,7 +13,7 @@ export default async function TournamentsPage({ searchParams }: { searchParams: 
     <>
       <div className="sc-section-head">
         <h1>Tournaments</h1>
-        {imports !== "off" && <Link className="sc-btn sc-btn-primary" href="/import">Import tournament</Link>}
+        <ImportButton policy={imports} variant="primary">Import tournament</ImportButton>
       </div>
       <TournamentList tournaments={tournaments} initialQuery={q ?? ""} />
     </>

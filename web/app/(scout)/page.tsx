@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Reveal } from "@/components/scout/Reveal";
+import { ImportButton } from "@/components/scout/ui";
 import { TournamentList } from "@/components/scout/TournamentList";
 import { importsPolicy, scoutGet } from "@/lib/scout";
 import type { TournamentListItem } from "@/lib/scoutTypes";
@@ -16,7 +17,7 @@ export default async function Landing() {
         <p className="sc-splash-sub">osu! tournament analytics &amp; scouting</p>
         <div className="sc-hero-cta">
           <Link className="sc-btn sc-btn-primary" href="/tournaments">Browse tournaments</Link>
-          {canImport && <Link className="sc-btn" href="/import">Import a tournament</Link>}
+          <ImportButton policy={imports}>Import a tournament</ImportButton>
         </div>
         <span className="sc-scrollhint" aria-hidden>↓</span>
       </section>
@@ -38,7 +39,7 @@ export default async function Landing() {
               ? "The best way to help is to add more tournaments: the more data the model sees, the better it gets."
               : "Imports currently run locally, so new tournaments are added by the site owner for now."}
           </p>
-          {canImport && <Link className="sc-btn sc-btn-primary" href="/import">Add a tournament</Link>}
+          <ImportButton policy={imports} variant="primary">Add a tournament</ImportButton>
         </section>
       </Reveal>
 
@@ -53,7 +54,7 @@ export default async function Landing() {
           ) : (
             <div className="sc-card sc-center">
               <p>No tournaments imported yet.</p>
-              {canImport && <Link className="sc-btn sc-btn-primary" href="/import">Import your first tournament</Link>}
+              <ImportButton policy={imports} variant="primary">Import your first tournament</ImportButton>
             </div>
           )}
         </section>

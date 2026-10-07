@@ -418,3 +418,8 @@
 .sc-picker-list button.on { background: var(--sc-accent-soft); }
 .sc-map-slot { font-family: var(--sc-mono); font-size: 0.6rem; font-weight: 800; letter-spacing: 0.12em; color: var(--sc-accent); }
 .sc-map:disabled:not(.taken) { opacity: 0.55; }
+
+/* import call-to-action when imports are off: visible, greyed out */
+.sc-disabled { opacity: 0.45; cursor: not-allowed; }
+.sc-btn.sc-disabled { border-style: dashed; background: transparent !important; color: var(--sc-dim) !important; border-color: var(--sc-line2) !important; }
+.sc-topnav a.sc-disabled { text-decoration: line-through; text-decoration-color: var(--sc-line2); }

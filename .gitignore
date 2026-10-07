@@ -9,3 +9,5 @@ node_modules/
 .next/
 *.tsbuildinfo
 backups/
+
+.vercel

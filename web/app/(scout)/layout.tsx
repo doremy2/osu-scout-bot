@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { importsPolicy, scoutGet } from "@/lib/scout";
 import type { TournamentListItem } from "@/lib/scoutTypes";
+import { ImportButton } from "@/components/scout/ui";
 import "../scout.css";
 
 async function siteMeta(): Promise<string> {
@@ -31,13 +32,13 @@ export default async function ScoutLayout({ children }: { children: ReactNode })
             <Link href="/">Home</Link>
             <Link href="/tournaments">Tournaments</Link>
             <Link href="/methodology">Methodology</Link>
-            {imports !== "off" && <Link href="/import">Import</Link>}
+            <ImportButton policy={imports} variant="nav">Import</ImportButton>
           </nav>
         </div>
       </header>
       <main className="sc-wrap sc-main">{children}</main>
       <footer className="sc-footer sc-wrap">
-        BETA · RATINGS ARE STILL BEING TUNED{imports !== "off" && <> · <Link href="/import" style={{ color: "var(--sc-accent)" }}>ADD A TOURNAMENT</Link></>}<br />
+        BETA · RATINGS ARE STILL BEING TUNED{imports === "off" ? " · IMPORTS CURRENTLY RUN LOCALLY" : <> · <Link href="/import" style={{ color: "var(--sc-accent)" }}>ADD A TOURNAMENT</Link></>}<br />
         RATINGS ARE CALCULATED BY THE SCOUT ANALYTICS ENGINE FROM OSU! MULTIPLAYER LOBBY DATA · NOT AFFILIATED WITH OSU!
       </footer>
     </div>
