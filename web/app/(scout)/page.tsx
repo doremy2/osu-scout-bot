@@ -39,7 +39,7 @@ export default async function Landing() {
               ? "Imports currently run locally, so new tournaments are added by the site owner for now."
               : imports === "token"
                 ? "The best way to help is to add more tournaments: the more data the model sees, the better it gets. Imports need an invite code, so ask for one."
-                : "The best way to help is to add more tournaments: the more data the model sees, the better it gets."}
+                : "The best way to help is to add more tournaments: anyone can paste a tournament's Google Sheet and have it rated. The more data the model sees, the better it gets."}
           </p>
           <ImportButton policy={imports} variant="primary">Add a tournament</ImportButton>
         </section>

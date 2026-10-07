@@ -42,6 +42,30 @@ def upsert_tournament(conn: sqlite3.Connection, slug: str, name: str | None = No
     return cur.lastrowid
 
 
+def delete_tournament(conn: sqlite3.Connection, slug: str) -> bool:
+    """Remove a tournament and everything that hangs off it (explicitly, so it works with or without FK enforcement)."""
+    t = get_tournament(conn, slug)
+    if t is None:
+        return False
+    tid = t["id"]
+    m = "(SELECT id FROM tournament_matches WHERE tournament_id = ?)"
+    g = f"(SELECT id FROM match_games WHERE match_id IN {m})"
+    run_batch(conn, [
+        (f"DELETE FROM game_scores WHERE game_id IN {g}", (tid,)),
+        (f"DELETE FROM match_games WHERE match_id IN {m}", (tid,)),
+        ("UPDATE tournament_matches SET team_red_id = NULL, team_blue_id = NULL WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM team_memberships WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM tournament_teams WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM tournament_players WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM tournament_sources WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM mappool WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM pool_slots WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM tournament_matches WHERE tournament_id = ?", (tid,)),
+        ("DELETE FROM tournaments WHERE id = ?", (tid,)),
+    ])
+    return True
+
+
 def get_tournament(conn: sqlite3.Connection, slug: str) -> sqlite3.Row | None:
     return conn.execute("SELECT * FROM tournaments WHERE slug = ?", (slug,)).fetchone()
 

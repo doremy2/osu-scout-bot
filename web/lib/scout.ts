@@ -11,12 +11,14 @@ export function scoutApiUrl(path: string): URL {
   return new URL(`api${path.startsWith("/") ? path : `/${path}`}`, base);
 }
 
-/** Who may start imports on this deployment: "open" (local), "token" (admin token) or "off" (read-only, e.g. Vercel). */
-export async function importsPolicy(): Promise<"open" | "token" | "off"> {
+/** Who may start imports: "open" (local), "public" (anyone, within limits), "token" (invite code) or "off" (read-only). */
+export type ImportsPolicy = "open" | "public" | "token" | "off";
+
+export async function importsPolicy(): Promise<ImportsPolicy> {
   try {
     const res = await fetch(scoutApiUrl("/health"), { cache: "no-store" });
     const body = await res.json();
-    return body.imports === "off" || body.imports === "token" ? body.imports : "open";
+    return ["off", "token", "public"].includes(body.imports) ? body.imports : "open";
   } catch {
     return "open";
   }

@@ -44,6 +44,8 @@ class ImportRequest:
     def validate(self) -> None:
         if not self.name.strip():
             raise ValueError("Tournament name is required")
+        if len(self.name) > 80 or len(self.acronym) > 12 or len(self.slug) > 48:
+            raise ValueError("Name (80), acronym (12) and slug (48) are limited in length")
         if not SLUG_RE.match(self.slug):
             raise ValueError("Slug may only contain lowercase letters, numbers and dashes (e.g. 4wc-2026)")
         if "docs.google.com/spreadsheets" not in self.sheet_url:

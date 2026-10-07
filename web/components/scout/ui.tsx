@@ -108,7 +108,7 @@ export function MatchLine({ match, tournament }: { match: MatchItem; tournament:
 /** The "import a tournament" call to action. When imports are switched off (read-only public deployment) it stays
  *  visible but greyed out, explains why on hover, and links to /import which says the same in full. */
 export function ImportButton({ policy, children, variant = "button" }: {
-  policy: "open" | "token" | "off"; children: ReactNode; variant?: "button" | "primary" | "nav";
+  policy: "open" | "public" | "token" | "off"; children: ReactNode; variant?: "button" | "primary" | "nav";
 }) {
   const off = policy === "off";
   const base = variant === "nav" ? "" : `sc-btn${variant === "primary" ? " sc-btn-primary" : ""}`;

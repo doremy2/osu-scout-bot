@@ -10,7 +10,7 @@ import hmac
 import sqlite3
 from pathlib import Path
 
-from fastapi import FastAPI, Header, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -20,7 +20,8 @@ from .analytics.draft import DraftConfig, draft_advice, list_sides, round_pools
 from .analytics.ratings import RatingConfig
 from .rounds import ROUNDS
 from .config import settings
-from .db import connect, writable_copy
+from . import limits
+from .db import connect, repo, writable_copy
 from .formats import FORMATS
 from .importer import ImportRequest, JobRegistry
 
@@ -45,9 +46,13 @@ class ImportBody(BaseModel):
 
 
 def import_policy(admin_token: str, mode: str) -> str:
-    """"off" | "token" | "open" - who may start an import."""
+    """"off" | "token" | "public" | "open" - who may start an import.
+    token = invite code required; public = anyone, within limits (the admin token is then the owner key);
+    open = anyone, no limits (local use)."""
     if mode == "off":
         return "off"
+    if mode == "public":
+        return "public"
     return "token" if admin_token else "open"
 
 
@@ -67,11 +72,16 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     app.state.jobs = jobs
     mode = "inline" if threaded_imports is False else (import_mode or settings.import_mode or ("step" if settings.turso_url else "thread"))
 
-    def require_import_access(x_admin_token: str | None) -> None:
+    def is_admin(x_admin_token: str | None) -> bool:
+        return bool(token and x_admin_token and hmac.compare_digest(x_admin_token.encode(), token.encode()))
+
+    def require_import_access(x_admin_token: str | None) -> bool:
+        """Raises unless this request may import. Returns True when it carries the owner's token."""
         if policy == "off":
             raise HTTPException(403, "Importing is disabled on this server.")
-        if policy == "token" and not (x_admin_token and hmac.compare_digest(x_admin_token.encode(), token.encode())):
+        if policy == "token" and not is_admin(x_admin_token):
             raise HTTPException(401, "Imports need the admin token.")
+        return is_admin(x_admin_token)
 
     def db() -> sqlite3.Connection:
         return connect(db_path)
@@ -120,8 +130,8 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
 
     # ---- imports ------------------------------------------------------------
     @app.post("/api/imports", status_code=202)
-    def start_import(body: ImportBody, x_admin_token: str | None = Header(default=None)):
-        require_import_access(x_admin_token)
+    def start_import(body: ImportBody, request: Request, x_admin_token: str | None = Header(default=None)):
+        admin = require_import_access(x_admin_token)
         if jobs.any_running():
             raise HTTPException(429, "Another import is already running. Try again when it has finished.")
         req = ImportRequest(name=body.name.strip(), acronym=body.acronym.strip(), slug=body.slug.strip().lower(),
@@ -135,9 +145,24 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         conn = db()
         try:
             existing = conn.execute("SELECT 1 FROM tournaments WHERE slug = ?", (req.slug,)).fetchone() is not None
+            visitor = None
+            if policy == "public" and not admin:
+                if existing:     # strangers may add tournaments, not rewrite existing ones
+                    raise HTTPException(409, "That slug is already taken. Choose a different one.")
+                visitor = limits.client_key((request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+                                            or (request.client.host if request.client else None))
+                reason = limits.check(conn, visitor)
+                if reason:
+                    raise HTTPException(429, reason)
         finally:
             conn.close()
         job = jobs.start(req, client_factory=client_factory, mode=mode)
+        if visitor and job.phase == "queued":
+            conn = db()
+            try:
+                limits.record(conn, visitor, req.slug)
+            finally:
+                conn.close()
         return {**job.public(), "existing": existing, "mode": mode}
 
     @app.post("/api/imports/{job_id}/step")
@@ -148,6 +173,20 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
             raise HTTPException(404, "Unknown import job")
         job = jobs.step(job_id, client_factory) if mode == "step" else jobs.get(job_id)
         return {**job.public(), "mode": mode}
+
+    @app.delete("/api/tournaments/{slug}")
+    def delete_tournament(slug: str, x_admin_token: str | None = Header(default=None)):
+        """Owner-only moderation: remove a tournament (e.g. one imported by mistake or abusively)."""
+        if not is_admin(x_admin_token):
+            raise HTTPException(401, "Only the site owner can delete tournaments.")
+        conn = db()
+        try:
+            if not repo.delete_tournament(conn, slug):
+                raise HTTPException(404, f"Unknown tournament '{slug}'")
+        finally:
+            conn.close()
+        service.invalidate(slug)
+        return {"deleted": slug}
 
     @app.get("/api/imports/{job_id}")
     def import_status(job_id: str):

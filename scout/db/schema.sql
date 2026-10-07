@@ -145,6 +145,15 @@ CREATE TABLE IF NOT EXISTS import_jobs (
     updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+-- who started which import and when (hashed visitor id), for the public-import budget
+CREATE TABLE IF NOT EXISTS import_log (
+    id          INTEGER PRIMARY KEY,
+    client      TEXT NOT NULL,
+    slug        TEXT NOT NULL,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS ix_import_log_time ON import_log(created_at);
+
 -- one row, rewritten at the end of every batch script, so a script that silently stopped halfway is detectable
 CREATE TABLE IF NOT EXISTS _batch_marker (id INTEGER PRIMARY KEY, token TEXT);
 

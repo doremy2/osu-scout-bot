@@ -112,7 +112,7 @@ Vercel functions have no persistent disk and cannot run background work, so the 
 | Mode | When | Data | Imports |
 |---|---|---|---|
 | **Snapshot** | `TURSO_DATABASE_URL` not set | read-only `deploy/scout.db` bundled with the deploy | off (the Import button is greyed out) |
-| **Hosted database** | `TURSO_DATABASE_URL` set | your Turso database (SQLite-compatible) | live, **invite code required** |
+| **Hosted database** | `TURSO_DATABASE_URL` set | your Turso database (SQLite-compatible) | live, **open to anyone** (with limits) |
 
 ### Turn on live imports
 
@@ -134,17 +134,27 @@ Vercel functions have no persistent disk and cannot run background work, so the 
    | `TURSO_DATABASE_URL` | the `libsql://...` URL |
    | `TURSO_AUTH_TOKEN` | the token from step 1 |
    | `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET` | your osu! OAuth app |
-   | `SCOUT_ADMIN_TOKEN` | the **invite code** people must enter to import (`openssl rand -hex 24`) |
+   | `SCOUT_ADMIN_TOKEN` | your **owner key** (`openssl rand -hex 24`): bypasses the limits, may re-import or delete tournaments |
+   | `SCOUT_IMPORTS_PER_VISITOR` / `SCOUT_IMPORTS_PER_DAY` | optional, defaults 2 and 20 (per 24 h) |
    | `SCOUT_MAX_MATCHES` | optional, default 300: refuse bigger sheets |
+   | `SCOUT_IMPORTS` | optional: `token` = invite-only (holders of the key), `off` = no web imports |
 
-4. **Redeploy** (`vercel deploy --prod`). The Import button becomes active and asks for the invite code.
+4. **Redeploy** (`vercel deploy --prod`). The Import button becomes active for everyone.
 
 How an import runs on Vercel: the browser starts a job (stored in the database) and then keeps asking the server to do the
 next ~40-second slice of work (scan the sheet, fetch lobbies at 1 per second, calculate ratings), showing live progress.
 Only one import runs at a time. If a request drops the browser simply asks again; the job continues where it stopped.
 
-Give the invite code only to people you trust: every import spends your osu! API quota and writes to your database.
-Rotate it any time by changing `SCOUT_ADMIN_TOKEN` and redeploying.
+**Because anyone can import, the site protects itself:**
+- Each visitor (a salted hash of their IP, never the address itself) can start 2 imports per day, and the whole site 20.
+- Only **new** tournaments: a visitor can't re-import or overwrite an existing slug (the owner key can).
+- One import at a time, Google-Sheets links only, at most `SCOUT_MAX_MATCHES` lobbies, length limits on names.
+- Every import spends your osu! API quota (about one request per match), which is why the daily budget exists.
+
+**Moderation** (needs `SCOUT_ADMIN_TOKEN`): remove a bad tournament with
+`curl -X DELETE https://<your-site>/api/scout/tournaments/<slug> -H "X-Admin-Token: <key>"`.
+To re-import an existing tournament (e.g. the sheet gained new matches), tick "Site owner?" on the Import page and enter the key.
+Switch to invite-only any time with `SCOUT_IMPORTS=token` (the key is then the invite code), or off with `SCOUT_IMPORTS=off`.
 
 ### Snapshot mode (no database)
 

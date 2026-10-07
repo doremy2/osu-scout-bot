@@ -530,3 +530,69 @@ def test_seeding_copies_a_database_into_a_libsql_target(team_db, tmp_path):
     assert [t["slug"] for t in dst_report["teams"]] == [t["slug"] for t in src_report["teams"]]
     copy_database(path, dst, progress=lambda *_: None)          # re-running replaces rows instead of duplicating them
     assert dst.execute("SELECT COUNT(*) FROM game_scores").fetchone()[0] == counts["game_scores"]
+
+
+# ---------- public imports: anyone may add tournaments, within limits ------------------------------------
+def _public(tmp_path, monkeypatch, **kw):
+    import dataclasses
+
+    from scout import limits
+    monkeypatch.setattr(limits, "settings", dataclasses.replace(limits.settings, public_imports_per_visitor=2,
+                                                                 public_imports_per_day=3))
+    return TestClient(create_app(tmp_path / "pub.db", client_factory=lambda: ft.FakeClient({}), import_mode="step",
+                                 imports_mode="public", **kw))
+
+
+def test_public_imports_need_no_code_but_are_rate_limited(tmp_path, monkeypatch):
+    c = _public(tmp_path, monkeypatch, admin_token="owner")
+    assert c.get("/api/health").json()["imports"] == "public"
+    me = {"x-forwarded-for": "203.0.113.7"}
+    a = c.post("/api/imports", json={**IMPORT_BODY, "slug": "one"}, headers=me)
+    assert a.status_code == 202 and a.json()["mode"] == "step"
+    c.app.state.jobs.store.save(dataclasses_replace_phase(c, a.json()["id"], "done"))
+    assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "two"}, headers=me).status_code == 202
+    c.app.state.jobs.store.save(dataclasses_replace_phase(c, c.app.state.jobs.store.running().id, "done"))
+    third = c.post("/api/imports", json={**IMPORT_BODY, "slug": "three"}, headers=me)
+    assert third.status_code == 429 and "per day" in third.json()["detail"]
+    # another visitor still gets in until the whole-site budget (3) is used
+    other = c.post("/api/imports", json={**IMPORT_BODY, "slug": "four"}, headers={"x-forwarded-for": "198.51.100.9"})
+    assert other.status_code == 202
+
+
+def dataclasses_replace_phase(client, job_id, phase):
+    job = client.app.state.jobs.store.get(job_id)
+    job.phase = phase
+    return job
+
+
+def test_public_visitors_cannot_overwrite_existing_tournaments(tmp_path, monkeypatch):
+    c = _public(tmp_path, monkeypatch, admin_token="owner")
+    conn = connect(tmp_path / "pub.db")
+    repo.upsert_tournament(conn, "taken", "Taken", fmt="1v1")
+    conn.close()
+    r = c.post("/api/imports", json={**IMPORT_BODY, "slug": "taken"})
+    assert r.status_code == 409 and "already taken" in r.json()["detail"]
+    owner = c.post("/api/imports", json={**IMPORT_BODY, "slug": "taken"}, headers={"X-Admin-Token": "owner"})
+    assert owner.status_code == 202 and owner.json()["existing"] is True       # the owner may update it
+
+
+def test_only_the_owner_can_delete_tournaments(tmp_path, monkeypatch):
+    c = _public(tmp_path, monkeypatch, admin_token="owner")
+    conn = connect(tmp_path / "pub.db")
+    repo.upsert_tournament(conn, "junk", "Junk", fmt="1v1")
+    conn.close()
+    assert c.delete("/api/tournaments/junk").status_code == 401
+    assert c.delete("/api/tournaments/junk", headers={"X-Admin-Token": "wrong"}).status_code == 401
+    assert c.delete("/api/tournaments/junk", headers={"X-Admin-Token": "owner"}).json() == {"deleted": "junk"}
+    assert c.delete("/api/tournaments/junk", headers={"X-Admin-Token": "owner"}).status_code == 404
+
+
+def test_deleting_a_tournament_removes_all_of_its_data(team_db):
+    path, conn = team_db
+    tid = repo.get_tournament(conn, "fake")["id"]
+    assert conn.execute("SELECT COUNT(*) FROM game_scores").fetchone()[0] > 0
+    assert repo.delete_tournament(conn, "fake") is True
+    for table in ("tournaments", "tournament_matches", "match_games", "game_scores", "tournament_teams", "team_memberships"):
+        assert conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] == 0, table
+    assert repo.delete_tournament(conn, "fake") is False
+    assert tid

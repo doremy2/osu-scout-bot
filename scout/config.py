@@ -34,6 +34,7 @@ class Settings:
     # Who may start imports (they spend osu! API quota and write to the DB):
     #   SCOUT_ADMIN_TOKEN set  -> imports need that token (X-Admin-Token header)
     #   SCOUT_IMPORTS=off      -> imports disabled entirely
+    #   SCOUT_IMPORTS=public   -> anyone may import NEW tournaments, within limits; the admin token (if set) is the owner key
     #   neither                -> open (fine for local use only)
     admin_token: str = os.environ.get("SCOUT_ADMIN_TOKEN", "")
     imports_mode: str = os.environ.get("SCOUT_IMPORTS", "auto").lower()
@@ -49,6 +50,9 @@ class Settings:
     import_mode: str = os.environ.get("SCOUT_IMPORT_MODE", "").lower()
     step_budget: float = float(os.environ.get("SCOUT_STEP_BUDGET", "40"))      # seconds of work per step request
     max_matches: int = int(os.environ.get("SCOUT_MAX_MATCHES", "300"))         # refuse sheets with more lobbies than this
+    # Budget for imports anyone may start (SCOUT_IMPORTS=public)
+    public_imports_per_visitor: int = int(os.environ.get("SCOUT_IMPORTS_PER_VISITOR", "2"))   # per visitor per 24 h
+    public_imports_per_day: int = int(os.environ.get("SCOUT_IMPORTS_PER_DAY", "20"))          # whole site per 24 h
     host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
     port: int = int(os.environ.get("SCOUT_PORT", "8001"))
     allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
