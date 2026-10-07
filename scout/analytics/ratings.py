@@ -36,8 +36,12 @@ from .dataset import Dataset, ScoreRow
 class RatingConfig:
     # --- rating scale -----------------------------------------------------
     base: float = 7.0
-    scale: float = 1.5
+    scale: float = 1.5               # rating points per standard deviation above the field average
+    scale_below: float = 2.5         # ...and below it: bad performances fall faster than good ones rise
+    min_rating: float = 1.0
     z_clip: float = 3.0
+    low_score_start: float = 0.5     # a score this many σ below the field starts being punished extra...
+    low_score_amp: float = 1.0       # ...every further σ below that counts (1 + amp) times; 0 disables
     # --- normalization ----------------------------------------------------
     transform: str = "sqrt"          # raw | sqrt | log: tames the long right tail of scorev2 scores
     std_prior_n: float = 3.0         # tiny reference groups borrow this many pseudo-samples of pooled std
@@ -46,10 +50,12 @@ class RatingConfig:
     perf_k: float = 3.0              # light shrinkage so one lucky map isn't a 10.0
     # --- tournament rating ------------------------------------------------
     confidence_k: float | None = None   # conf = n / (n + k). None = auto: k_noise + workload term
+    below_average_k_factor: float = 0.0  # players below the average participant are shrunk toward it this much less (0 = not at all)
     confidence_workload_weight: float = 1.0  # auto k adds this × (average maps a participant plays)
     field_strength_weight: float = 0.5  # credit for playing against the (stronger) bracket field
     use_round_weights: bool = True
     round_weights: dict | None = None   # override rounds.py weights, e.g. {"GF": 1.3}
+    rank_qualified_first: bool = True   # players who reached a bracket round rank above those who did not
     # --- eligibility ------------------------------------------------------
     slice_confidence_k: float = 5.0     # confidence of a single mod/round slice: n / (n + k)
     min_slice_confidence: float = 0.5   # mod/round awards need at least this; below it the UI says 'low confidence'
@@ -144,6 +150,13 @@ def _group_key(s: ScoreRow, cfg: RatingConfig):
     return ("game", s.game_id)
 
 
+def _punish_low(z: float, cfg: RatingConfig) -> float:
+    """Poor maps hurt more than good maps help: below -low_score_start σ, extra σ count (1+amp)x."""
+    if z >= -cfg.low_score_start:
+        return z
+    return z - cfg.low_score_amp * (-z - cfg.low_score_start)
+
+
 def normalize_scores(ds: Dataset, cfg: RatingConfig) -> dict[tuple[int, int], float]:
     """(game_id, user_id) -> z, using the reference groups described in the module docstring."""
     groups: dict[tuple, list[tuple[ScoreRow, float]]] = defaultdict(list)
@@ -183,7 +196,8 @@ def normalize_scores(ds: Dataset, cfg: RatingConfig) -> dict[tuple[int, int], fl
         k0 = cfg.std_prior_n
         std = math.sqrt(((n - 1) * var + k0 * prior_var) / ((n - 1) + k0))
         for s, v in rows:
-            z[(s.game_id, s.user_id)] = 0.0 if std == 0 else max(-cfg.z_clip, min(cfg.z_clip, (v - mean) / std))
+            zi = 0.0 if std == 0 else max(-cfg.z_clip, min(cfg.z_clip, (v - mean) / std))
+            z[(s.game_id, s.user_id)] = _punish_low(zi, cfg)
     return z
 
 
@@ -290,7 +304,8 @@ def compute_player_stats(ds: Dataset, cfg: RatingConfig | None = None):
 
 
 def to_rating(z: float, cfg: RatingConfig) -> float:
-    return round(cfg.base + cfg.scale * z, 2)
+    r = cfg.base + (cfg.scale if z >= 0 else cfg.scale_below) * z
+    return round(max(cfg.min_rating, r), 2)
 
 
 # ---- tournament rating model ---------------------------------------------------
@@ -336,20 +351,23 @@ class ModelParams:
     prior: float        # z of the average participant (shrinkage target)
     k_noise: float = 0.0       # statistical part: within-player noise / between-player skill spread
     k_workload: float = 0.0    # body-of-work part: a typical participant's map count
+    below_factor: float = 1.0  # multiplies k when the observed performance is below the prior
 
 
 def resolve_model(stats: dict[int, PlayerStats], cfg: RatingConfig) -> ModelParams:
     obs = [p.adj.z_mean() for p in stats.values() if p.adj.n]
     prior = sum(obs) / len(obs) if obs else 0.0
     if cfg.confidence_k is not None:
-        return ModelParams(k=cfg.confidence_k, prior=prior)
+        return ModelParams(k=cfg.confidence_k, prior=prior, below_factor=cfg.below_average_k_factor)
     noise = estimate_confidence_k(stats)
     workload = cfg.confidence_workload_weight * (sum(p.overall.n for p in stats.values()) / max(1, len(stats)))
-    return ModelParams(k=noise + workload, prior=prior, k_noise=noise, k_workload=workload)
+    return ModelParams(k=noise + workload, prior=prior, k_noise=noise, k_workload=workload,
+                       below_factor=cfg.below_average_k_factor)
 
 
 def tournament_z(p: PlayerStats, m: ModelParams) -> tuple[float, float, float]:
     """(Z_T, confidence, observed) for the Tournament Rating."""
     obs = p.adj.z_mean()
     conf = p.adj.confidence(m.k)
-    return conf * obs + (1 - conf) * m.prior, conf, obs
+    use = p.adj.confidence(m.k * m.below_factor) if obs < m.prior else conf   # a poor body of work is not rescued by a thin sample
+    return use * obs + (1 - use) * m.prior, conf, obs

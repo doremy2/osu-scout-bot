@@ -72,6 +72,7 @@ export type PlayerSummary = {
   deepest_round_name: string | null;
   qualifier: { rating: number; maps: number; rank: number; rank_of: number } | null;
   maps_played: number;
+  qualified: boolean | null;
   consistency_sigma: number | null;
   mod_ratings: Record<string, RankedRating>;
   round_ratings: Record<string, RankedRating>;
@@ -242,6 +243,7 @@ export type LeaderboardRow = {
   extra?: number;
   confidence?: number;
   low_confidence?: boolean;
+  qualified?: boolean | null;
   tournament_rating?: number;
   performance_rating?: number;
   deepest_round_name?: string | null;
@@ -254,6 +256,7 @@ export type LeaderboardData = {
   key: string | null;
   total: number;
   note: string | null;
+  qualified_cutoff: number | null; // number of players above the qualification line (tournament mode)
   columns: { value_label: string; extra_label?: string };
   rows: LeaderboardRow[];
   options: { rounds: { key: string; name: string }[]; mods: string[] };

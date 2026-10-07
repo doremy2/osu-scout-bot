@@ -276,3 +276,29 @@ def test_failed_import_leaves_no_ghost_tournament(tmp_path, monkeypatch):
                               client_factory=lambda: ft.FakeClient({}), threaded=False)
     assert job.phase == "error" and "No osu! multiplayer links" in job.error
     assert repo.get_tournament(connect(db), "ghost") is None
+
+
+def test_qualified_players_rank_above_eliminated_ones(tmp_path):
+    from scout.analytics.report import leaderboard
+    # qualifier: players 3 and 4 clearly out-score 1 and 2 on every map
+    qual = [_game(i, 100 + i, i, [_score(1, 300000), _score(2, 280000), _score(3, 900000), _score(4, 850000)])
+            for i in range(1, 9)]
+    # bracket: only players 1 and 2 qualified
+    semi = [_game(50 + i, 200 + i, i, [_score(1, 500000 + i * 1000), _score(2, 480000)]) for i in range(1, 5)]
+    conn = connect(tmp_path / "q.db")
+    tid = repo.upsert_tournament(conn, "t", "T", fmt="1v1")
+    src = tmp_path / "links.txt"
+    src.write_text("Qualifiers\nhttps://osu.ppy.sh/community/matches/10\n"
+                   "Semifinals\nhttps://osu.ppy.sh/community/matches/11\n")
+    ingest.discover(conn, tid, str(src))
+    ingest.fetch(conn, tid, ft.FakeClient({10: _payload(10, "X: (Qualifiers) vs (Lobby A)", qual),
+                                           11: _payload(11, "X: (p1) vs (p2)", semi)}), progress=lambda *_: None)
+    rep = build_report(conn, "t")
+    names = [r["username"] for r in rep["rankings"]]
+    assert set(names[:2]) == {"p1", "p2"} and set(names[2:]) == {"p3", "p4"}   # the line, whatever the ratings
+    assert [r["qualified"] for r in rep["rankings"]] == [True, True, False, False]
+    perf = {r["username"]: r["performance_rating"] for r in rep["rankings"]}
+    assert perf["p3"] > perf["p1"]                                              # eliminated players can still out-perform
+    assert leaderboard(rep)["qualified_cutoff"] == 2
+    assert leaderboard(rep, "performance")["qualified_cutoff"] is None          # pure performance has no line
+    assert [r["rank"] for r in rep["rankings"]] == [1, 2, 3, 4]

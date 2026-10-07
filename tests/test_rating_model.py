@@ -179,3 +179,4 @@ def test_tiny_bracket_groups_keep_the_margin_of_victory():
     win_close = z[(f.scores[-4].game_id, 700)]
     win_big = z[(f.scores[-2].game_id, 710)]
     assert 0 < win_close < win_big
+

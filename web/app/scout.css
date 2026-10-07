@@ -288,3 +288,7 @@
 .sc-breakdown .sc-stat-value { display: flex; align-items: baseline; gap: 8px; }
 .sc-breakdown small { color: var(--sc-dim); font-size: 0.9rem; font-weight: 600; }
 .sc-explain { color: var(--sc-dim); font-size: 0.85rem; margin: 12px 0 0; }
+
+.sc-cutline td { padding: 0; border-bottom: 0; }
+.sc-cutline span { display: block; text-align: center; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sc-warn); border-top: 2px dashed var(--sc-warn); padding: 6px 0 4px; margin-top: 4px; }
+.sc-row-out td { opacity: 0.8; }

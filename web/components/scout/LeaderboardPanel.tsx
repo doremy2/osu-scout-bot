@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { scoutClient } from "@/lib/scout";
 import { fmtRecord, tournamentHref } from "@/lib/scoutFormat";
 import type { LeaderboardData, LeaderboardMode, TeamListItem } from "@/lib/scoutTypes";
@@ -135,8 +135,15 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
                 </tr>
               </thead>
               <tbody>
-                {data.rows.map((r) => (
-                  <tr key={r.user_id} className="sc-row-link" onClick={() => open(r.slug)}>
+                {data.rows.map((r, i) => (
+                  <Fragment key={r.user_id}>
+                  {data.mode === "tournament" && r.qualified === false &&
+                    (i === 0 ? r.rank === (data.qualified_cutoff ?? -1) + 1 : data.rows[i - 1].qualified === true) && (
+                    <tr className="sc-cutline" aria-label="Qualification line">
+                      <td colSpan={9}><span>Did not qualify ↓</span></td>
+                    </tr>
+                  )}
+                  <tr className={`sc-row-link${data.mode === "tournament" && r.qualified === false ? " sc-row-out" : ""}`} onClick={() => open(r.slug)}>
                     <td className={`sc-num sc-rank sc-rank-${r.rank <= 3 ? r.rank : "n"}`}>{r.rank}</td>
                     <td>
                       <Link className="sc-player" href={tournamentHref(slug, "players", r.slug)} onClick={(e) => e.stopPropagation()}>
@@ -162,6 +169,7 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
                     <td className="sc-num sc-hide-sm"><Confidence value={r.confidence} low={r.low_confidence} /></td>
                     {!compact && <td className="sc-hide-sm sc-dim">{r.deepest_round_name ?? ""}</td>}
                   </tr>
+                  </Fragment>
                 ))}
                 {data.rows.length === 0 && !loading && (
                   <tr><td colSpan={9} className="sc-empty">No players match.</td></tr>

@@ -93,7 +93,15 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
 
     # ---- rankings -------------------------------------------------------
     t_z = {uid: tournament_z(p, model) for uid, p in stats.items()}          # (Z_T, confidence, observed)
-    ranked = sorted(stats.values(), key=lambda p: t_z[p.user_id][0], reverse=True)
+    def reached_bracket(p: PlayerStats) -> bool:
+        return p.deepest_round is not None and is_versus_round(p.deepest_round)
+
+    has_qualifiers = any(not is_versus_round(s.round) for s in ds.scores if s.round)
+    n_qualified = sum(reached_bracket(p) for p in stats.values())
+    split_qualified = cfg.rank_qualified_first and has_qualifiers and 0 < n_qualified < len(stats)
+    # Tournament ranking: qualified players first (if the tournament had qualifiers), then by rating.
+    ranked = sorted(stats.values(),
+                    key=lambda p: ((not reached_bracket(p)) if split_qualified else 0, -t_z[p.user_id][0]))
     rank_of = {p.user_id: i for i, p in enumerate(ranked, 1)}
     perf_ranked = sorted(stats.values(), key=lambda p: p.overall.z_adj(k), reverse=True)
     perf_rank_of = {p.user_id: i for i, p in enumerate(perf_ranked, 1)}
@@ -122,6 +130,7 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
         sigma = p.overall.z_std()
         return {
             "rank": rank_of[p.user_id],
+            "qualified": reached_bracket(p) if split_qualified else None,
             "user_id": p.user_id,
             "username": name(p.user_id),
             "slug": slugs[p.user_id],
@@ -173,7 +182,7 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
             "avatar_url": avatar(best.user_id), "value": value_fn(best)}})
 
     elig = [p for p in stats.values() if p.overall.n >= acfg.min_maps_overall]
-    award("mvp", "Tournament MVP", elig, lambda p: t_z[p.user_id][0],
+    award("mvp", "Tournament MVP", [p for p in elig if not split_qualified or reached_bracket(p)] or elig, lambda p: t_z[p.user_id][0],
           lambda p: to_rating(t_z[p.user_id][0], cfg), f">= {acfg.min_maps_overall} maps, highest Tournament Rating")
     for m in mods_present:
         if m == "TB":
@@ -430,6 +439,8 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
                     "scores": len(ds.scores), "players": len(stats), "teams": len(team_pages),
                     "beatmaps": len(ds.beatmaps), "empty_matches": ds.empty_matches,
                     "mods": mods_present, "rounds": rounds_present,
+                    "qualified_split": {"enabled": split_qualified, "qualified": n_qualified if split_qualified else None,
+                                        "eliminated": len(stats) - n_qualified if split_qualified else None},
                     "round_names": {r: round_name(r) for r in rounds_present}},
         "config": {"rating": cfg.__dict__, "awards": acfg.__dict__,
                    "model": {"confidence_k": round(model.k, 2), "k_noise": round(model.k_noise, 2),
@@ -498,7 +509,12 @@ def leaderboard(rep: dict, mode: str = "tournament", key: str | None = None,
     note = f"Players need at least {awards_min} maps." if mode == "consistency" else None
     if mode == "performance":
         note = "Performance Rating is how strong the scores were when the player played, regardless of how many maps or rounds that was."
-    return {"mode": mode, "key": key, "total": total, "columns": columns, "note": note, "rows": rows}
+    split = rep["summary"]["qualified_split"]
+    cutoff = split["qualified"] if split["enabled"] and mode == "tournament" else None   # rows before this index qualified
+    if cutoff is not None:
+        note = "Players who reached the bracket rank above players who did not qualify."
+    return {"mode": mode, "key": key, "total": total, "columns": columns, "note": note,
+            "qualified_cutoff": cutoff, "rows": rows}
 
 
 def _lb_row(r: dict, rating: float, maps: int, full: dict | None = None) -> dict:
@@ -507,7 +523,8 @@ def _lb_row(r: dict, rating: float, maps: int, full: dict | None = None) -> dict
            "rating": rating, "maps": maps}
     if full:   # whole-tournament rows also carry the explainers
         row.update(tournament_rating=full["rating"], performance_rating=full["performance_rating"],
-                   confidence=full["confidence"], deepest_round_name=full["deepest_round_name"])
+                   confidence=full["confidence"], deepest_round_name=full["deepest_round_name"],
+                   qualified=full.get("qualified"))
     return row
 
 
