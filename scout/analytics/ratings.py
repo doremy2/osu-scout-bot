@@ -345,6 +345,16 @@ def estimate_confidence_k(stats: dict[int, PlayerStats]) -> float:
     return max(1.0, min(60.0, sigma2 / tau2))
 
 
+def within_sigma(stats: dict[int, PlayerStats]) -> float:
+    """Typical per-map noise (σ of a player's own z around their mean), used to turn skill gaps into win odds."""
+    rows = [p.overall for p in stats.values() if p.overall.n >= 2]
+    if not rows:
+        return 1.0
+    n_tot = sum(r.n for r in rows)
+    ss = sum(sum((z - sum(r.zs) / r.n) ** 2 for z in r.zs) for r in rows)
+    return max(0.3, math.sqrt(ss / max(1, n_tot - len(rows))))
+
+
 @dataclass
 class ModelParams:
     k: float            # confidence prior strength actually used

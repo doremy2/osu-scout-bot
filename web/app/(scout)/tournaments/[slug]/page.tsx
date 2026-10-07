@@ -49,10 +49,9 @@ export default async function OverviewPage({ params }: { params: Promise<{ slug:
         </Card>
       </div>
 
-      <Card title="Player leaderboard"
-            action={<Link className="sc-link" href={tournamentHref(slug, "leaderboards")}>Rounds, mods &amp; more →</Link>}>
+      <Card title="Player leaderboard">
         <LeaderboardPanel slug={slug} initial={board} pageSize={25} hasTeams={t.has_teams} compact
-                          viewAllHref={tournamentHref(slug, "players")} />
+                          viewAllHref={tournamentHref(slug, "leaderboards")} />
       </Card>
 
       <div className="sc-grid-2">

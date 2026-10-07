@@ -219,6 +219,14 @@ def test_api_tournament_pages(client):
     assert client.get("/api/tournaments/missing").status_code == 404
 
 
+def test_model_endpoint_exposes_live_constants(client):
+    m = client.get("/api/model", params={"slug": "fake"}).json()
+    assert m["rating"]["scale_below"] > m["rating"]["scale"] and m["rounds"][0]["code"] == "Q"
+    assert m["tournament"]["confidence_k"] > 0 and m["awards"]["min_maps_overall"] > 0
+    assert client.get("/api/model").json()["tournament"] is None
+    assert client.get("/api/model", params={"slug": "nope"}).status_code == 404
+
+
 def test_api_never_exposes_secrets(client):
     for path in ("/api/health", "/api/tournaments", "/api/tournaments/fake"):
         assert "secret" not in client.get(path).text.lower().replace("osu_credentials_configured", "")
@@ -343,3 +351,71 @@ def test_only_one_import_runs_at_a_time(tmp_path):
 def test_docs_are_hidden_by_default(tmp_path):
     c = _protected(tmp_path)
     assert c.get("/api/docs").status_code == 404 and c.get("/api/openapi.json").status_code == 404
+
+
+# ---------- draft simulator ------------------------------------------------------
+def test_match_win_probability_basics():
+    from scout.analytics.draft import match_win_probability, build_sequence, DraftConfig
+    assert abs(match_win_probability([0.5] * 9, 9) - 0.5) < 1e-9
+    assert match_win_probability([0.9] * 9, 9) > 0.99 and match_win_probability([0.1] * 9, 9) < 0.01
+    assert match_win_probability([1.0] * 5, 9) == 1.0
+    assert abs(match_win_probability([], 9, 0.5) - 0.5) < 1e-9
+    seq = build_sequence(DraftConfig(best_of=9, bans_per_side=2, first_ban="A", first_pick="B"), 20, True)
+    assert [x["side"] for x in seq[:4]] == ["A", "B", "A", "B"] and seq[4] == {"type": "pick", "side": "B"}
+    assert sum(x["type"] == "pick" for x in seq) == 8
+    # a small pool shrinks the number of picks instead of failing
+    assert sum(x["type"] == "pick" for x in build_sequence(DraftConfig(best_of=13), 10, False)) == 10 - 4
+
+
+def test_draft_api_runs_a_full_draft(client):
+    setup = client.get("/api/tournaments/fake/draft/setup").json()
+    assert setup["side_kind"] == "team" and len(setup["sides"]) == 4
+    rnd = max(setup["rounds"], key=lambda r: r["maps"])["round"]
+    a, b = setup["sides"][0]["slug"], setup["sides"][1]["slug"]
+    body = {"a": a, "b": b, "round": rnd, "bans_per_side": 1, "best_of": 5}
+    taken: list[int] = []
+    for _ in range(40):
+        d = client.post("/api/tournaments/fake/draft/advice", json={**body, "taken": taken}).json()
+        assert all(0 < m["p_a"] < 1 for m in d["maps"]) and 0 < d["match_win_a"] < 1
+        if d["done"]:
+            break
+        assert d["next"]["side"] in ("A", "B") and d["suggestions"]
+        taken.append(d["suggestions"][0]["beatmap_id"])          # follow the advice
+    assert d["done"] and len(taken) == len(d["sequence"]) == 2 + 4
+    assert [m["taken"]["type"] for m in sorted((m for m in d["maps"] if "taken" in m), key=lambda m: m["taken"]["order"])]         == ["ban", "ban", "pick", "pick", "pick", "pick"]
+    # swapping the sides mirrors the odds
+    r = client.post("/api/tournaments/fake/draft/advice", json={**body, "a": b, "b": a, "taken": []}).json()
+    first = client.post("/api/tournaments/fake/draft/advice", json={**body, "taken": []}).json()
+    m1 = {m["beatmap_id"]: m["p_a"] for m in first["maps"]}
+    assert all(abs(m["p_a"] + m1[m["beatmap_id"]] - 1) < 0.05 for m in r["maps"])
+    assert client.post("/api/tournaments/fake/draft/advice", json={**body, "b": a}).status_code == 422
+    assert client.post("/api/tournaments/fake/draft/advice", json={**body, "a": "nope"}).status_code == 404
+
+
+def test_draft_pool_includes_maps_nobody_has_played(team_db):
+    """The pool comes from the sheet's slot list, so unplayed maps (and rounds with no matches yet) still appear, in slot order."""
+    from scout.analytics.draft import pool_for_round, round_pools
+    from scout.analytics.report import build_analysis
+    path, conn = team_db
+    tid = repo.get_tournament(conn, "fake")["id"]
+    played = conn.execute("""SELECT DISTINCT g.beatmap_id FROM match_games g JOIN tournament_matches m ON m.id = g.match_id
+                             WHERE m.round = 'GS' AND g.beatmap_id < 9000 ORDER BY g.beatmap_id LIMIT 3""").fetchall()
+    ids = [r[0] for r in played]
+    slots = [
+        {"round": "GS", "slot": "NM1", "beatmap_id": ids[0], "beatmapset_id": None, "position": 0, "label": None, "star_rating": None},
+        {"round": "GS", "slot": "NM2", "beatmap_id": None, "beatmapset_id": 321, "position": 1,
+         "label": "Some Artist - Unplayed Song [Hard]", "star_rating": 6.5},
+        {"round": "GS", "slot": "HD1", "beatmap_id": ids[1], "beatmapset_id": None, "position": 2, "label": None, "star_rating": None},
+        {"round": "GS", "slot": "TB", "beatmap_id": ids[2], "beatmapset_id": None, "position": 3, "label": None, "star_rating": None},
+        {"round": "F", "slot": "NM1", "beatmap_id": None, "beatmapset_id": 1, "position": 0, "label": "A - B [C]", "star_rating": 5.0},
+        {"round": "F", "slot": "NM2", "beatmap_id": None, "beatmapset_id": 2, "position": 1, "label": "D - E [F]", "star_rating": 6.0},
+    ]
+    repo.save_pool_slots(conn, tid, slots)
+    an = build_analysis(conn, "fake")
+    pool = pool_for_round(an, "GS")
+    assert [m["slot"] for m in pool] == ["NM1", "NM2", "HD1", "TB"]
+    unplayed = pool[1]
+    assert (unplayed["artist"], unplayed["title"], unplayed["version"]) == ("Some Artist", "Unplayed Song", "Hard")
+    assert unplayed["plays"] == 0 and unplayed["beatmap_id"] < 0 and unplayed["beatmapset_id"] == 321
+    assert pool[3]["mod"] == "TB"
+    assert any(r["round"] == "F" and r["maps"] == 2 for r in round_pools(an))     # a round nobody has played yet

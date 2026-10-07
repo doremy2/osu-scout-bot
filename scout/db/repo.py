@@ -183,6 +183,22 @@ def save_parsed_match(conn: sqlite3.Connection, match_row_id: int, pm: ParsedMat
                 )
 
 
+# --- pool slots (display order) -----------------------------------------------
+def save_pool_slots(conn: sqlite3.Connection, tournament_id: int, slots: list[dict]) -> int:
+    """Replace the tournament's slot list. Kept only if the sheet actually yielded some."""
+    if not slots:
+        return 0
+    conn.execute("DELETE FROM pool_slots WHERE tournament_id = ?", (tournament_id,))
+    conn.executemany(
+        "INSERT OR REPLACE INTO pool_slots (tournament_id, round, slot, beatmap_id, beatmapset_id, position, label, star_rating) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [(tournament_id, s["round"], s["slot"], s["beatmap_id"], s.get("beatmapset_id"), s["position"], s.get("label"),
+          s.get("star_rating")) for s in slots],
+    )
+    conn.commit()
+    return len(slots)
+
+
 # --- mappool --------------------------------------------------------------
 def load_mappool(conn: sqlite3.Connection, tournament_id: int, rows: list[dict]) -> int:
     """rows: dicts with beatmap_id, slot and optional round."""

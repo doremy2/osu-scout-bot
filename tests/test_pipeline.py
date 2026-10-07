@@ -182,3 +182,22 @@ def test_decorated_headers_and_bare_ids():
     assert got == {113747385: "SF", 113749253: "SF", 113947963: "GF"}
     # without an MP LINK column a bare number is not treated as a match id
     assert extract_links([Table("t", [[Cell("17"), Cell("113747385")]])]) == []
+
+
+def test_pool_slots_from_a_mappool_tab():
+    """Slots come out in sheet order, per round, whether the sheet links the difficulty, the set, or just prints the id."""
+    from scout.sources.extract import Cell, Table
+    from scout.sources.pools import extract_pool_slots
+    rows = [
+        [Cell("GRAND FINALS"), Cell("Star ratings...")],
+        [Cell("NM1"), Cell("Artist - Song", link="https://osu.ppy.sh/beatmapsets/100#osu/555")],
+        [Cell("NM2"), Cell("Artist - Other", link="https://osu.ppy.sh/beatmapsets/200")],
+        [Cell("HD1"), Cell("4798382"), Cell("Artist - Third")],
+        [Cell("TB"), Cell("Artist - Tiebreaker", link="https://osu.ppy.sh/b/777")],
+        [Cell("QUALIFIERS")],
+        [Cell("NM1"), Cell("Q map", link="https://osu.ppy.sh/beatmaps/888")],
+    ]
+    got = extract_pool_slots([Table("mappools", rows), Table("schedules", rows)])   # the second tab is ignored
+    assert [(s["round"], s["slot"], s["beatmap_id"], s["beatmapset_id"], s["position"]) for s in got] == [
+        ("GF", "NM1", 555, 100, 0), ("GF", "NM2", None, 200, 1), ("GF", "HD1", 4798382, None, 2),
+        ("GF", "TB", 777, None, 3), ("Q", "NM1", 888, None, 0)]

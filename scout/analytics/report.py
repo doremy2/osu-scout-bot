@@ -38,6 +38,10 @@ class Analysis:
     game_out: dict
     match_out: dict
     cfg: RatingConfig
+    stats: dict | None = None        # user_id -> PlayerStats (draft simulator, etc.)
+    model: ModelParams | None = None
+    strength: dict | None = None     # round -> field strength
+    cache: dict | None = None        # lazily built helpers
 
 
 def _pct(w: int, l: int) -> float | None:
@@ -456,7 +460,8 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
         "team_pages": team_pages,
         "players": players,
     }
-    return Analysis(report=report, ds=ds, z=z, game_out=game_out, match_out=match_out, cfg=cfg)
+    return Analysis(report=report, ds=ds, z=z, game_out=game_out, match_out=match_out, cfg=cfg, stats=stats,
+                    model=model, strength=field_strength(ds, stats, cfg), cache={})
 
 
 # ---- views over a finished report (still no rating maths) ---------------------

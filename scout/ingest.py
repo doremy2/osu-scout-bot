@@ -14,7 +14,7 @@ from typing import Callable, Protocol
 from . import classify, teams
 from .db import repo
 from .osu import MatchNotFound, OsuApiError, parse_match
-from .sources import discover_links
+from .sources import discover_all
 
 log = logging.getLogger("scout.ingest")
 
@@ -26,7 +26,8 @@ class MatchFetcher(Protocol):
 def discover(conn: sqlite3.Connection, tournament_id: int, location: str,
              kind: str | None = None, round_override: str | None = None) -> tuple[int, int]:
     """Returns (links found, new matches)."""
-    kind, links = discover_links(location, kind)
+    kind, links, slots = discover_all(location, kind)
+    repo.save_pool_slots(conn, tournament_id, slots)
     new = repo.add_match_links(conn, tournament_id, links, round_override=round_override)
     repo.record_source(conn, tournament_id, kind, location, len(links))
     return len(links), new

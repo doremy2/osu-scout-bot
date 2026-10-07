@@ -56,6 +56,7 @@ class Dataset:
     teams: dict[int, dict]        # tournament_teams.id -> row (empty for formats without teams)
     member_team: dict[int, int]   # user_id -> team id, scoped to this tournament
     empty_matches: int = 0        # imported lobbies with no counted game (abandoned / forfeited)
+    pool_slots: dict | None = None   # round -> [slot dicts in sheet order] from the sheet (draft simulator pool)
 
 
 def load_dataset(conn: sqlite3.Connection, tournament_id: int) -> Dataset:
@@ -94,5 +95,20 @@ def load_dataset(conn: sqlite3.Connection, tournament_id: int) -> Dataset:
         "SELECT user_id, team_id FROM team_memberships WHERE tournament_id = ?", (tournament_id,))}
     bm_ids = {s.beatmap_id for s in scores if s.beatmap_id}
     beatmaps = {r["beatmap_id"]: dict(r) for r in conn.execute("SELECT * FROM beatmaps").fetchall() if r["beatmap_id"] in bm_ids}
+    pool_slots: dict = {}
+    played_in_round: dict = {}
+    for s in scores:
+        if s.round and s.beatmap_id:
+            played_in_round.setdefault(s.round, set()).add(s.beatmap_id)
+    for r in conn.execute("SELECT round, slot, beatmap_id, beatmapset_id, position, label, star_rating FROM pool_slots "
+                          "WHERE tournament_id = ? ORDER BY round, position", (tournament_id,)):
+        bid = r["beatmap_id"]
+        if bid is None and r["beatmapset_id"]:      # sheet only linked the set: use the difficulty played from it
+            cands = [b for b in played_in_round.get(r["round"], ()) if (beatmaps.get(b) or {}).get("beatmapset_id") == r["beatmapset_id"]]
+            bid = cands[0] if len(cands) == 1 else None
+        pool_slots.setdefault(r["round"], []).append({
+            "slot": r["slot"], "position": r["position"], "beatmap_id": bid, "beatmapset_id": r["beatmapset_id"],
+            "label": r["label"], "star_rating": r["star_rating"]})
     return Dataset(tournament=t, scores=scores, players=players, matches=matches, beatmaps=beatmaps,
-                   teams=teams, member_team=member_team, empty_matches=len(imported) - len(matches))
+                   teams=teams, member_team=member_team, empty_matches=len(imported) - len(matches),
+                   pool_slots=pool_slots)

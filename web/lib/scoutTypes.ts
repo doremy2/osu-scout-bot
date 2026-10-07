@@ -318,3 +318,48 @@ export type ImportStatus = {
   error: string | null;
   existing?: boolean;
 };
+
+// ---- draft simulator ----
+export type DraftSide = { slug: string; name: string; country?: string | null; avatar_url?: string; rating: number; detail: string };
+
+export type DraftSetup = {
+  tournament: Tournament;
+  sides: DraftSide[];
+  rounds: { round: string; name: string; maps: number }[];
+  side_kind: "team" | "player";
+};
+
+export type DraftMap = {
+  beatmap_id: number;
+  mod: string;
+  slot: string | null;
+  plays: number;
+  beatmapset_id: number | null;
+  star_rating: number | null;
+  title: string;
+  artist: string;
+  version: string;
+  p_a: number;
+  rating_a: number;
+  rating_b: number;
+  plays_a: number;
+  plays_b: number;
+  reasons: string[];
+  taken?: { type: "ban" | "pick"; side: "A" | "B"; order: number };
+};
+
+export type DraftAdvice = {
+  a: { slug: string; name: string };
+  b: { slug: string; name: string };
+  round: string;
+  round_name: string;
+  sequence: { type: "ban" | "pick"; side: "A" | "B" }[];
+  step: number;
+  next: { type: "ban" | "pick"; side: "A" | "B" } | null;
+  done: boolean;
+  maps: DraftMap[];
+  tiebreaker: number | null;
+  suggestions: { beatmap_id: number; score: number; p_side: number; reasons: string[] }[];
+  match_win_a: number;
+  target: number;
+};

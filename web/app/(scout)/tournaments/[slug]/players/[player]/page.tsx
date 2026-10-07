@@ -51,7 +51,8 @@ export default async function PlayerProfile({ params }: { params: Promise<{ slug
         <p className="sc-explain">
           Performance rating is how strong the scores were when {p.username} played. Tournament rating also weighs how much evidence
           there is (maps played, later rounds count slightly more) and the strength of the field faced, so a short run is
-          pulled toward the average without being punished.
+          pulled toward the average without being punished.{" "}
+          <Link className="sc-link" href={`/methodology?t=${encodeURIComponent(slug)}`}>See the formulas →</Link>
         </p>
       </Card>
 

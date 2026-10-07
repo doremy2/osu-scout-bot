@@ -5,6 +5,7 @@ to this process, and every number it shows comes from `scout.analytics`.
 """
 from __future__ import annotations
 
+import dataclasses
 import hmac
 import sqlite3
 from pathlib import Path
@@ -14,11 +15,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from .analytics import service
-from .analytics.report import LEADERBOARD_MODES, leaderboard, match_detail, search_players
+from .analytics.report import LEADERBOARD_MODES, AwardConfig, leaderboard, match_detail, search_players
+from .analytics.draft import DraftConfig, draft_advice, list_sides, round_pools
+from .analytics.ratings import RatingConfig
+from .rounds import ROUNDS
 from .config import settings
 from .db import connect
 from .formats import FORMATS
 from .importer import ImportRequest, JobRegistry
+
+
+class DraftBody(BaseModel):
+    a: str
+    b: str
+    round: str
+    taken: list[int] = []
+    best_of: int = 9
+    bans_per_side: int = 2
+    first_ban: str = "A"
+    first_pick: str = "B"
 
 
 class ImportBody(BaseModel):
@@ -75,6 +90,23 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
             return service.list_tournaments(conn)
         finally:
             conn.close()
+
+    @app.get("/api/model")
+    def model(slug: str | None = None):
+        """The live constants behind every rating, so the methodology page can never drift from the code."""
+        out = {"rating": dataclasses.asdict(RatingConfig()), "awards": dataclasses.asdict(AwardConfig()),
+               "rounds": [{"code": c, "name": n, "order": o, "weight": w}
+                          for c, (n, o, w) in sorted(ROUNDS.items(), key=lambda kv: kv[1][1])],
+               "tournament": None}
+        if slug:
+            conn = db()
+            try:
+                rep = analysis(conn, slug).report
+            finally:
+                conn.close()
+            out["tournament"] = {"slug": slug, "name": rep["tournament"]["name"], **rep["config"]["model"],
+                                 "qualified_split": rep["summary"]["qualified_split"]}
+        return out
 
     # ---- imports ------------------------------------------------------------
     @app.post("/api/imports", status_code=202)
@@ -221,6 +253,36 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         if not detail:
             raise HTTPException(404, "No such match in this tournament")
         return {"tournament": an.report["tournament"], **detail}
+
+    @app.get("/api/tournaments/{slug}/draft/setup")
+    def draft_setup(slug: str):
+        conn = db()
+        try:
+            an = analysis(conn, slug)
+        finally:
+            conn.close()
+        return {"tournament": an.report["tournament"], "sides": list_sides(an), "rounds": round_pools(an),
+                "side_kind": "team" if an.report["tournament"]["has_teams"] else "player"}
+
+    @app.post("/api/tournaments/{slug}/draft/advice")
+    def draft_state(slug: str, body: DraftBody):
+        if body.first_ban not in ("A", "B") or body.first_pick not in ("A", "B"):
+            raise HTTPException(422, "first_ban / first_pick must be A or B")
+        if not (1 <= body.best_of <= 21 and 0 <= body.bans_per_side <= 4):
+            raise HTTPException(422, "best_of must be 1-21 and bans_per_side 0-4")
+        conn = db()
+        try:
+            an = analysis(conn, slug)
+        finally:
+            conn.close()
+        cfg = DraftConfig(best_of=body.best_of, bans_per_side=body.bans_per_side,
+                          first_ban=body.first_ban, first_pick=body.first_pick)
+        try:
+            return draft_advice(an, body.a, body.b, body.round, body.taken, cfg)
+        except KeyError as e:
+            raise HTTPException(404, f"Unknown side {e}") from None
+        except ValueError as e:
+            raise HTTPException(422, str(e)) from None
 
     @app.get("/api/tournaments/{slug}/awards")
     def awards(slug: str):

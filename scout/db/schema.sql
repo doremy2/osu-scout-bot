@@ -154,5 +154,19 @@ CREATE TABLE IF NOT EXISTS team_memberships (
     PRIMARY KEY (tournament_id, user_id)
 );
 
+-- Official mappool slots read from the sheet's mappool tab. Display order only (draft simulator);
+-- unlike `mappool` it never changes how games are classified or rated.
+CREATE TABLE IF NOT EXISTS pool_slots (
+    tournament_id  INTEGER NOT NULL REFERENCES tournaments(id) ON DELETE CASCADE,
+    round          TEXT NOT NULL,
+    slot           TEXT NOT NULL,              -- NM1, HD2, TB ...
+    beatmap_id     INTEGER,                    -- difficulty id when the sheet links one...
+    beatmapset_id  INTEGER,                    -- ...otherwise just the set (resolved against played maps)
+    position       INTEGER NOT NULL,           -- order within the round in the sheet
+    label          TEXT,                       -- "Artist - Title [Difficulty]" as written in the sheet
+    star_rating    REAL,
+    PRIMARY KEY (tournament_id, round, slot)
+);
+
 CREATE INDEX IF NOT EXISTS ix_teams_tournament ON tournament_teams(tournament_id);
 CREATE INDEX IF NOT EXISTS ix_members_team ON team_memberships(team_id);

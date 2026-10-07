@@ -30,6 +30,7 @@ export default async function ScoutLayout({ children }: { children: ReactNode })
           <nav className="sc-topnav" aria-label="Main">
             <Link href="/">Home</Link>
             <Link href="/tournaments">Tournaments</Link>
+            <Link href="/methodology">Methodology</Link>
             <Link href="/import">Import</Link>
           </nav>
         </div>

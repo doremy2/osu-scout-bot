@@ -10,6 +10,7 @@ from pathlib import Path
 
 from ..models import MatchLink
 from .extract import Cell, Table, extract_links, extract_links_from_text
+from .pools import extract_pool_slots
 from .readers import read_csv, read_google_sheet, read_xlsx
 
 
@@ -27,6 +28,12 @@ def detect_kind(location: str) -> str:
 
 
 def discover_links(location: str, kind: str | None = None) -> tuple[str, list[MatchLink]]:
+    kind, links, _slots = discover_all(location, kind)
+    return kind, links
+
+
+def discover_all(location: str, kind: str | None = None) -> tuple[str, list[MatchLink], list[dict]]:
+    """Match links plus mappool slots (the latter only from spreadsheet-like sources)."""
     kind = kind or detect_kind(location)
     if kind == "google_sheet":
         tables = read_google_sheet(location)
@@ -35,10 +42,10 @@ def discover_links(location: str, kind: str | None = None) -> tuple[str, list[Ma
     elif kind == "csv":
         tables = read_csv(Path(location))
     elif kind == "text":
-        return kind, extract_links_from_text(Path(location).read_text(encoding="utf-8"))
+        return kind, extract_links_from_text(Path(location).read_text(encoding="utf-8")), []
     else:
         raise ValueError(f"Unsupported source kind: {kind}")
-    return kind, extract_links(tables)
+    return kind, extract_links(tables), extract_pool_slots(tables)
 
 
-__all__ = ["Cell", "Table", "discover_links", "detect_kind", "extract_links", "extract_links_from_text"]
+__all__ = ["Cell", "Table", "discover_links", "discover_all", "extract_pool_slots", "detect_kind", "extract_links", "extract_links_from_text"]

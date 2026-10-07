@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 4
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
 
@@ -51,4 +51,8 @@ def _migrate(conn: sqlite3.Connection) -> None:
     _add_column(conn, "tournament_matches", "team_red_id", "INTEGER REFERENCES tournament_teams(id)")
     _add_column(conn, "tournament_matches", "team_blue_id", "INTEGER REFERENCES tournament_teams(id)")
     _add_column(conn, "players", "country_name", "TEXT")
+    # v4: sheet text for pool slots (maps nobody has played yet)
+    if _columns(conn, "pool_slots"):
+        _add_column(conn, "pool_slots", "label", "TEXT")
+        _add_column(conn, "pool_slots", "star_rating", "REAL")
     conn.execute("UPDATE schema_version SET version = ? WHERE version < ?", (SCHEMA_VERSION, SCHEMA_VERSION))
