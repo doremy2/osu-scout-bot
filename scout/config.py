@@ -37,6 +37,8 @@ class Settings:
     #   neither                -> open (fine for local use only)
     admin_token: str = os.environ.get("SCOUT_ADMIN_TOKEN", "")
     imports_mode: str = os.environ.get("SCOUT_IMPORTS", "auto").lower()
+    # Serve a bundled, read-only snapshot (serverless hosts). Set automatically on Vercel.
+    readonly: bool = os.environ.get("SCOUT_READONLY", "").lower() in ("1", "true", "yes") or bool(os.environ.get("VERCEL"))
     host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
     port: int = int(os.environ.get("SCOUT_PORT", "8001"))
     allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")

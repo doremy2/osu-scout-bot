@@ -263,7 +263,8 @@ def test_import_validation_and_missing_credentials(tmp_path, monkeypatch):
     from scout import server
     monkeypatch.setattr(server.settings.__class__, "osu_client_id", "", raising=False)
     monkeypatch.setattr(server, "settings", type("S", (), {"osu_client_id": "", "osu_client_secret": "", "db_path": tmp_path / "x.db", "admin_token": "",
-                                                "imports_mode": "auto", "allowed_origins": "", "enable_docs": False})())
+                                                "imports_mode": "auto", "allowed_origins": "", "enable_docs": False,
+                                                "readonly": False})())
     c = TestClient(create_app(tmp_path / "x.db"))
     r = c.post("/api/imports", json={"name": "N", "acronym": "N", "slug": "ok", "format": "1v1",
                                      "sheet_url": "https://docs.google.com/spreadsheets/d/a/edit"})
@@ -419,3 +420,57 @@ def test_draft_pool_includes_maps_nobody_has_played(team_db):
     assert unplayed["plays"] == 0 and unplayed["beatmap_id"] < 0 and unplayed["beatmapset_id"] == 321
     assert pool[3]["mod"] == "TB"
     assert any(r["round"] == "F" and r["maps"] == 2 for r in round_pools(an))     # a round nobody has played yet
+
+
+# ---------- Vercel / read-only hosting -------------------------------------------------
+def test_writable_copy_of_a_readonly_snapshot(tmp_path):
+    from scout.db import writable_copy
+    src = tmp_path / "snap.db"
+    conn = connect(src)
+    conn.close()
+    dest = writable_copy(src, name="scout-test-copy.db")
+    assert dest != src and dest.exists()
+    c2 = connect(dest)                      # opens, migrates and writes without touching the original
+    c2.execute("INSERT INTO tournaments (slug, name) VALUES ('x', 'X')")
+    c2.commit()
+    assert connect(src).execute("SELECT COUNT(*) FROM tournaments").fetchone()[0] == 0
+
+
+def test_vercel_entrypoint_serves_the_snapshot_and_refuses_imports():
+    import subprocess
+    code = ";".join([
+        "from fastapi.testclient import TestClient",
+        "import scout_api",
+        "c = TestClient(scout_api.app)",
+        "assert c.get('/api/health').json()['imports'] == 'off'",
+        "assert len(c.get('/api/tournaments').json()) >= 1",
+        "r = c.post('/api/imports', json={'name': 'N', 'acronym': 'N', 'slug': 'ok', 'format': '1v1',"
+        " 'sheet_url': 'https://docs.google.com/spreadsheets/d/a/edit'})",
+        "assert r.status_code == 403, r.text",
+        "print('ok')",
+    ])
+    env = {k: v for k, v in __import__("os").environ.items() if not k.startswith("SCOUT_")}
+    env["VERCEL"] = "1"
+    out = subprocess.run([sys.executable, "-c", code], cwd=Path(__file__).resolve().parent.parent, env=env,
+                         capture_output=True, text=True, timeout=120)
+    assert out.returncode == 0 and "ok" in out.stdout, out.stderr[-800:]
+
+
+def test_vercel_json_is_consistent_with_the_code():
+    import importlib
+    import json
+    cfg = json.loads((Path(__file__).resolve().parent.parent / "vercel.json").read_text(encoding="utf-8"))
+    services = cfg["services"]
+    assert set(services) == {"web", "scout_api"}
+    # only web is public: the catch-all rewrite targets it and nothing targets scout_api
+    assert [r["destination"]["service"] for r in cfg["rewrites"]] == ["web"]
+    # web reaches scout_api through exactly one binding, into the env var the web app reads
+    assert services["web"]["bindings"] == [{"type": "service", "service": "scout_api", "format": "url", "env": "SCOUT_API_URL"}]
+    assert "bindings" not in services["scout_api"]
+    # the FastAPI entrypoint "module:attr" resolves to an ASGI app
+    module, attr = services["scout_api"]["entrypoint"].split(":")
+    root = str(Path(__file__).resolve().parent.parent)
+    sys.path.insert(0, root)
+    assert hasattr(importlib.import_module(module), attr)
+    # build/runtime keys must live inside services, not at the top level
+    assert not {"framework", "buildCommand", "installCommand", "functions", "outputDirectory"} & set(cfg)

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { Reveal } from "@/components/scout/Reveal";
 import { TournamentList } from "@/components/scout/TournamentList";
-import { scoutGet } from "@/lib/scout";
+import { importsPolicy, scoutGet } from "@/lib/scout";
 import type { TournamentListItem } from "@/lib/scoutTypes";
 
 export const dynamic = "force-dynamic";
 
 export default async function Landing() {
-  const tournaments = await scoutGet<TournamentListItem[]>("/tournaments");
+  const [tournaments, imports] = await Promise.all([scoutGet<TournamentListItem[]>("/tournaments"), importsPolicy()]);
+  const canImport = imports !== "off";
   return (
     <>
       <section className="sc-splash">
@@ -15,7 +16,7 @@ export default async function Landing() {
         <p className="sc-splash-sub">osu! tournament analytics &amp; scouting</p>
         <div className="sc-hero-cta">
           <Link className="sc-btn sc-btn-primary" href="/tournaments">Browse tournaments</Link>
-          <Link className="sc-btn" href="/import">Import a tournament</Link>
+          {canImport && <Link className="sc-btn" href="/import">Import a tournament</Link>}
         </div>
         <span className="sc-scrollhint" aria-hidden>↓</span>
       </section>
@@ -32,10 +33,12 @@ export default async function Landing() {
           <h2>This site and its ratings are a work in progress.</h2>
           <p className="sc-dim">
             The rating model is still being tuned, so numbers and rankings can change as it improves. Treat them as a
-            scouting aid, not a verdict. The best way to help is to add more tournaments: the more data the model sees,
-            the better it gets.
+            scouting aid, not a verdict.{" "}
+            {canImport
+              ? "The best way to help is to add more tournaments: the more data the model sees, the better it gets."
+              : "Imports currently run locally, so new tournaments are added by the site owner for now."}
           </p>
-          <Link className="sc-btn sc-btn-primary" href="/import">Add a tournament</Link>
+          {canImport && <Link className="sc-btn sc-btn-primary" href="/import">Add a tournament</Link>}
         </section>
       </Reveal>
 
@@ -50,7 +53,7 @@ export default async function Landing() {
           ) : (
             <div className="sc-card sc-center">
               <p>No tournaments imported yet.</p>
-              <Link className="sc-btn sc-btn-primary" href="/import">Import your first tournament</Link>
+              {canImport && <Link className="sc-btn sc-btn-primary" href="/import">Import your first tournament</Link>}
             </div>
           )}
         </section>

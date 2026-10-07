@@ -20,7 +20,7 @@ from .analytics.draft import DraftConfig, draft_advice, list_sides, round_pools
 from .analytics.ratings import RatingConfig
 from .rounds import ROUNDS
 from .config import settings
-from .db import connect
+from .db import connect, writable_copy
 from .formats import FORMATS
 from .importer import ImportRequest, JobRegistry
 
@@ -54,6 +54,8 @@ def import_policy(admin_token: str, mode: str) -> str:
 def create_app(db_path: str | Path | None = None, client_factory=None, threaded_imports: bool = True,
                admin_token: str | None = None, imports_mode: str | None = None) -> FastAPI:
     db_path = Path(db_path or settings.db_path)
+    if settings.readonly and str(db_path) != ":memory:":
+        db_path = writable_copy(db_path)
     token = settings.admin_token if admin_token is None else admin_token
     policy = import_policy(token, settings.imports_mode if imports_mode is None else imports_mode)
     app = FastAPI(title="osu! scout API", docs_url="/api/docs" if settings.enable_docs else None,

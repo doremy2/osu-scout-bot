@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "web": {
+      "root": "web",
+      "framework": "nextjs",
+      "bindings": [
+        { "type": "service", "service": "scout_api", "format": "url", "env": "SCOUT_API_URL" }
+      ]
+    },
+    "scout_api": {
+      "root": ".",
+      "framework": "fastapi",
+      "entrypoint": "scout_api:app",
+      "functions": {
+        "scout_api.py": {
+          "excludeFiles": "{data/**,web/**,tests/**,docs/**,venv/**,**/*.png,**/*.bak}"
+        }
+      }
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "service": "web" } }
+  ]
+}

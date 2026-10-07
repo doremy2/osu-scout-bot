@@ -82,7 +82,7 @@ export function ImportForm() {
   if (policy === "off") {
     return (
       <p className="sc-empty">
-        Importing is turned off on this server. To add a tournament, ask the site owner or run the importer locally
+        Imports currently run locally. To add a tournament, ask the site owner or run the importer yourself
         (<code>python -m scout import</code>).
       </p>
     );

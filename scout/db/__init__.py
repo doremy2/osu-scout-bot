@@ -8,6 +8,18 @@ SCHEMA_VERSION = 4
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
 
+def writable_copy(src: str | Path, name: str = "scout-readonly.db") -> Path:
+    """Serverless hosts (Vercel) ship the code read-only. Copy the bundled snapshot to the temp dir once per
+    instance so SQLite can open it normally (WAL, schema checks) without touching the deployed files."""
+    import shutil
+    import tempfile
+    dest = Path(tempfile.gettempdir()) / name
+    src = Path(src)
+    if not dest.exists() or dest.stat().st_mtime < src.stat().st_mtime or dest.stat().st_size != src.stat().st_size:
+        shutil.copyfile(src, dest)
+    return dest
+
+
 def connect(db_path: str | Path) -> sqlite3.Connection:
     db_path = Path(db_path)
     if str(db_path) != ":memory:":

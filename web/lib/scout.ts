@@ -1,8 +1,26 @@
 import { notFound } from "next/navigation";
 
 // Server-side calls go straight to the Python service; browser code uses the /api/scout proxy
-// (see next.config.mjs). Neither ever sees the osu! credentials.
-const SERVER_BASE = (process.env.SCOUT_API_URL || "http://127.0.0.1:8001").replace(/\/$/, "");
+// (app/api/scout/[...path]/route.ts). Neither ever sees the osu! credentials.
+//
+// SCOUT_API_URL is read at request time (never at build time): on Vercel it is the internal URL of the
+// `scout_api` service binding, locally it defaults to the dev server.
+export function scoutApiUrl(path: string): URL {
+  const raw = process.env.SCOUT_API_URL || "http://127.0.0.1:8001";
+  const base = raw.endsWith("/") ? raw : `${raw}/`;
+  return new URL(`api${path.startsWith("/") ? path : `/${path}`}`, base);
+}
+
+/** Who may start imports on this deployment: "open" (local), "token" (admin token) or "off" (read-only, e.g. Vercel). */
+export async function importsPolicy(): Promise<"open" | "token" | "off"> {
+  try {
+    const res = await fetch(scoutApiUrl("/health"), { cache: "no-store" });
+    const body = await res.json();
+    return body.imports === "off" || body.imports === "token" ? body.imports : "open";
+  } catch {
+    return "open";
+  }
+}
 
 export class ScoutApiError extends Error {
   constructor(public status: number, message: string) {
@@ -14,11 +32,11 @@ export class ScoutApiError extends Error {
 export async function scoutGet<T>(path: string): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${SERVER_BASE}/api${path}`, { cache: "no-store" });
+    response = await fetch(scoutApiUrl(path), { cache: "no-store" });
   } catch {
     throw new ScoutApiError(
       503,
-      "Can't reach the scout API on 127.0.0.1:8001. Start it with:  python -m scout serve   (or  python -m scout dev)"
+      "Can't reach the scout API. Start it with:  python -m scout serve   (or  python -m scout dev)"
     );
   }
   if (response.status === 404) notFound();

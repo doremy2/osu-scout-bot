@@ -1,0 +1,11 @@
+# Keep uploads small. The API serves deploy/scout.db, so the working databases and caches are not needed.
+data
+venv
+.venv
+**/__pycache__
+*.png
+*.bak
+tests
+docs
+web/node_modules
+web/.next

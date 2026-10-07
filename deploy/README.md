@@ -8,9 +8,9 @@ Two processes make up the site, and they must run on the same machine:
 | `scout-web` | Next.js site; proxies `/api/scout/*` to the API | `127.0.0.1:3000` |
 | Caddy | HTTPS + public entry point | `:80` / `:443` |
 
-Only Caddy is exposed to the internet. Frontend-only hosts (Vercel, Netlify) will not work, because the API owns the database.
+Only Caddy is exposed to the internet. Frontend-only hosts (Netlify, a plain Vercel Next.js project) will not work, because the API owns the database; Vercel works only in the read-only snapshot setup of route C.
 
-Pick one route: **A. systemd on a VPS** (simplest) or **B. Docker Compose**.
+Pick one route: **A. systemd on a VPS** (simplest), **B. Docker Compose**, or **C. Vercel** (read-only snapshot, see the end).
 
 ---
 
@@ -97,3 +97,22 @@ Data lives in the `scoutdata` volume; back it up with
 - One small VPS (1 vCPU / 1 GB) is plenty: reports are cached in memory per tournament.
 - The osu! API is called at most once per second (`OSU_MIN_INTERVAL`).
 - For rate limiting beyond this (many anonymous visitors), add Caddy's `rate_limit` plugin or Cloudflare in front.
+
+
+---
+
+## C. Vercel (multi-service project)
+
+`vercel.json` defines two services: `web` (Next.js, public at `/`) and `scout_api` (FastAPI from `scout_api.py`, internal only).
+`web` gets the API's internal address through a service binding, injected as `SCOUT_API_URL`; the browser only ever calls
+`/api/scout/*`, which the web app proxies at runtime (`web/app/api/scout/[...path]/route.ts`).
+
+**Serverless limits that shape this setup**
+- The deployed filesystem is read-only and functions are short-lived, so the API serves a bundled **snapshot** of the database
+  (`deploy/scout.db`) and **web imports are off**. To add or update tournaments: import locally, run
+  `python scripts/make_deploy_db.py`, commit `deploy/scout.db`, and redeploy.
+- No secrets are needed on Vercel (the osu! credentials are only used when importing, which happens locally).
+- The old Discord bot is not deployed.
+
+**Steps:** import the repo into Vercel as a project with the *Services* preset (or `vercel` / `vercel dev` with the CLI), keep the
+framework preset from `vercel.json`, and deploy. `vercel dev` runs both services together locally.
