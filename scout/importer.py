@@ -72,6 +72,10 @@ class JobRegistry:
             return next((j for j in self.jobs.values()
                          if j.request.slug == slug and j.phase not in ("done", "error")), None)
 
+    def any_running(self) -> bool:
+        with self.lock:
+            return any(j.phase not in ("done", "error") for j in self.jobs.values())
+
     def start(self, db_path, req: ImportRequest, client_factory: Callable | None = None,
               threaded: bool = True) -> ImportJob:
         req.validate()

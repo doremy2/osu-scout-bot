@@ -1,0 +1,24 @@
+[Unit]
+Description=osu! scout website (Next.js)
+After=network.target scout-api.service
+Wants=scout-api.service
+
+[Service]
+Type=simple
+User=scout
+Group=scout
+WorkingDirectory=/opt/osu-scout/web
+Environment=NODE_ENV=production
+Environment=SCOUT_API_URL=http://127.0.0.1:8001
+ExecStart=/usr/bin/npm run start -- -H 127.0.0.1
+Restart=on-failure
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/osu-scout/web/.next
+
+[Install]
+WantedBy=multi-user.target

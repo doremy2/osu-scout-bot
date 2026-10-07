@@ -30,6 +30,17 @@ class Settings:
     osu_client_secret: str = os.environ.get("OSU_CLIENT_SECRET", "")
     # osu! asks for <= 60 req/min; one request per second keeps us well under.
     osu_min_interval: float = float(os.environ.get("OSU_MIN_INTERVAL", "1.0"))
+    # --- public deployment ------------------------------------------------
+    # Who may start imports (they spend osu! API quota and write to the DB):
+    #   SCOUT_ADMIN_TOKEN set  -> imports need that token (X-Admin-Token header)
+    #   SCOUT_IMPORTS=off      -> imports disabled entirely
+    #   neither                -> open (fine for local use only)
+    admin_token: str = os.environ.get("SCOUT_ADMIN_TOKEN", "")
+    imports_mode: str = os.environ.get("SCOUT_IMPORTS", "auto").lower()
+    host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
+    port: int = int(os.environ.get("SCOUT_PORT", "8001"))
+    allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
+    enable_docs: bool = os.environ.get("SCOUT_DOCS", "").lower() in ("1", "true", "yes")
 
 
 settings = Settings()

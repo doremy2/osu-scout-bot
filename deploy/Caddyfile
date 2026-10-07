@@ -1,0 +1,21 @@
+# Replace scout.example.com with your domain (its DNS A record must point at this server).
+# Caddy gets and renews the HTTPS certificate automatically.
+scout.example.com {
+	encode zstd gzip
+
+	# Only the website is public. The Python API listens on 127.0.0.1:8001 and is reached through
+	# the Next.js proxy (/api/scout/*), so there is nothing else to expose.
+	reverse_proxy 127.0.0.1:3000
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options SAMEORIGIN
+		-Server
+	}
+
+	# Cheap guard on the one expensive endpoint: block oversized import bodies.
+	request_body {
+		max_size 64KB
+	}
+}

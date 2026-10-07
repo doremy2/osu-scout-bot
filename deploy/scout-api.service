@@ -1,0 +1,23 @@
+[Unit]
+Description=osu! scout API (FastAPI + SQLite)
+After=network.target
+
+[Service]
+Type=simple
+User=scout
+Group=scout
+WorkingDirectory=/opt/osu-scout
+EnvironmentFile=/opt/osu-scout/.env
+ExecStart=/opt/osu-scout/venv/bin/python -m scout serve
+Restart=on-failure
+RestartSec=3
+
+# hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/osu-scout/data
+
+[Install]
+WantedBy=multi-user.target

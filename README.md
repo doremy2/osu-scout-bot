@@ -73,10 +73,15 @@ same lobby by overlapping players. The same map in other lobbies, or a lobby run
 | Path | What |
 |---|---|
 | `scout/` | ingestion, database, analytics, FastAPI service (the new system) |
-| `web/app/(scout)/` | the tournament site; `web/app/legacy/` is the old OWC leaderboard |
+| `web/app/(scout)/` | the tournament site |
+| `deploy/` | systemd, Caddy, Docker and backup files for a public server |
 | `tests/` | `python -m pytest` |
 | `data/scout.db` | tournament database (local, not committed) |
 | top-level `*.py` | the original Discord bot and OWC ranking pipeline, untouched |
+
+## Deploying
+
+See [`deploy/README.md`](deploy/README.md): systemd + Caddy on a VPS, or `docker compose up`. Set `SCOUT_ADMIN_TOKEN` first: it protects the import endpoint.
 
 ## Tests
 

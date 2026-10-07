@@ -1,0 +1,10 @@
+FROM python:3.12-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 && rm -rf /var/lib/apt/lists/*
+COPY scout/requirements.txt scout/requirements.txt
+RUN pip install --no-cache-dir -r scout/requirements.txt
+COPY scout scout
+ENV SCOUT_DB=/data/scout.db SCOUT_HOST=0.0.0.0 SCOUT_PORT=8001
+VOLUME /data
+EXPOSE 8001
+CMD ["python", "-m", "scout", "serve"]

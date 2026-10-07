@@ -254,7 +254,8 @@ def test_import_validation_and_missing_credentials(tmp_path, monkeypatch):
             ImportRequest(**args).validate()
     from scout import server
     monkeypatch.setattr(server.settings.__class__, "osu_client_id", "", raising=False)
-    monkeypatch.setattr(server, "settings", type("S", (), {"osu_client_id": "", "osu_client_secret": "", "db_path": tmp_path / "x.db"})())
+    monkeypatch.setattr(server, "settings", type("S", (), {"osu_client_id": "", "osu_client_secret": "", "db_path": tmp_path / "x.db", "admin_token": "",
+                                                "imports_mode": "auto", "allowed_origins": "", "enable_docs": False})())
     c = TestClient(create_app(tmp_path / "x.db"))
     r = c.post("/api/imports", json={"name": "N", "acronym": "N", "slug": "ok", "format": "1v1",
                                      "sheet_url": "https://docs.google.com/spreadsheets/d/a/edit"})
@@ -302,3 +303,43 @@ def test_qualified_players_rank_above_eliminated_ones(tmp_path):
     assert leaderboard(rep)["qualified_cutoff"] == 2
     assert leaderboard(rep, "performance")["qualified_cutoff"] is None          # pure performance has no line
     assert [r["rank"] for r in rep["rankings"]] == [1, 2, 3, 4]
+
+
+# ---------- import protection -------------------------------------------------
+IMPORT_BODY = {"name": "N", "acronym": "N", "slug": "ok", "format": "1v1",
+               "sheet_url": "https://docs.google.com/spreadsheets/d/a/edit"}
+
+
+def _protected(tmp_path, **kw):
+    return TestClient(create_app(tmp_path / "p.db", client_factory=lambda: None, threaded_imports=False, **kw))
+
+
+def test_imports_need_the_admin_token_when_one_is_set(tmp_path):
+    c = _protected(tmp_path, admin_token="s3cret")
+    assert c.get("/api/health").json()["imports"] == "token"
+    assert c.post("/api/imports", json=IMPORT_BODY).status_code == 401
+    assert c.post("/api/imports", json=IMPORT_BODY, headers={"X-Admin-Token": "wrong"}).status_code == 401
+    # right token gets past the gate (the import itself then fails on the fake sheet, which is fine)
+    assert c.post("/api/imports", json=IMPORT_BODY, headers={"X-Admin-Token": "s3cret"}).status_code == 202
+
+
+def test_imports_can_be_switched_off(tmp_path):
+    c = _protected(tmp_path, admin_token="s3cret", imports_mode="off")
+    assert c.get("/api/health").json()["imports"] == "off"
+    assert c.post("/api/imports", json=IMPORT_BODY, headers={"X-Admin-Token": "s3cret"}).status_code == 403
+
+
+def test_only_one_import_runs_at_a_time(tmp_path):
+    from scout.importer import ImportJob
+    c = _protected(tmp_path, admin_token="")
+    assert c.get("/api/health").json()["imports"] == "open"
+    busy = ImportJob(id="busy", request=ImportRequest(**IMPORT_BODY), phase="importing")
+    c.app.state.jobs.jobs["busy"] = busy
+    assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 429
+    busy.phase = "done"
+    assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 202
+
+
+def test_docs_are_hidden_by_default(tmp_path):
+    c = _protected(tmp_path)
+    assert c.get("/api/docs").status_code == 404 and c.get("/api/openapi.json").status_code == 404

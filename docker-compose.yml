@@ -1,0 +1,41 @@
+# Production-style stack: Caddy (HTTPS) -> web (Next.js) -> api (FastAPI + SQLite).
+# Only Caddy publishes ports; the API is reachable from the web container only.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    env_file: .env
+    environment:
+      SCOUT_DB: /data/scout.db
+      SCOUT_HOST: 0.0.0.0
+    volumes:
+      - scoutdata:/data
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      args:
+        SCOUT_API_URL: http://api:8001
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile.docker:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+      - caddyconfig:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  scoutdata:
+  caddydata:
+  caddyconfig:

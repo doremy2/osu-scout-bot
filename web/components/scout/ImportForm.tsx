@@ -32,10 +32,17 @@ export function ImportForm() {
   const [sheet, setSheet] = useState("");
   const [format, setFormat] = useState<Format | "">("");
   const [error, setError] = useState<string | null>(null);
+  const [policy, setPolicy] = useState<"open" | "token" | "off" | null>(null);
+  const [token, setToken] = useState("");
   const [job, setJob] = useState<ImportStatus | null>(null);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => () => { if (timer.current) clearInterval(timer.current); }, []);
+
+  // Public deployments protect imports: ask the server whether they are open, token-gated or off.
+  useEffect(() => {
+    scoutClient<{ imports: "open" | "token" | "off" }>("/health").then((h) => setPolicy(h.imports)).catch(() => setPolicy("open"));
+  }, []);
 
   function onName(v: string) {
     setName(v);
@@ -49,7 +56,7 @@ export function ImportForm() {
     try {
       const started = await scoutClient<ImportStatus>("/imports", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token ? { "X-Admin-Token": token } : {}) },
         body: JSON.stringify({ name, acronym, slug, sheet_url: sheet, format })
       });
       setJob(started);
@@ -72,6 +79,14 @@ export function ImportForm() {
   }
 
   if (job) return <Progress job={job} onRetry={() => { setJob(null); }} />;
+  if (policy === "off") {
+    return (
+      <p className="sc-empty">
+        Importing is turned off on this server. To add a tournament, ask the site owner or run the importer locally
+        (<code>python -m scout import</code>).
+      </p>
+    );
+  }
 
   return (
     <form className="sc-form" onSubmit={submit}>
@@ -108,6 +123,14 @@ export function ImportForm() {
           ))}
         </div>
       </fieldset>
+      {policy === "token" && (
+        <label className="sc-field-block">
+          <span>Admin token</span>
+          <input className="sc-input" required type="password" autoComplete="off" value={token}
+                 onChange={(e) => setToken(e.target.value)} placeholder="Ask the site owner" />
+          <small>Imports on this server are restricted. Your token is only sent to this site.</small>
+        </label>
+      )}
       {error && <p className="sc-error" role="alert">{error}</p>}
       <button className="sc-btn sc-btn-primary sc-btn-lg" type="submit">Import tournament</button>
     </form>

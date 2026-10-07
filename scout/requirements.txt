@@ -1,0 +1,5 @@
+# Runtime dependencies of the scout package (the website API + importer). The old Discord bot has its own requirements.txt.
+requests>=2.31
+openpyxl>=3.1
+fastapi>=0.110
+uvicorn>=0.27

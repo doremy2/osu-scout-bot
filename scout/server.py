@@ -5,10 +5,11 @@ to this process, and every number it shows comes from `scout.analytics`.
 """
 from __future__ import annotations
 
+import hmac
 import sqlite3
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -28,12 +29,24 @@ class ImportBody(BaseModel):
     format: str
 
 
-def create_app(db_path: str | Path | None = None, client_factory=None, threaded_imports: bool = True) -> FastAPI:
+def import_policy(admin_token: str, mode: str) -> str:
+    """"off" | "token" | "open" - who may start an import."""
+    if mode == "off":
+        return "off"
+    return "token" if admin_token else "open"
+
+
+def create_app(db_path: str | Path | None = None, client_factory=None, threaded_imports: bool = True,
+               admin_token: str | None = None, imports_mode: str | None = None) -> FastAPI:
     db_path = Path(db_path or settings.db_path)
-    app = FastAPI(title="osu! scout API", docs_url="/api/docs", openapi_url="/api/openapi.json")
-    app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    token = settings.admin_token if admin_token is None else admin_token
+    policy = import_policy(token, settings.imports_mode if imports_mode is None else imports_mode)
+    app = FastAPI(title="osu! scout API", docs_url="/api/docs" if settings.enable_docs else None,
+                  redoc_url=None, openapi_url="/api/openapi.json" if settings.enable_docs else None)
+    app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in settings.allowed_origins.split(",") if o.strip()],
                        allow_methods=["GET", "POST"], allow_headers=["*"])
     jobs = JobRegistry()
+    app.state.jobs = jobs
 
     def db() -> sqlite3.Connection:
         return connect(db_path)
@@ -47,7 +60,8 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     # ---- meta ---------------------------------------------------------------
     @app.get("/api/health")
     def health():
-        return {"ok": True, "osu_credentials_configured": bool(settings.osu_client_id and settings.osu_client_secret)}
+        return {"ok": True, "imports": policy,   # lets the UI ask for the admin token / hide the form
+                "osu_credentials_configured": bool(settings.osu_client_id and settings.osu_client_secret)}
 
     @app.get("/api/formats")
     def formats():
@@ -64,7 +78,13 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
 
     # ---- imports ------------------------------------------------------------
     @app.post("/api/imports", status_code=202)
-    def start_import(body: ImportBody):
+    def start_import(body: ImportBody, x_admin_token: str | None = Header(default=None)):
+        if policy == "off":
+            raise HTTPException(403, "Importing is disabled on this server.")
+        if policy == "token" and not (x_admin_token and hmac.compare_digest(x_admin_token.encode(), token.encode())):
+            raise HTTPException(401, "Imports need the admin token.")
+        if jobs.any_running():
+            raise HTTPException(429, "Another import is already running. Try again when it has finished.")
         req = ImportRequest(name=body.name.strip(), acronym=body.acronym.strip(), slug=body.slug.strip().lower(),
                             sheet_url=body.sheet_url.strip(), format=body.format)
         try:
@@ -216,4 +236,5 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
 
 def run(host: str = "127.0.0.1", port: int = 8001) -> None:
     import uvicorn
-    uvicorn.run(create_app(), host=host, port=port, log_level="info")
+    uvicorn.run(create_app(), host=settings.host if host == "127.0.0.1" else host,
+                port=settings.port if port == 8001 else port, log_level="info", proxy_headers=True)
