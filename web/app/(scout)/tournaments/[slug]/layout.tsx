@@ -26,10 +26,11 @@ export default async function TournamentLayout({ children, params }: { children:
           </div>
           <h1>{t.name}</h1>
           <p className="sc-thead-stats">
-            <b>{fmtInt(s.matches)}</b> Matches
-            {t.has_teams && <> • <b>{fmtInt(s.teams)}</b> Teams</>}
-            {" "}• <b>{fmtInt(s.players)}</b> Players • <b>{fmtInt(s.games)}</b> Maps
-            {t.start_date && <span className="sc-dim"> • {fmtDate(t.start_date)}{t.end_date && t.end_date !== t.start_date ? ` – ${fmtDate(t.end_date)}` : ""}</span>}
+            <span><b>{fmtInt(s.matches)}</b>MATCHES</span>
+            {t.has_teams && <span><b>{fmtInt(s.teams)}</b>TEAMS</span>}
+            <span><b>{fmtInt(s.players)}</b>PLAYERS</span>
+            <span><b>{fmtInt(s.games)}</b>MAPS</span>
+            {t.start_date && <span>{fmtDate(t.start_date)}{t.end_date && t.end_date !== t.start_date ? ` – ${fmtDate(t.end_date)}` : ""}</span>}
           </p>
         </div>
         <PlayerSearch slug={t.slug} />

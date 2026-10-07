@@ -76,6 +76,12 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
 
   return (
     <div className="sc-lb">
+      {!compact && view === "players" && (
+        <div className="sc-lb-head">
+          <span className="sc-lb-count">{data.total}</span>
+          <span className="sc-lb-count-sub">rated players{mode === "mod" && key ? ` · ${key}` : mode === "round" && key ? ` · ${rounds.find((r) => r.key === key)?.name ?? key}` : ""}</span>
+        </div>
+      )}
       {hasTeams && teams && !compact && (
         <div className="sc-seg" role="tablist" aria-label="Leaderboard type">
           <button role="tab" aria-selected={view === "players"} className={view === "players" ? "on" : ""} onClick={() => setView("players")}>Players</button>
@@ -162,7 +168,7 @@ export function LeaderboardPanel({ slug, initial, pageSize = 25, hasTeams = fals
                       </td>
                     )}
                     {data.columns.extra_label && <td className="sc-num sc-dim">{r.extra?.toFixed(2)}</td>}
-                    <td className="sc-num"><Rating value={r.rating} /></td>
+                    <td className="sc-num"><span className="sc-scorebar"><i style={{ ["--w" as string]: `${Math.max(0, Math.min(100, r.rating * 10))}%` }} /><Rating value={r.rating} /></span></td>
                     {data.mode === "tournament" && <td className="sc-num sc-hide-sm"><Rating value={r.performance_rating} /></td>}
                     {data.mode === "performance" && <td className="sc-num sc-hide-sm"><Rating value={r.tournament_rating} /></td>}
                     <td className="sc-num sc-dim">{r.maps}</td>

@@ -6,7 +6,8 @@ import type { TournamentListItem } from "@/lib/scoutTypes";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Tournaments" };
 
-export default async function TournamentsPage() {
+export default async function TournamentsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await searchParams;
   const tournaments = await scoutGet<TournamentListItem[]>("/tournaments");
   return (
     <>
@@ -14,7 +15,7 @@ export default async function TournamentsPage() {
         <h1>Tournaments</h1>
         <Link className="sc-btn sc-btn-primary" href="/import">Import tournament</Link>
       </div>
-      <TournamentList tournaments={tournaments} />
+      <TournamentList tournaments={tournaments} initialQuery={q ?? ""} />
     </>
   );
 }

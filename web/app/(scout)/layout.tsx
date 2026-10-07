@@ -1,23 +1,47 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { scoutGet } from "@/lib/scout";
+import type { TournamentListItem } from "@/lib/scoutTypes";
 import "../scout.css";
 
-export default function ScoutLayout({ children }: { children: ReactNode }) {
+async function siteMeta(): Promise<string> {
+  try {
+    const t = await scoutGet<TournamentListItem[]>("/tournaments");
+    const matches = t.reduce((n, x) => n + x.matches, 0);
+    return `${t.length} tournaments · ${matches.toLocaleString("en-US")} matches`;
+  } catch {
+    return "osu! tournament analytics";
+  }
+}
+
+export default async function ScoutLayout({ children }: { children: ReactNode }) {
+  const meta = await siteMeta();
   return (
     <div className="sc-root">
       <header className="sc-topbar">
-        <div className="sc-wrap sc-topbar-in">
-          <Link href="/" className="sc-brand"><span className="sc-brand-dot" />osu! <b>scout</b></Link>
+        <div className="sc-checker" aria-hidden />
+        <div className="sc-wrap sc-head1">
+          <Link href="/" className="sc-brand">osu!<b>scout</b><span className="sc-brand-dot" /><span className="sc-beta-tag">beta</span></Link>
+          <span className="sc-head-meta">{meta}</span>
+          <form className="sc-head-search" action="/tournaments" role="search">
+            <input name="q" type="search" placeholder="Search tournaments…" aria-label="Search tournaments" />
+          </form>
+        </div>
+        <div className="sc-wrap sc-head2">
           <nav className="sc-topnav" aria-label="Main">
+            <Link href="/">Home</Link>
             <Link href="/tournaments">Tournaments</Link>
-            <Link href="/legacy" className="sc-hide-sm">OWC rankings</Link>
-            <Link href="/import" className="sc-btn sc-btn-primary sc-btn-sm">Import tournament</Link>
+            <Link href="/import">Import</Link>
           </nav>
+          <div className="sc-topnav-r">
+            <Link href="/legacy">OWC rankings</Link>
+          </div>
         </div>
       </header>
       <main className="sc-wrap sc-main">{children}</main>
       <footer className="sc-footer sc-wrap">
-        Ratings are calculated by the scout analytics engine from osu! multiplayer lobby data. Not affiliated with osu!.
+        BETA · RATINGS ARE STILL BEING TUNED · <Link href="/import" style={{ color: "var(--sc-accent)" }}>ADD A TOURNAMENT</Link><br />
+        RATINGS ARE CALCULATED BY THE SCOUT ANALYTICS ENGINE FROM OSU! MULTIPLAYER LOBBY DATA · NOT AFFILIATED WITH OSU!
       </footer>
     </div>
   );

@@ -11,6 +11,7 @@ export default function ImportPage() {
         Paste the tournament’s Google Sheet. Importing runs on the server with the osu! API — it takes about a
         second per match, and re-importing the same slug only fetches matches that are new or failed.
       </p>
+      <p className="sc-note">Beta: the more tournaments are added, the better the ratings get. Thanks for contributing.</p>
       <div className="sc-card"><ImportForm /></div>
     </div>
   );

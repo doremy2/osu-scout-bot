@@ -5,8 +5,8 @@ import { useMemo, useState } from "react";
 import { fmtDate, tournamentHref } from "@/lib/scoutFormat";
 import type { TournamentListItem } from "@/lib/scoutTypes";
 
-export function TournamentList({ tournaments, limit }: { tournaments: TournamentListItem[]; limit?: number }) {
-  const [q, setQ] = useState("");
+export function TournamentList({ tournaments, limit, initialQuery = "" }: { tournaments: TournamentListItem[]; limit?: number; initialQuery?: string }) {
+  const [q, setQ] = useState(initialQuery);
   const rows = useMemo(() => {
     const needle = q.trim().toLowerCase();
     const hit = tournaments.filter((t) => !needle || `${t.name} ${t.acronym ?? ""} ${t.slug}`.toLowerCase().includes(needle));

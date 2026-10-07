@@ -69,7 +69,7 @@ export default async function PlayerProfile({ params }: { params: Promise<{ slug
             {p.by_mod.map((m) => (
               <li key={m.mod}>
                 <ModBadge mod={m.mod} />
-                <span className="sc-grow sc-dim">{m.maps} maps · <Confidence value={m.confidence} low={m.low_confidence} /></span>
+                <span className="sc-grow sc-dim">{m.maps} {m.maps === 1 ? "map" : "maps"} · <Confidence value={m.confidence} low={m.low_confidence} /></span>
                 <Rating value={m.rating} />
                 <span className="sc-rankchip">#{m.rank} <small>/ {m.rank_of}</small></span>
               </li>
@@ -81,7 +81,7 @@ export default async function PlayerProfile({ params }: { params: Promise<{ slug
             {p.by_round.map((r) => (
               <li key={r.round}>
                 <span className="sc-round-name">{r.round_name}</span>
-                <span className="sc-grow sc-dim">{r.maps} maps</span>
+                <span className="sc-grow sc-dim">{r.maps} {r.maps === 1 ? "map" : "maps"}</span>
                 <Rating value={r.rating} />
                 <span className="sc-rankchip">#{r.rank} <small>/ {r.rank_of}</small></span>
               </li>
