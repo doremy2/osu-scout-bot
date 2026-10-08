@@ -13,7 +13,7 @@ from typing import Callable, Protocol
 
 from . import classify, teams
 from .db import repo
-from .osu import MatchNotFound, OsuApiError, parse_match
+from .osu import MatchNotFound, OsuApiError, parse_match, parse_room
 from .sources import discover_all
 
 log = logging.getLogger("scout.ingest")
@@ -56,13 +56,15 @@ def fetch_one(conn: sqlite3.Connection, m, client: MatchFetcher, use_cache: bool
     """Import one pending lobby. Returns ("imported" | "not_found" | "failed", human-readable detail).
     The raw API payload is cached for later re-parsing, except on the hosted database where it would be dead weight."""
     mid = m["osu_match_id"]
+    room = (m["kind"] if "kind" in m.keys() else "match") == "room"     # lazer room vs stable match
+    cache_key = -mid if room else mid            # one cache for both: room ids never collide with match ids
     try:
-        payload = repo.load_raw(conn, mid) if use_cache else None
+        payload = repo.load_raw(conn, cache_key) if use_cache else None
         if payload is None:
-            payload = client.get_match_full(mid)
+            payload = client.get_room_full(mid) if room else client.get_match_full(mid)
             if not getattr(conn, "is_remote", False):
-                repo.cache_raw(conn, mid, payload)
-        parsed = parse_match(payload)
+                repo.cache_raw(conn, cache_key, payload)
+        parsed = parse_room(payload) if room else parse_match(payload)
         repo.save_parsed_match(conn, m["id"], parsed)
         repo.mark_match(conn, m["id"], "imported")
         return "imported", f"{parsed.name} — {len(parsed.games)} games"
@@ -76,13 +78,14 @@ def fetch_one(conn: sqlite3.Connection, m, client: MatchFetcher, use_cache: bool
 
 def reparse(conn: sqlite3.Connection, tournament_id: int) -> int:
     rows = conn.execute(
-        "SELECT id, osu_match_id FROM tournament_matches WHERE tournament_id = ? AND status = 'imported'",
+        "SELECT id, osu_match_id, kind FROM tournament_matches WHERE tournament_id = ? AND status = 'imported'",
         (tournament_id,),
     ).fetchall()
     for m in rows:
-        payload = repo.load_raw(conn, m["osu_match_id"])
+        room = m["kind"] == "room"
+        payload = repo.load_raw(conn, -m["osu_match_id"] if room else m["osu_match_id"])
         if payload:
-            repo.save_parsed_match(conn, m["id"], parse_match(payload))
+            repo.save_parsed_match(conn, m["id"], parse_room(payload) if room else parse_match(payload))
     finalize(conn, tournament_id)
     return len(rows)
 

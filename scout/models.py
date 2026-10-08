@@ -10,6 +10,7 @@ class MatchLink:
     osu_match_id: int
     round_raw: str | None = None      # text hint, e.g. "Quarterfinals" or the sheet tab name
     context: str | None = None        # the row / line the link was found in
+    kind: str = "match"               # "match" = stable multiplayer match, "room" = lazer multiplayer room
 
 
 @dataclass

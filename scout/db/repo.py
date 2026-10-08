@@ -7,6 +7,7 @@ import sqlite3
 import unicodedata
 import zlib
 
+from ..clients import DEFAULT_CLIENT, validate_client
 from ..formats import DEFAULT_FORMAT, validate_format
 from .batch import Statement, run_batch
 from ..models import MatchLink, ParsedMatch
@@ -21,22 +22,24 @@ def slugify(text: str) -> str:
 # --- tournaments ----------------------------------------------------------
 def upsert_tournament(conn: sqlite3.Connection, slug: str, name: str | None = None,
                       acronym: str | None = None, warmups: int | None = None,
-                      fmt: str | None = None) -> int:
+                      fmt: str | None = None, client: str | None = None) -> int:
     if fmt is not None:
         validate_format(fmt)
+    if client is not None:
+        validate_client(client)
     row = conn.execute("SELECT id FROM tournaments WHERE slug = ?", (slug,)).fetchone()
     if row:
-        if name or acronym or warmups is not None or fmt:
+        if name or acronym or warmups is not None or fmt or client:
             conn.execute(
                 "UPDATE tournaments SET name = COALESCE(?, name), acronym = COALESCE(?, acronym), "
-                "warmups = COALESCE(?, warmups), format = COALESCE(?, format) WHERE id = ?",
-                (name, acronym, warmups, fmt, row["id"]),
+                "warmups = COALESCE(?, warmups), format = COALESCE(?, format), client = COALESCE(?, client) WHERE id = ?",
+                (name, acronym, warmups, fmt, client, row["id"]),
             )
             conn.commit()
         return row["id"]
     cur = conn.execute(
-        "INSERT INTO tournaments (slug, name, acronym, warmups, format) VALUES (?, ?, ?, ?, ?)",
-        (slug, name or slug, acronym, warmups or 0, fmt or DEFAULT_FORMAT),
+        "INSERT INTO tournaments (slug, name, acronym, warmups, format, client) VALUES (?, ?, ?, ?, ?, ?)",
+        (slug, name or slug, acronym, warmups or 0, fmt or DEFAULT_FORMAT, client or DEFAULT_CLIENT),
     )
     conn.commit()
     return cur.lastrowid
@@ -124,12 +127,12 @@ def add_match_links(conn: sqlite3.Connection, tournament_id: int, links: list[Ma
             new += 1
             known.add(link.osu_match_id)
         stmts.append((
-            """INSERT INTO tournament_matches (tournament_id, osu_match_id, round, round_raw, source_context)
-               VALUES (?, ?, ?, ?, ?)
+            """INSERT INTO tournament_matches (tournament_id, osu_match_id, round, round_raw, source_context, kind)
+               VALUES (?, ?, ?, ?, ?, ?)
                ON CONFLICT(tournament_id, osu_match_id) DO UPDATE SET
                  round = COALESCE(tournament_matches.round, excluded.round),
                  round_raw = COALESCE(tournament_matches.round_raw, excluded.round_raw)""",
-            (tournament_id, link.osu_match_id, code, raw, link.context),
+            (tournament_id, link.osu_match_id, code, raw, link.context, link.kind),
         ))
     run_batch(conn, stmts)
     return new

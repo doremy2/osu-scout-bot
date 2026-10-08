@@ -23,7 +23,7 @@ from ..classify import bucket_from_slot
 from ..rounds import round_name
 from .ratings import to_rating, within_sigma
 
-MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "TB"]
+MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "LM", "TB"]
 
 
 @dataclass

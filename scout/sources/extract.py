@@ -12,6 +12,8 @@ MP_LINK_RE = re.compile(
     r"(?:https?://)?(?:osu|old)\.ppy\.sh/(?:community/matches|mp)/(\d+)",
     re.IGNORECASE,
 )
+# lazer multiplayer rooms: osu.ppy.sh/multiplayer/rooms/2679265
+ROOM_LINK_RE = re.compile(r"(?:https?://)?osu\.ppy\.sh/multiplayer/rooms/(\d+)", re.IGNORECASE)
 _URL_RE = re.compile(r"https?://\S+")
 _DECOR_RE = re.compile(r"[─-▟■-◿]+")     # box-drawing rules like ━  ━  ━ in section headers
 _BARE_ID_RE = re.compile(r"^\d{7,10}$")                        # a lone match id typed without its URL
@@ -36,6 +38,12 @@ def find_match_ids(text: str) -> list[int]:
     return [int(m) for m in MP_LINK_RE.findall(text or "")]
 
 
+def find_links(text: str) -> list[tuple[str, int]]:
+    """(kind, id) for every stable match link ("match") and lazer room link ("room") in the text."""
+    return ([("match", int(m)) for m in MP_LINK_RE.findall(text or "")]
+            + [("room", int(m)) for m in ROOM_LINK_RE.findall(text or "")])
+
+
 def _row_label(row: list[Cell]) -> str:
     """Row text without URLs, used for round detection."""
     parts = (_DECOR_RE.sub("", _URL_RE.sub("", c.text)).strip() for c in row)
@@ -48,32 +56,33 @@ def extract_links(tables: list[Table]) -> list[MatchLink]:
     Round hint priority for a link: text in its own row > nearest section header row
     above it (a row with a round name but no links) > the tab name.
     """
-    seen: set[int] = set()
+    seen: set[tuple[str, int]] = set()
     out: list[MatchLink] = []
     for table in tables:
         section_raw = table.name if normalize_round(table.name) else None
         # Some sheets lose the hyperlink and keep only the numeric id under an "MP LINK" column.
         bare_ids_ok = any("mp link" in c.text.lower() for r in table.rows for c in r)
         for row in table.rows:
-            ids: list[int] = []
+            ids: list[tuple[str, int]] = []
             for cell in row:
-                ids.extend(find_match_ids(cell.blob()))
+                ids.extend(find_links(cell.blob()))
                 if bare_ids_ok and not cell.link and _BARE_ID_RE.match(cell.text.strip()):
-                    ids.append(int(cell.text.strip()))
+                    ids.append(("match", int(cell.text.strip())))      # a bare number can only be a stable match id
             label = _row_label(row)
             if not ids:
                 if label and normalize_round(label) and len(label) < 80:
                     section_raw = label  # looks like a header such as "Quarterfinals"
                 continue
             row_raw = label if normalize_round(label) else None
-            for mid in ids:
-                if mid in seen:
+            for kind, mid in ids:
+                if (kind, mid) in seen:
                     continue
-                seen.add(mid)
+                seen.add((kind, mid))
                 out.append(MatchLink(
                     osu_match_id=mid,
                     round_raw=row_raw or section_raw,
                     context=f"[{table.name}] {label}"[:300],
+                    kind=kind,
                 ))
     return out
 

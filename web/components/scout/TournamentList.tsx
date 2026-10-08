@@ -23,6 +23,7 @@ export function TournamentList({ tournaments, limit, initialQuery = "" }: { tour
             <div className="sc-tcard-top">
               <span className="sc-tag">{t.acronym || t.slug}</span>
               <span className={`sc-tag sc-tag-${t.format}`}>{t.format_label}</span>
+              {t.client === "lazer" && <span className="sc-tag sc-tag-lazer">Lazer</span>}
             </div>
             <h3>{t.name}</h3>
             <p className="sc-dim">

@@ -20,7 +20,7 @@ def _token(conn: sqlite3.Connection, tournament_id: int) -> tuple:
                      "FROM tournament_matches WHERE tournament_id = ? AND status = 'imported'", (tournament_id,)).fetchone()
     g = conn.execute("SELECT COUNT(*), COALESCE(SUM(g.excluded), 0) FROM match_games g JOIN tournament_matches m "
                      "ON m.id = g.match_id WHERE m.tournament_id = ?", (tournament_id,)).fetchone()
-    t = conn.execute("SELECT format, name, acronym FROM tournaments WHERE id = ?", (tournament_id,)).fetchone()
+    t = conn.execute("SELECT format, name, acronym, client FROM tournaments WHERE id = ?", (tournament_id,)).fetchone()
     tm = conn.execute("SELECT COUNT(*) FROM team_memberships WHERE tournament_id = ?", (tournament_id,)).fetchone()[0]
     pool = conn.execute("SELECT COUNT(*) FROM mappool WHERE tournament_id = ?", (tournament_id,)).fetchone()[0]
     return (*tuple(m), *tuple(g), *tuple(t), tm, pool)
@@ -51,7 +51,7 @@ def invalidate(slug: str | None = None) -> None:
 
 def list_tournaments(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
-        """SELECT t.id, t.slug, t.name, t.acronym, t.format, t.start_date, t.end_date,
+        """SELECT t.id, t.slug, t.name, t.acronym, t.format, t.client, t.start_date, t.end_date,
                   (SELECT COUNT(*) FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'imported') AS matches,
                   (SELECT COUNT(*) FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'pending') AS pending,
                   (SELECT COUNT(*) FROM tournament_players p WHERE p.tournament_id = t.id) AS players,

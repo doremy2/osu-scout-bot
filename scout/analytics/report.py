@@ -11,14 +11,15 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from ..db.repo import get_tournament, slugify
+from ..clients import CLIENTS
 from ..formats import get_format
 from ..rounds import is_versus_round, round_name, round_order
 from .dataset import Dataset, load_dataset
-from .ratings import (ModelParams, PlayerStats, RatingConfig, Slice, compute_player_stats, field_strength, resolve_model,
+from .ratings import (ModelParams, PlayerStats, RatingConfig, Slice, compute_player_stats, config_for_client, field_strength, resolve_model,
                       to_rating, tournament_z)
 from .teams import merge_slices, team_tournament_rating
 
-MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "TB"]
+MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "LM", "TB"]
 LEADERBOARD_MODES = ("tournament", "performance", "round", "mod", "consistency", "maps")
 
 
@@ -59,10 +60,11 @@ def build_report(conn: sqlite3.Connection, slug: str,
 
 def build_analysis(conn: sqlite3.Connection, slug: str,
                    cfg: RatingConfig | None = None, acfg: AwardConfig | None = None) -> Analysis:
-    cfg, acfg = cfg or RatingConfig(), acfg or AwardConfig()
+    acfg = acfg or AwardConfig()
     t = get_tournament(conn, slug)
     if t is None:
         raise KeyError(f"No tournament '{slug}'")
+    cfg = cfg or config_for_client(t["client"])
     fmt = get_format(t["format"])
     ds = load_dataset(conn, t["id"])
     stats, z, game_out, match_out = compute_player_stats(ds, cfg)
@@ -438,6 +440,7 @@ def build_analysis(conn: sqlite3.Connection, slug: str,
     report = {
         "tournament": {"id": t["id"], "slug": t["slug"], "name": t["name"], "acronym": t["acronym"],
                        "format": fmt.key, "format_label": fmt.label, "has_teams": fmt.has_teams,
+                       "client": t["client"], "client_label": CLIENTS[t["client"]].label if t["client"] in CLIENTS else t["client"],
                        "start_date": t["start_date"], "end_date": t["end_date"]},
         "summary": {"matches": len(ds.matches), "games": len({s.game_id for s in ds.scores}),
                     "scores": len(ds.scores), "players": len(stats), "teams": len(team_pages),

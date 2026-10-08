@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Methodology" };
 
 type Model = {
+  client?: string;
   rating: Record<string, number | string | boolean | null>;
   awards: Record<string, number>;
   rounds: { code: string; name: string; order: number; weight: number }[];
@@ -59,6 +60,13 @@ export default async function Methodology({ searchParams }: { searchParams: Prom
       )}
 
       <Step n="1" title="Normalize every score">
+        {m.client === "lazer" && (
+          <p>
+            <b>Lazer tournament.</b> Matches are read from multiplayer rooms and scored with lazer&rsquo;s standardised total
+            score (what the room history shows). It is bounded and roughly linear in performance, so it is used as is
+            (<code>transform = raw</code>). Maps with lazer-only mods (DA and friends) form their own <code>LM</code> mod group.
+          </p>
+        )}
         <p>
           A score is only meaningful relative to the field that played the same map. Each score is turned into a
           z-score against everyone who played that beatmap (same mod, same stage). All qualifier lobbies are pooled

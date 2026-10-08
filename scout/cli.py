@@ -17,6 +17,7 @@ from . import ingest
 from .analytics import build_report
 from .config import settings
 from .db import connect, repo
+from .clients import CLIENTS
 from .formats import FORMATS
 from .models import MatchLink
 from .rounds import round_name
@@ -39,7 +40,7 @@ def _upsert(conn, a) -> int:
     """Create/update the tournament. A brand-new tournament must say what format it is."""
     if repo.get_tournament(conn, a.slug) is None and not a.format:
         sys.exit("A new tournament needs --format 1v1 or --format team.")
-    return repo.upsert_tournament(conn, a.slug, a.name, a.acronym, a.warmups, a.format)
+    return repo.upsert_tournament(conn, a.slug, a.name, a.acronym, a.warmups, a.format, a.client)
 
 
 def cmd_create(conn, a):
@@ -214,6 +215,7 @@ def main(argv: list[str] | None = None) -> None:
         p.add_argument("--acronym")
         p.add_argument("--warmups", type=int, help="games to skip per lobby when no mappool is loaded")
         p.add_argument("--format", choices=sorted(FORMATS), help="tournament format (required for a new tournament)")
+        p.add_argument("--client", choices=sorted(CLIENTS), help="osu! client: stable (default) or lazer (multiplayer rooms)")
 
     p = sub.add_parser("create"); p.add_argument("slug"); tourney_opts(p); p.set_defaults(fn=cmd_create)
     for nm, fn in (("discover", cmd_discover), ("import", cmd_import)):

@@ -12,7 +12,7 @@ import re
 from ..rounds import normalize_round
 from .extract import Table, _row_label
 
-SLOT_RE = re.compile(r"^(NM|HD|HR|DT|EZ|FM|FL|HT|TB|CM)\s*-?\s*(\d{0,2})$", re.IGNORECASE)
+SLOT_RE = re.compile(r"^(NM|HD|HR|DT|EZ|FM|FL|HT|TB|CM|LM)\s*-?\s*(\d{0,2})$", re.IGNORECASE)
 _LINK_ID_RES = [
     re.compile(r"#(?:osu|taiko|fruits|catch|mania)/(\d+)"),
     re.compile(r"/(?:beatmaps|b)/(\d+)"),

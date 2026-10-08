@@ -303,6 +303,16 @@ def compute_player_stats(ds: Dataset, cfg: RatingConfig | None = None):
     return stats, z, game_out, match_out
 
 
+def config_for_client(client: str | None) -> RatingConfig:
+    """Rating settings for the osu! client the tournament was played on.
+
+    Lazer's standardised score is bounded and roughly linear in performance (about 1,000,000 for a clean play, scaled
+    by mods), unlike stable's heavy-tailed scoreV2, so it is used as is instead of square-rooted."""
+    if client == "lazer":
+        return RatingConfig(transform="raw")
+    return RatingConfig()
+
+
 def to_rating(z: float, cfg: RatingConfig) -> float:
     r = cfg.base + (cfg.scale if z >= 0 else cfg.scale_below) * z
     return round(max(cfg.min_rating, r), 2)

@@ -1,6 +1,6 @@
 // Presentation helpers only. No rating maths lives in the frontend.
 
-export const MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "TB"];
+export const MOD_ORDER = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "LM", "TB"];
 
 /** Colour tier for a rating. The rating scale is fixed by the backend (7.0 = field average,
  *  +1.5 per standard deviation), so these are absolute and not tied to any tournament. */

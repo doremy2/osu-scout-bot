@@ -17,11 +17,12 @@ from pydantic import BaseModel
 from .analytics import service
 from .analytics.report import LEADERBOARD_MODES, AwardConfig, leaderboard, match_detail, search_players
 from .analytics.draft import DraftConfig, draft_advice, list_sides, round_pools
-from .analytics.ratings import RatingConfig
+from .analytics.ratings import RatingConfig, config_for_client
 from .rounds import ROUNDS
 from .config import settings
 from . import limits
 from .db import connect, repo, writable_copy
+from .clients import CLIENTS
 from .formats import FORMATS
 from .importer import ImportRequest, JobRegistry, purge_abandoned
 
@@ -43,6 +44,7 @@ class ImportBody(BaseModel):
     slug: str
     sheet_url: str
     format: str
+    client: str = "stable"
 
 
 def import_policy(admin_token: str, mode: str) -> str:
@@ -98,6 +100,10 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         return {"ok": True, "imports": policy,   # lets the UI ask for the admin token / hide the form
                 "osu_credentials_configured": bool(settings.osu_client_id and settings.osu_client_secret)}
 
+    @app.get("/api/clients")
+    def clients():
+        return [{"key": c.key, "label": c.label, "description": c.description} for c in CLIENTS.values()]
+
     @app.get("/api/formats")
     def formats():
         return [{"key": f.key, "label": f.label, "description": f.description, "has_teams": f.has_teams}
@@ -118,7 +124,7 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     @app.get("/api/model")
     def model(slug: str | None = None):
         """The live constants behind every rating, so the methodology page can never drift from the code."""
-        out = {"rating": dataclasses.asdict(RatingConfig()), "awards": dataclasses.asdict(AwardConfig()),
+        out = {"rating": dataclasses.asdict(RatingConfig()), "client": "stable", "awards": dataclasses.asdict(AwardConfig()),
                "rounds": [{"code": c, "name": n, "order": o, "weight": w}
                           for c, (n, o, w) in sorted(ROUNDS.items(), key=lambda kv: kv[1][1])],
                "tournament": None}
@@ -128,6 +134,8 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
                 rep = analysis(conn, slug).report
             finally:
                 conn.close()
+            out["client"] = rep["tournament"]["client"]
+            out["rating"] = rep["config"]["rating"]            # the settings this tournament's client actually uses
             out["tournament"] = {"slug": slug, "name": rep["tournament"]["name"], **rep["config"]["model"],
                                  "qualified_split": rep["summary"]["qualified_split"]}
         return out
@@ -137,7 +145,7 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     def start_import(body: ImportBody, request: Request, x_admin_token: str | None = Header(default=None)):
         admin = require_import_access(x_admin_token)
         req = ImportRequest(name=body.name.strip(), acronym=body.acronym.strip(), slug=body.slug.strip().lower(),
-                            sheet_url=body.sheet_url.strip(), format=body.format)
+                            sheet_url=body.sheet_url.strip(), format=body.format, client=body.client)
         try:
             req.validate()
         except ValueError as e:

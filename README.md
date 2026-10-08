@@ -37,8 +37,8 @@ Then open <http://localhost:3000>. (`python -m scout serve` runs only the API on
 
 ## Using the site
 
-- **Import**: `/import` takes a name, acronym, slug, Google Sheet URL and a required format
-  (`1v1` or `Team`). The sheet must be shared as "anyone with the link can view". Progress is shown live,
+- **Import**: `/import` takes a name, acronym, slug, Google Sheet URL, the osu! client (`Stable` matches or `Lazer`
+  multiplayer rooms) and a required format (`1v1` or `Team`). The sheet must be shared as "anyone with the link can view". Progress is shown live,
   then you're redirected to the report. Re-importing a slug only fetches new or failed matches.
 - **Tournament page** `/tournaments/<slug>`: Overview, Players, Teams (team format only), Leaderboards
   (overall / by round / by mod / consistency / maps played), Matches, Awards, plus in-tournament player search.

@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 7
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
 
@@ -82,6 +82,9 @@ def _migrate(conn: sqlite3.Connection) -> None:
     _add_column(conn, "tournament_matches", "team_red_id", "INTEGER REFERENCES tournament_teams(id)")
     _add_column(conn, "tournament_matches", "team_blue_id", "INTEGER REFERENCES tournament_teams(id)")
     _add_column(conn, "players", "country_name", "TEXT")
+    # v7: lazer support: which client a tournament used, and whether a lobby is a stable match or a lazer room
+    _add_column(conn, "tournaments", "client", "TEXT NOT NULL DEFAULT 'stable'")
+    _add_column(conn, "tournament_matches", "kind", "TEXT NOT NULL DEFAULT 'match'")
     # v4: sheet text for pool slots (maps nobody has played yet)
     if _columns(conn, "pool_slots"):
         _add_column(conn, "pool_slots", "label", "TEXT")

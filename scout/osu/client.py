@@ -71,6 +71,28 @@ class OsuClient:
         raise OsuApiError(f"GET {path} failed after {retries} attempts")
 
     # --- endpoints ------------------------------------------------------
+    def get_room_full(self, room_id: int) -> dict:
+        """A lazer multiplayer room: its info + playlist, and the scores of every playlist item that was played.
+        (The room's "View history" page is built from the same two endpoints.)"""
+        room = self.get(f"/rooms/{room_id}")
+        scores: dict[str, list] = {}
+        for item in room.get("playlist", []):
+            if not item.get("expired"):          # never played
+                continue
+            collected: list = []
+            cursor = None
+            for _ in range(20):                  # head-to-head / team rooms are far below 50 scores per item
+                params = {"limit": 50}
+                if cursor:
+                    params["cursor_string"] = cursor
+                page = self.get(f"/rooms/{room_id}/playlist/{item['id']}/scores", params=params)
+                collected.extend(page.get("scores") or [])
+                cursor = page.get("cursor_string")
+                if not cursor or not page.get("scores"):
+                    break
+            scores[str(item["id"])] = collected
+        return {"kind": "room", "room": room, "scores": scores}
+
     def get_match_full(self, match_id: int) -> dict:
         """The match endpoint returns at most 100 events per call. Page forward with
         `after=<last event id>` until we reach latest_event_id, then merge into one payload."""

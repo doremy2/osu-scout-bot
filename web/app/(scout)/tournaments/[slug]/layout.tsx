@@ -23,6 +23,7 @@ export default async function TournamentLayout({ children, params }: { children:
           <div className="sc-thead-tags">
             <span className="sc-tag">{t.acronym || t.slug}</span>
             <span className={`sc-tag sc-tag-${t.format}`}>{t.format_label}</span>
+            {t.client === "lazer" && <span className="sc-tag sc-tag-lazer">Lazer</span>}
           </div>
           <h1>{t.name}</h1>
           <p className="sc-thead-stats">

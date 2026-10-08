@@ -5,11 +5,16 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { scoutClient } from "@/lib/scout";
 import { tournamentHref } from "@/lib/scoutFormat";
-import type { Format, ImportStatus } from "@/lib/scoutTypes";
+import type { Format, ImportStatus, OsuClient } from "@/lib/scoutTypes";
 
 function slugify(text: string): string {
   return text.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
+
+const CLIENT_OPTIONS: { key: OsuClient; label: string; blurb: string }[] = [
+  { key: "stable", label: "Stable", blurb: "Classic matches · osu.ppy.sh/community/matches/… links · legacy scoring" },
+  { key: "lazer", label: "Lazer", blurb: "Multiplayer rooms · osu.ppy.sh/multiplayer/rooms/… links · standardised scoring, lazer mods (LM)" }
+];
 
 const FORMAT_OPTIONS: { key: Format; label: string; blurb: string }[] = [
   { key: "1v1", label: "1v1", blurb: "Individual players · matches are Player A vs Player B" },
@@ -31,6 +36,7 @@ export function ImportForm() {
   const [slugTouched, setSlugTouched] = useState(false);
   const [sheet, setSheet] = useState("");
   const [format, setFormat] = useState<Format | "">("");
+  const [client, setClient] = useState<OsuClient>("stable");
   const [error, setError] = useState<string | null>(null);
   const [policy, setPolicy] = useState<"open" | "public" | "token" | "off" | null>(null);
   const [token, setToken] = useState("");
@@ -61,7 +67,7 @@ export function ImportForm() {
       const started = await scoutClient<ImportStatus>("/imports", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...(token ? { "X-Admin-Token": token } : {}) },
-        body: JSON.stringify({ name, acronym, slug, sheet_url: sheet, format })
+        body: JSON.stringify({ name, acronym, slug, sheet_url: sheet, format, client })
       });
       setJob(started);
       const finish = (s: ImportStatus) => {
@@ -141,6 +147,19 @@ export function ImportForm() {
                placeholder="https://docs.google.com/spreadsheets/d/…" />
         <small>Share it as “anyone with the link can view”. We read the MP links and round headers from every tab.</small>
       </label>
+      <fieldset className="sc-field-block sc-format">
+        <legend>osu! client <em>required</em></legend>
+        <div className="sc-format-grid">
+          {CLIENT_OPTIONS.map((o) => (
+            <label key={o.key} className={`sc-format-opt${client === o.key ? " on" : ""}`}>
+              <input type="radio" name="client" value={o.key} checked={client === o.key} onChange={() => setClient(o.key)} required />
+              <strong>{o.label}</strong>
+              <span>{o.blurb}</span>
+            </label>
+          ))}
+        </div>
+        <small>Lazer tournaments are read from their multiplayer rooms (the “view history” page) and rated on standardised score.</small>
+      </fieldset>
       <fieldset className="sc-field-block sc-format">
         <legend>Tournament format <em>required</em></legend>
         <div className="sc-format-grid">

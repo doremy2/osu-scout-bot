@@ -8,6 +8,7 @@ from __future__ import annotations
 import re
 import sqlite3
 
+from .clients import lazer_only
 from .db.batch import run_batch
 from .rounds import is_versus_round
 
@@ -38,10 +39,12 @@ def bucket_from_mods(mods: set[str]) -> str:
     return "NM"
 
 
-def infer_bucket(game_mods: list[str], score_mods: list[list[str]]) -> str:
+def infer_bucket(game_mods: list[str], score_mods: list[list[str]], lazer: bool = False) -> str:
     """Without a mappool: if players ran different mods (or added mods on top of the
     lobby's), it was a FreeMod pick; otherwise the shared mods decide."""
     base = {m for m in game_mods if m not in NEUTRAL_MODS}
+    if lazer and lazer_only(base):          # a lazer-only required mod (DA, ...) makes it a "lazer mod" slot
+        return "LM"
     player_sets = [frozenset(m for m in sm if m not in NEUTRAL_MODS) for sm in score_mods]
     if len(set(player_sets)) > 1 or any(ps - base for ps in player_sets):
         return "FM"
@@ -89,8 +92,9 @@ def _superseded_games(conn: sqlite3.Connection, games: list[sqlite3.Row], min_sc
 
 
 def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[str, int]:
-    t = conn.execute("SELECT warmups FROM tournaments WHERE id = ?", (tournament_id,)).fetchone()
+    t = conn.execute("SELECT warmups, client FROM tournaments WHERE id = ?", (tournament_id,)).fetchone()
     warmups = t["warmups"] if t else 0
+    lazer = bool(t and t["client"] == "lazer")
 
     pool: dict[tuple[str, int], str] = {
         (r["round"], r["beatmap_id"]): r["slot"]
@@ -135,7 +139,7 @@ def classify_tournament(conn: sqlite3.Connection, tournament_id: int) -> dict[st
             if slot:
                 bucket = bucket_from_slot(slot)
             else:
-                bucket = infer_bucket(game_mods, [[m for m in r["mods"].split(",") if m] for r in score_rows])
+                bucket = infer_bucket(game_mods, [[m for m in r["mods"].split(",") if m] for r in score_rows], lazer)
 
             updates.append((
                 "UPDATE match_games SET mod_bucket = ?, pool_slot = ?, is_warmup = ?, excluded = ?, exclude_reason = ? WHERE id = ?",

@@ -10,7 +10,7 @@ type Side = "A" | "B";
 type Config = { a: string; b: string; round: string; best_of: number; bans_per_side: number; first_ban: Side; first_pick: Side };
 
 const BEST_OF = [5, 7, 9, 11, 13];
-const MOD_ROWS = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "TB"];
+const MOD_ROWS = ["NM", "HD", "HR", "DT", "EZ", "FL", "HT", "FM", "LM", "TB"];
 
 export function DraftSimulator({ slug, setup }: { slug: string; setup: DraftSetup }) {
   const defaultRound = (setup.rounds.find((r) => r.round === "QF") ?? setup.rounds[setup.rounds.length - 1])?.round ?? "";

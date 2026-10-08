@@ -24,6 +24,7 @@ from . import ingest
 from .analytics import service
 from .config import settings
 from .db import connect, repo
+from .clients import validate_client
 from .formats import validate_format
 
 log = logging.getLogger("scout.importer")
@@ -41,6 +42,7 @@ class ImportRequest:
     format: str
     warmups: int | None = None
     keep_metadata: bool = False       # re-import of an existing tournament: leave its name/format/acronym alone
+    client: str = "stable"            # osu! client the tournament was played on: stable | lazer
 
     def validate(self) -> None:
         if not self.name.strip():
@@ -52,6 +54,7 @@ class ImportRequest:
         if "docs.google.com/spreadsheets" not in self.sheet_url:
             raise ValueError("Paste a Google Sheets link (docs.google.com/spreadsheets/...)")
         validate_format(self.format)
+        validate_client(self.client)
 
 
 @dataclass
@@ -162,10 +165,10 @@ def _default_client():
 
 
 def _cleanup_ghost(conn, job: ImportJob) -> None:
-    """A failed import must not leave an empty tournament behind."""
+    """A failed import must not leave a tournament behind that this job created and never managed to import anything into."""
     t = repo.get_tournament(conn, job.request.slug)
     if job.created and t and not conn.execute(
-            "SELECT 1 FROM tournament_matches WHERE tournament_id = ?", (t["id"],)).fetchone():
+            "SELECT 1 FROM tournament_matches WHERE tournament_id = ? AND status = 'imported'", (t["id"],)).fetchone():
         conn.execute("DELETE FROM tournaments WHERE id = ?", (t["id"],))
         conn.commit()
 
@@ -191,13 +194,22 @@ def step(store: JobStore, job_id: str, client_factory: Callable | None = None, b
             if req.keep_metadata and not job.created:
                 tid = repo.upsert_tournament(conn, req.slug)
             else:
-                tid = repo.upsert_tournament(conn, req.slug, req.name, req.acronym or None, req.warmups, req.format)
+                tid = repo.upsert_tournament(conn, req.slug, req.name, req.acronym or None, req.warmups, req.format,
+                                             req.client)
             found, _new = ingest.discover(conn, tid, req.sheet_url, kind="google_sheet")
             if found == 0:
                 raise ValueError("No osu! multiplayer links were found in that sheet. "
                                  "Is it shared as 'anyone with the link can view'?")
             if found > settings.max_matches:
                 raise ValueError(f"That sheet has {found} matches; the limit for web imports is {settings.max_matches}.")
+            kinds = {r["kind"]: r["n"] for r in conn.execute(
+                "SELECT kind, COUNT(*) AS n FROM tournament_matches WHERE tournament_id = ? GROUP BY kind", (tid,))}
+            if kinds.get("room") and req.client == "stable":
+                raise ValueError("This sheet links lazer multiplayer rooms (osu.ppy.sh/multiplayer/rooms/...). "
+                                 "Choose the Lazer client and import again.")
+            if req.client == "lazer" and not kinds.get("room"):
+                raise ValueError("No lazer multiplayer room links (osu.ppy.sh/multiplayer/rooms/...) were found in that "
+                                 "sheet. If the tournament was played on stable, choose the Stable client.")
             job.found = found
             job.total = len(repo.pending_matches(conn, tid))
             job.phase, job.message = "importing", f"Found {found} multiplayer matches"

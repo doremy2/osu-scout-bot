@@ -426,3 +426,6 @@
 .sc-owner { font-size: 0.82rem; color: var(--sc-dim); }
 .sc-owner summary { cursor: pointer; }
 .sc-owner input { margin-top: 8px; max-width: 320px; }
+
+.sc-tag-lazer { color: #7dd3ff; border-color: rgba(125, 211, 255, 0.5); }
+.sc-mod-lm { background: #7dd3ff; color: #05222f; }

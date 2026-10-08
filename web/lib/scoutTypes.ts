@@ -1,6 +1,7 @@
 // Shapes returned by the Python service (scout.server). All numbers are computed there.
 
 export type Format = "1v1" | "team";
+export type OsuClient = "stable" | "lazer";
 
 export type TeamRef = { name: string; slug: string; country: string | null };
 
@@ -12,6 +13,8 @@ export type Tournament = {
   format: Format;
   format_label: string;
   has_teams: boolean;
+  client: OsuClient;
+  client_label: string;
   start_date: string | null;
   end_date: string | null;
 };
@@ -24,6 +27,7 @@ export type TournamentListItem = {
   format: Format;
   format_label: string;
   has_teams: boolean;
+  client?: OsuClient;
   start_date: string | null;
   end_date: string | null;
   matches: number;
