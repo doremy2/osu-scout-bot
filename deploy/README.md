@@ -135,7 +135,7 @@ Vercel functions have no persistent disk and cannot run background work, so the 
    | `TURSO_AUTH_TOKEN` | the token from step 1 |
    | `OSU_CLIENT_ID`, `OSU_CLIENT_SECRET` | your osu! OAuth app |
    | `SCOUT_ADMIN_TOKEN` | your **owner key** (`openssl rand -hex 24`): bypasses the limits, may re-import or delete tournaments |
-   | `SCOUT_IMPORTS_PER_VISITOR` / `SCOUT_IMPORTS_PER_DAY` | optional, defaults 2 and 20 (per 24 h) |
+   | `SCOUT_IMPORTS_PER_VISITOR` / `SCOUT_IMPORTS_PER_DAY` | optional caps per 24 h; default 0 = unlimited |
    | `SCOUT_MAX_MATCHES` | optional, default 300: refuse bigger sheets |
    | `SCOUT_IMPORTS` | optional: `token` = invite-only (holders of the key), `off` = no web imports |
 
@@ -143,13 +143,13 @@ Vercel functions have no persistent disk and cannot run background work, so the 
 
 How an import runs on Vercel: the browser starts a job (stored in the database) and then keeps asking the server to do the
 next ~40-second slice of work (scan the sheet, fetch lobbies at 1 per second, calculate ratings), showing live progress.
-Only one import runs at a time. If a request drops the browser simply asks again; the job continues where it stopped.
+Several imports can run at once (the osu! API allows about 60 requests per minute in total, so many large imports at the same time will each go slower). If a request drops the browser simply asks again; the job continues where it stopped.
 
 **Because anyone can import, the site protects itself:**
-- Each visitor (a salted hash of their IP, never the address itself) can start 2 imports per day, and the whole site 20.
+- No import rate limit by default, and imports can run at the same time. To cap them, set `SCOUT_IMPORTS_PER_VISITOR` / `SCOUT_IMPORTS_PER_DAY` (visitors are told apart by a salted hash of their IP, never the address itself).
 - Only **new** tournaments: a visitor can't re-import or overwrite an existing slug (the owner key can).
-- One import at a time, Google-Sheets links only, at most `SCOUT_MAX_MATCHES` lobbies, length limits on names.
-- Every import spends your osu! API quota (about one request per match), which is why the daily budget exists.
+- Google-Sheets links only, at most `SCOUT_MAX_MATCHES` lobbies, length limits on names.
+- Every import spends your osu! API quota (about one request per match). If it ever gets abused, turn the caps on without a code change.
 
 **Moderation** (needs `SCOUT_ADMIN_TOKEN`): remove a bad tournament with
 `curl -X DELETE https://<your-site>/api/scout/tournaments/<slug> -H "X-Admin-Token: <key>"`.

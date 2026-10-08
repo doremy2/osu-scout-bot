@@ -51,8 +51,9 @@ class Settings:
     step_budget: float = float(os.environ.get("SCOUT_STEP_BUDGET", "40"))      # seconds of work per step request
     max_matches: int = int(os.environ.get("SCOUT_MAX_MATCHES", "300"))         # refuse sheets with more lobbies than this
     # Budget for imports anyone may start (SCOUT_IMPORTS=public)
-    public_imports_per_visitor: int = int(os.environ.get("SCOUT_IMPORTS_PER_VISITOR", "2"))   # per visitor per 24 h
-    public_imports_per_day: int = int(os.environ.get("SCOUT_IMPORTS_PER_DAY", "20"))          # whole site per 24 h
+    # 0 = unlimited (the default); set a number to cap imports per visitor / per site per 24 h
+    public_imports_per_visitor: int = int(os.environ.get("SCOUT_IMPORTS_PER_VISITOR", "0"))
+    public_imports_per_day: int = int(os.environ.get("SCOUT_IMPORTS_PER_DAY", "0"))
     host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
     port: int = int(os.environ.get("SCOUT_PORT", "8001"))
     allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")

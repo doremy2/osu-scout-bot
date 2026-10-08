@@ -338,14 +338,19 @@ def test_imports_can_be_switched_off(tmp_path):
     assert c.post("/api/imports", json=IMPORT_BODY, headers={"X-Admin-Token": "s3cret"}).status_code == 403
 
 
-def test_only_one_import_runs_at_a_time(tmp_path):
+def test_imports_can_run_at_the_same_time(tmp_path):
     c = _protected(tmp_path, admin_token="")
     assert c.get("/api/health").json()["imports"] == "open"
     store = c.app.state.jobs.store
     busy = store.create(ImportRequest(**IMPORT_BODY))
     busy.phase = "importing"
     store.save(busy)
-    assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 429
+    # a different tournament starts straight away...
+    other = c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"})
+    assert other.status_code == 202 and other.json()["id"] != busy.id
+    # ...while asking for the same slug again just rejoins the job already running for it
+    again = c.post("/api/imports", json=IMPORT_BODY)
+    assert again.json()["id"] == busy.id
     busy.phase = "done"
     store.save(busy)
     assert c.post("/api/imports", json={**IMPORT_BODY, "slug": "other"}).status_code == 202
@@ -543,7 +548,7 @@ def _public(tmp_path, monkeypatch, **kw):
                                  imports_mode="public", **kw))
 
 
-def test_public_imports_need_no_code_but_are_rate_limited(tmp_path, monkeypatch):
+def test_public_imports_need_no_code_and_can_be_budgeted(tmp_path, monkeypatch):
     c = _public(tmp_path, monkeypatch, admin_token="owner")
     assert c.get("/api/health").json()["imports"] == "public"
     me = {"x-forwarded-for": "203.0.113.7"}
@@ -596,3 +601,11 @@ def test_deleting_a_tournament_removes_all_of_its_data(team_db):
         assert conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] == 0, table
     assert repo.delete_tournament(conn, "fake") is False
     assert tid
+
+
+def test_public_imports_are_unlimited_by_default(tmp_path):
+    c = TestClient(create_app(tmp_path / "free.db", client_factory=lambda: ft.FakeClient({}), import_mode="step",
+                              imports_mode="public"))
+    for i in range(6):                       # no per-visitor or per-day cap unless one is configured
+        r = c.post("/api/imports", json={**IMPORT_BODY, "slug": f"free-{i}"}, headers={"x-forwarded-for": "203.0.113.7"})
+        assert r.status_code == 202, r.text

@@ -26,7 +26,6 @@ export default async function ImportPage() {
           </p>
           <p className="sc-note">
             Beta: the more tournaments are added, the better the ratings get. Thanks for contributing.
-            {imports === "public" && " To keep this free for everyone, each visitor can add a couple of tournaments per day."}
           </p>
           <div className="sc-card"><ImportForm /></div>
         </>

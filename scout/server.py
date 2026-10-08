@@ -132,8 +132,6 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
     @app.post("/api/imports", status_code=202)
     def start_import(body: ImportBody, request: Request, x_admin_token: str | None = Header(default=None)):
         admin = require_import_access(x_admin_token)
-        if jobs.any_running():
-            raise HTTPException(429, "Another import is already running. Try again when it has finished.")
         req = ImportRequest(name=body.name.strip(), acronym=body.acronym.strip(), slug=body.slug.strip().lower(),
                             sheet_url=body.sheet_url.strip(), format=body.format)
         try:
