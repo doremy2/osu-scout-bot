@@ -12,8 +12,8 @@ async function proxy(request: Request, ctx: { params: Promise<{ path: string[] }
   target.search = new URL(request.url).search;
 
   const headers = new Headers();
-  // x-forwarded-for lets the API apply per-visitor import limits
-  for (const name of ["content-type", "x-admin-token", "accept", "x-forwarded-for"]) {
+  // x-forwarded-for lets the API apply per-visitor import limits; authorization carries Vercel Cron's bearer secret
+  for (const name of ["content-type", "x-admin-token", "authorization", "accept", "x-forwarded-for"]) {
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }

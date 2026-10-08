@@ -9,10 +9,12 @@ from __future__ import annotations
 
 import logging
 import sqlite3
+from dataclasses import dataclass, field
 from typing import Callable, Protocol
 
 from . import classify, teams
 from .db import repo
+from .models import MatchLink
 from .osu import MatchNotFound, OsuApiError, parse_match, parse_room
 from .sources import discover_all
 
@@ -23,14 +25,33 @@ class MatchFetcher(Protocol):
     def get_match_full(self, match_id: int) -> dict: ...
 
 
+@dataclass
+class SourceScan:
+    """What a source says right now, compared with what the tournament already holds."""
+    kind: str
+    links: list[MatchLink]
+    slots: list[dict]
+    hash: str
+    new: list[MatchLink] = field(default_factory=list)      # lobbies the tournament does not have yet
+
+
+def scan_source(conn: sqlite3.Connection, tournament_id: int, location: str, kind: str | None = None) -> SourceScan:
+    """Read the source and work out which lobbies are new. Writes nothing."""
+    kind, links, slots = discover_all(location, kind)
+    known = repo.known_match_ids(conn, tournament_id)
+    return SourceScan(kind, links, slots, repo.links_hash(links, slots),
+                      [l for l in links if l.osu_match_id not in known])
+
+
 def discover(conn: sqlite3.Connection, tournament_id: int, location: str,
              kind: str | None = None, round_override: str | None = None) -> tuple[int, int]:
     """Returns (links found, new matches)."""
-    kind, links, slots = discover_all(location, kind)
-    repo.save_pool_slots(conn, tournament_id, slots)
-    new = repo.add_match_links(conn, tournament_id, links, round_override=round_override)
-    repo.record_source(conn, tournament_id, kind, location, len(links))
-    return len(links), new
+    scan = scan_source(conn, tournament_id, location, kind)
+    repo.save_pool_slots(conn, tournament_id, scan.slots)
+    new = repo.add_match_links(conn, tournament_id, scan.links, round_override=round_override)
+    repo.record_source(conn, tournament_id, scan.kind, location, len(scan.links))
+    repo.record_check(conn, tournament_id, source_hash=scan.hash)
+    return len(scan.links), new
 
 
 def fetch(conn: sqlite3.Connection, tournament_id: int, client: MatchFetcher,

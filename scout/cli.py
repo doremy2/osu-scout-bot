@@ -205,6 +205,73 @@ def print_player(p: dict) -> None:
         print(f"  {round_name(h['round']):<15} {h['result'] or '?'} {h['score'] or '':<6} {h['name']}")
 
 
+def cmd_update(conn, a):
+    """Rescan tournament sources and import only the lobbies that are new."""
+    from . import updater
+    from .importer import JobStore
+    if a.slug:
+        res = updater.check_tournament(a.db, a.slug)
+        print(f"{a.slug}: {res['state']} - {res.get('new', 0)} new, {res.get('pending', 0)} waiting" + (f" ({res['error']})" if res.get("error") else ""))
+        if res.get("job"):
+            import time
+            job = updater.drive(JobStore(a.db), res["job"], _client, time.monotonic() + a.budget)
+            print(f"  import job {job.phase}: {job.done}/{job.total}")
+        return
+    out = updater.tick(a.db, _client, budget=a.budget, discovery=not a.no_discovery)
+    for r in out["resumed"]:
+        print(f"resumed {r['slug']}: {r['phase']}")
+    for r in out["checked"]:
+        print(f"{r['slug']}: {r['state']} - {r.get('new', 0)} new, {r.get('pending', 0)} waiting")
+    if not out["resumed"] and not out["checked"]:
+        print("Nothing is due.")
+    if out["discovery"]:
+        for sc in out["discovery"]["scanned"]:
+            print(f"discovery source {sc['source_id']}: {sc['created']} new candidates, {sc['known']} known")
+
+
+def cmd_source(conn, a):
+    from . import discovery
+    if a.action == "add":
+        sid = discovery.add_source(conn, a.name, a.kind, a.url, a.every)
+        print(f"Source {sid} added: {a.name}")
+    elif a.action == "list":
+        for s in discovery.list_sources(conn):
+            print(f"{s['id']:>3} {'on ' if s['enabled'] else 'off'} {s['kind']:<5} {s['name']:<30} last {s['last_scanned_at'] or 'never'} "
+                  f"({s['last_status'] or '-'}, {s['last_found']} sheets)  {s['url']}")
+    else:
+        ids = [a.id] if a.id else [s["id"] for s in discovery.list_sources(conn) if s["enabled"]]
+        for sid in ids:
+            r = discovery.scan_source(a.db, sid)
+            print(f"source {sid}: {r.get('error') or ''}{r['created']} new, {r['updated']} updated, {r['known']} known, "
+                  f"{r['duplicate']} duplicate, {r['no_links']} without links, {r['errors']} errors, {r['deferred']} deferred")
+
+
+def cmd_candidates(conn, a):
+    from . import discovery
+    rows = discovery.list_candidates(conn, a.status)
+    for c in rows:
+        print(f"#{c['id']:<4} {c['confidence']:.2f} {c['status']:<9} {c['detected_format']:<4} {c['detected_client']:<6} "
+              f"{c['match_count']:>4} MP  {c['name']}  [{c['suggested_slug']}]  {c['source_url']}")
+        if a.why:
+            for r in c["reasons"]:
+                print(f"        {r}")
+    if not rows:
+        print("The queue is empty.")
+
+
+def cmd_approve(conn, a):
+    from . import discovery
+    from .importer import JobRegistry
+    res = discovery.approve_candidate(a.db, a.id, JobRegistry(a.db), _client, mode="inline")
+    job = res["job"]
+    print(f"{res['candidate']['tournament_slug']}: import {job.phase}" + (f" - {job.error}" if job.error else ""))
+
+
+def cmd_ignore(conn, a):
+    from . import discovery
+    print("Ignored." if discovery.set_candidate_status(conn, a.id, "ignored") else "No pending candidate with that id.")
+
+
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(prog="scout", description="osu! tournament ingestion + analytics")
     ap.add_argument("--db", default=str(settings.db_path))
@@ -238,6 +305,17 @@ def main(argv: list[str] | None = None) -> None:
     p.set_defaults(fn=cmd_reparse)
     p = sub.add_parser("recompute", help="re-run classification + team detection (no API calls)")
     p.add_argument("slug"); p.set_defaults(fn=cmd_recompute)
+    p = sub.add_parser("update", help="rescan tournament sources and import only the new lobbies (all that are due, or one slug)")
+    p.add_argument("slug", nargs="?"); p.add_argument("--budget", type=float, default=600, help="seconds of work")
+    p.add_argument("--no-discovery", action="store_true"); p.set_defaults(fn=cmd_update)
+    p = sub.add_parser("source", help="discovery sources: add | list | scan")
+    p.add_argument("action", choices=["add", "list", "scan"]); p.add_argument("--name"); p.add_argument("--url")
+    p.add_argument("--kind", choices=["page", "sheet"], default="page"); p.add_argument("--every", type=int, default=360, help="minutes between scans")
+    p.add_argument("--id", type=int); p.set_defaults(fn=cmd_source)
+    p = sub.add_parser("candidates", help="the discovery review queue"); p.add_argument("--status", default="pending")
+    p.add_argument("--why", action="store_true", help="show the confidence reasons"); p.set_defaults(fn=cmd_candidates)
+    p = sub.add_parser("approve", help="approve a candidate: imports it"); p.add_argument("id", type=int); p.set_defaults(fn=cmd_approve)
+    p = sub.add_parser("ignore", help="ignore a candidate"); p.add_argument("id", type=int); p.set_defaults(fn=cmd_ignore)
     p = sub.add_parser("serve", help="start the web API on 127.0.0.1:8001"); p.add_argument("--port", type=int, default=8001)
     p.set_defaults(fn=cmd_serve)
     p = sub.add_parser("dev", help="start API + website (http://localhost:3000)"); p.add_argument("--port", type=int, default=8001)

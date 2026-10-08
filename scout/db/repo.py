@@ -1,11 +1,13 @@
 """Repository functions: the only place that writes tournament data."""
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sqlite3
 import unicodedata
 import zlib
+from datetime import datetime, timedelta, timezone
 
 from ..clients import DEFAULT_CLIENT, validate_client
 from ..formats import DEFAULT_FORMAT, validate_format
@@ -154,8 +156,9 @@ def pending_matches(conn: sqlite3.Connection, tournament_id: int, retry_failed: 
 
 def mark_match(conn: sqlite3.Connection, match_row_id: int, status: str, error: str | None = None) -> None:
     conn.execute(
-        "UPDATE tournament_matches SET status = ?, error = ?, fetched_at = datetime('now') WHERE id = ?",
-        (status, error, match_row_id),
+        "UPDATE tournament_matches SET status = ?, error = ?, fetched_at = datetime('now'), "
+        "attempts = attempts + CASE WHEN ? = 'imported' THEN 0 ELSE 1 END WHERE id = ?",
+        (status, error, status, match_row_id),
     )
     conn.commit()
 
@@ -258,3 +261,124 @@ def load_mappool(conn: sqlite3.Connection, tournament_id: int, rows: list[dict])
         n += 1
     conn.commit()
     return n
+
+
+# --- automatic updating ----------------------------------------------------------
+UTC = timezone.utc
+RETRY_FAILED_AFTER = timedelta(minutes=30)       # a failed fetch is tried again after this long...
+RETRY_NOT_FOUND_AFTER = timedelta(hours=6)       # ...a 404 later still (the sheet may list a lobby before it exists)
+MAX_ATTEMPTS = 5                                 # then it is left alone until someone resets it
+LIVE_LOBBY_WINDOW = timedelta(hours=6)           # a lobby that started this recently may still be running
+LIVE_LOBBY_REFRESH = timedelta(minutes=10)
+
+
+def utcnow() -> datetime:
+    return datetime.now(UTC)
+
+
+def stamp(when: datetime | None = None) -> str:
+    """The timestamp format the database uses (UTC, same as datetime('now'))."""
+    return (when or utcnow()).astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def parse_stamp(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        d = datetime.fromisoformat(value.strip().replace(" ", "T"))
+    except ValueError:
+        return None
+    return d.replace(tzinfo=UTC) if d.tzinfo is None else d.astimezone(UTC)
+
+
+def iso(value: str | None) -> str | None:
+    d = parse_stamp(value)
+    return d.strftime("%Y-%m-%dT%H:%M:%SZ") if d else None
+
+
+def links_hash(links: list[MatchLink], slots: list[dict] | None = None) -> str:
+    """Fingerprint of what a source currently says (which lobbies, in which round, which pool). Cheap change detection."""
+    rows = sorted((l.kind, l.osu_match_id, l.round_raw or "") for l in links)
+    pool = sorted((s.get("round") or "", s.get("slot") or "", s.get("beatmap_id") or 0, s.get("beatmapset_id") or 0)
+                  for s in (slots or []))
+    return hashlib.sha256(json.dumps([rows, pool], separators=(",", ":")).encode()).hexdigest()[:24]
+
+
+def known_match_ids(conn: sqlite3.Connection, tournament_id: int) -> set[int]:
+    """Lobby ids the tournament already holds, whatever their status (this is what the unique key is on)."""
+    return {r[0] for r in conn.execute("SELECT osu_match_id FROM tournament_matches WHERE tournament_id = ?", (tournament_id,))}
+
+
+def set_source(conn: sqlite3.Connection, tournament_id: int, url: str, source_type: str, overwrite: bool = False) -> None:
+    """Remember where a tournament came from. Tracking is switched on the first time a source is recorded; after that
+    it is left as the owner set it."""
+    row = conn.execute("SELECT source_url FROM tournaments WHERE id = ?", (tournament_id,)).fetchone()
+    if row is None:
+        return
+    if row["source_url"] is None:
+        conn.execute("UPDATE tournaments SET source_url = ?, source_type = ?, auto_update = ? WHERE id = ?",
+                     (url, source_type, 1 if source_type == "google_sheet" else 0, tournament_id))
+    elif overwrite and row["source_url"] != url:
+        conn.execute("UPDATE tournaments SET source_url = ?, source_type = ? WHERE id = ?", (url, source_type, tournament_id))
+    conn.commit()
+
+
+def set_auto_update(conn: sqlite3.Connection, slug: str, enabled: bool, source_url: str | None = None) -> bool:
+    t = get_tournament(conn, slug)
+    if t is None:
+        return False
+    if source_url:
+        conn.execute("UPDATE tournaments SET source_url = ?, source_type = ?, check_failures = 0 WHERE id = ?",
+                     (source_url, "google_sheet", t["id"]))
+    conn.execute("UPDATE tournaments SET auto_update = ? WHERE id = ?", (1 if enabled else 0, t["id"]))
+    conn.commit()
+    return True
+
+
+def record_check(conn: sqlite3.Connection, tournament_id: int, *, source_hash: str | None = None, new: int = 0,
+                 error: str | None = None, now: datetime | None = None) -> None:
+    """Book-keep one look at the source. A failed look backs off (check_failures); a look that found new lobbies
+    marks the tournament as changed (that keeps it on the fast schedule)."""
+    when = stamp(now)
+    if error is not None:
+        conn.execute("UPDATE tournaments SET last_checked_at = ?, last_check_error = ?, check_failures = check_failures + 1 "
+                     "WHERE id = ?", (when, error[:300], tournament_id))
+    else:
+        conn.execute(
+            """UPDATE tournaments SET last_checked_at = ?, last_check_error = NULL, check_failures = 0,
+                      last_source_hash = COALESCE(?, last_source_hash),
+                      last_changed_at = CASE WHEN ? > 0 THEN ? ELSE last_changed_at END,
+                      last_new_matches = CASE WHEN ? > 0 THEN ? ELSE last_new_matches END
+               WHERE id = ?""",
+            (when, source_hash, new, when, new, new, tournament_id))
+    conn.commit()
+
+
+def requeue_retryable(conn: sqlite3.Connection, tournament_id: int, now: datetime | None = None) -> int:
+    """Failed fetches and 404s get another chance after a cool-down (bounded by MAX_ATTEMPTS)."""
+    now = now or utcnow()
+    n = 0
+    for status, wait in (("failed", RETRY_FAILED_AFTER), ("not_found", RETRY_NOT_FOUND_AFTER)):
+        cur = conn.execute(
+            "UPDATE tournament_matches SET status = 'pending' WHERE tournament_id = ? AND status = ? AND attempts < ? "
+            "AND (fetched_at IS NULL OR fetched_at <= ?)", (tournament_id, status, MAX_ATTEMPTS, stamp(now - wait)))
+        n += cur.rowcount if cur.rowcount and cur.rowcount > 0 else 0
+    conn.commit()
+    return n
+
+
+def reopen_live_matches(conn: sqlite3.Connection, tournament_id: int, now: datetime | None = None) -> int:
+    """A stable lobby with no end time that started a few hours ago is probably still being played: queue it for a fresh
+    download (dropping its cached copy) so games played since the last look are picked up. Rooms are left alone
+    (a lazer room costs a dozen API calls)."""
+    now = now or utcnow()
+    rows = conn.execute(
+        "SELECT id, osu_match_id FROM tournament_matches WHERE tournament_id = ? AND status = 'imported' AND kind = 'match' "
+        "AND end_time IS NULL AND start_time IS NOT NULL AND replace(replace(start_time, 'T', ' '), 'Z', '') >= ? "
+        "AND (fetched_at IS NULL OR fetched_at <= ?)",
+        (tournament_id, stamp(now - LIVE_LOBBY_WINDOW), stamp(now - LIVE_LOBBY_REFRESH))).fetchall()
+    for r in rows:
+        conn.execute("DELETE FROM raw_match_cache WHERE osu_match_id = ?", (r["osu_match_id"],))
+        conn.execute("UPDATE tournament_matches SET status = 'pending' WHERE id = ?", (r["id"],))
+    conn.commit()
+    return len(rows)

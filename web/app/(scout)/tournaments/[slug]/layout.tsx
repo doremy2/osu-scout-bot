@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { PlayerSearch } from "@/components/scout/PlayerSearch";
 import { TournamentTabs } from "@/components/scout/TournamentTabs";
+import { TrackingBadge } from "@/components/scout/TrackingBadge";
 import { scoutGet } from "@/lib/scout";
 import { fmtDate, fmtInt } from "@/lib/scoutFormat";
 import type { Overview } from "@/lib/scoutTypes";
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function TournamentLayout({ children, params }: { children: ReactNode; params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { tournament: t, summary: s } = await scoutGet<Overview>(`/tournaments/${encodeURIComponent(slug)}`);
+  const { tournament: t, summary: s, tracking } = await scoutGet<Overview>(`/tournaments/${encodeURIComponent(slug)}`);
   return (
     <>
       <section className="sc-thead">
@@ -36,6 +37,7 @@ export default async function TournamentLayout({ children, params }: { children:
         </div>
         <PlayerSearch slug={t.slug} />
       </section>
+      <TrackingBadge slug={t.slug} initial={tracking} />
       <TournamentTabs slug={t.slug} hasTeams={t.has_teams} />
       <div className="sc-tcontent">{children}</div>
     </>

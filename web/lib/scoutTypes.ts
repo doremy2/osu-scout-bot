@@ -223,7 +223,26 @@ export type TeamPage = {
   matches: MatchItem[];
 };
 
+/** Live tracking: the tournament's source is rescanned on a schedule and only new matches are imported. */
+export type Tracking = {
+  enabled: boolean;
+  state: "off" | "tracking" | "live" | "updating" | "error";
+  live: boolean;
+  updating: boolean;
+  source_type: string | null;
+  source_url: string | null;
+  last_checked_at: string | null;
+  last_changed_at: string | null;
+  next_check_at: string | null;
+  matches_tracked: number;
+  pending: number;
+  new_detected: number;
+  error: string | null;
+  job: { id: string; phase: string; done: number; total: number } | null;
+};
+
 export type Overview = {
+  tracking: Tracking | null;
   tournament: Tournament;
   summary: Summary;
   mvp: PlayerSummary | null;
@@ -367,4 +386,39 @@ export type DraftAdvice = {
   suggestions: { beatmap_id: number; score: number; p_side: number; reasons: string[] }[];
   match_win_a: number;
   target: number;
+};
+
+
+export type DiscoveryCandidate = {
+  id: number;
+  name: string;
+  acronym: string | null;
+  suggested_slug: string;
+  source_url: string;
+  source_type: string;
+  detected_format: Format;
+  detected_client: OsuClient;
+  match_count: number;
+  room_count: number;
+  confidence: number;
+  reasons: string[];
+  status: "pending" | "approved" | "ignored" | "duplicate";
+  duplicate_of: string | null;
+  tournament_slug: string | null;
+  discovered_at: string | null;
+  decided_at: string | null;
+  job: { id: string; phase: string; done: number; total: number; error: string | null } | null;
+};
+
+export type DiscoverySource = {
+  id: number;
+  name: string;
+  kind: "page" | "sheet";
+  url: string;
+  enabled: number;
+  scan_interval_min: number;
+  last_scanned_at: string | null;
+  last_status: "ok" | "error" | null;
+  last_error: string | null;
+  last_found: number;
 };

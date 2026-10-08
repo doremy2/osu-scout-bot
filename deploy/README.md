@@ -162,3 +162,25 @@ Import locally, run `python scripts/make_deploy_db.py`, commit `deploy/scout.db`
 
 **Steps:** import the repo into Vercel as a project (the services come from `vercel.json`), or use the CLI
 (`vercel link`, `vercel deploy`, `vercel deploy --prod`). `vercel dev -L` runs both services locally.
+
+## Automatic updates and discovery
+
+Imported Google Sheet tournaments are re-checked on a schedule; only lobbies that are new since the last check are
+downloaded, then ratings are recalculated. Discovery sources are scanned on the same schedule and only fill the review
+queue at `/admin` (nothing is published until approved).
+
+One scheduled call does all of it, within ~45 s per call (`SCOUT_TICK_BUDGET`); whatever does not fit continues on the next call:
+
+```
+GET|POST /api/cron/tick        Authorization: Bearer $CRON_SECRET   (or header X-Admin-Token: $SCOUT_ADMIN_TOKEN)
+```
+
+- **Server / local:** set `SCOUT_AUTO_UPDATE_MINUTES=15` and the API runs it on a timer, or run `python -m scout update`
+  from cron / a systemd timer.
+- **Vercel:** set `CRON_SECRET`, then add a cron to `vercel.json` hitting `/api/scout/cron/tick`. Hobby plans only allow
+  daily schedules (`0 6 * * *`); a 15-minute schedule (`*/15 * * * *`) needs Pro. Any free external pinger
+  (e.g. a GitHub Actions schedule) can call the endpoint with the bearer secret instead.
+- Check cadence adapts: 15 min while a tournament changed in the last 3 days, then 3 h, daily, weekly. Failed checks back off.
+- `SCOUT_DISCOVERY_AUTO_APPROVE=0.9` would let very confident candidates skip review; the default `0` never auto-publishes.
+
+CLI: `update [slug]`, `source add|list|scan`, `candidates [--why]`, `approve ID`, `ignore ID`.

@@ -264,7 +264,7 @@ def test_import_validation_and_missing_credentials(tmp_path, monkeypatch):
     monkeypatch.setattr(server.settings.__class__, "osu_client_id", "", raising=False)
     monkeypatch.setattr(server, "settings", type("S", (), {"osu_client_id": "", "osu_client_secret": "", "db_path": tmp_path / "x.db", "admin_token": "",
                                                 "imports_mode": "auto", "import_mode": "", "turso_url": "", "allowed_origins": "", "enable_docs": False,
-                                                "readonly": False})())
+                                                "readonly": False, "auto_update_minutes": 0})())
     c = TestClient(create_app(tmp_path / "x.db"))
     r = c.post("/api/imports", json={"name": "N", "acronym": "N", "slug": "ok", "format": "1v1",
                                      "sheet_url": "https://docs.google.com/spreadsheets/d/a/edit"})
@@ -644,7 +644,7 @@ def test_abandoned_web_imports_are_removed_but_cli_tournaments_are_not(tmp_path)
 
     def job(slug, phase, minutes_ago):
         j = store.create(ImportRequest(name=slug, acronym="", slug=slug, sheet_url="https://docs.google.com/spreadsheets/d/a/edit", format="1v1"))
-        j.phase = phase
+        j.phase, j.created = phase, True                        # a web import that created the tournament
         store.save(j)
         conn.execute("UPDATE import_jobs SET updated_at = datetime('now', ?) WHERE id = ?", (f"-{minutes_ago} minutes", j.id))
         conn.commit()

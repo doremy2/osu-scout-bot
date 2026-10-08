@@ -31,6 +31,7 @@ log = logging.getLogger("scout.importer")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FINISHED = ("done", "error")
 STALE_AFTER = 15 * 60       # a job nobody has touched for this long no longer blocks new imports (seconds)
+ORIGINS = ("import", "update", "discovery")     # who started a job: a visitor's import, a scheduled update, an approved candidate
 
 
 @dataclass
@@ -43,6 +44,7 @@ class ImportRequest:
     warmups: int | None = None
     keep_metadata: bool = False       # re-import of an existing tournament: leave its name/format/acronym alone
     client: str = "stable"            # osu! client the tournament was played on: stable | lazer
+    origin: str = "import"            # import (a visitor) | update (scheduled rescan) | discovery (approved candidate)
 
     def validate(self) -> None:
         if not self.name.strip():
@@ -55,6 +57,8 @@ class ImportRequest:
             raise ValueError("Paste a Google Sheets link (docs.google.com/spreadsheets/...)")
         validate_format(self.format)
         validate_client(self.client)
+        if self.origin not in ORIGINS:
+            raise ValueError(f"Unknown import origin {self.origin!r}")
 
 
 @dataclass
@@ -72,7 +76,8 @@ class ImportJob:
     created: bool = False            # this job created the tournament row
 
     def public(self) -> dict:
-        return {"id": self.id, "slug": self.request.slug, "phase": self.phase, "message": self.message,
+        return {"id": self.id, "slug": self.request.slug, "origin": self.request.origin, "phase": self.phase,
+                "message": self.message,
                 "found": self.found, "done": self.done, "total": self.total, "failed": self.failed,
                 "not_found": self.not_found, "error": self.error}
 
@@ -88,12 +93,14 @@ class JobStore:
                          message=r["message"], found=r["found"], done=r["done"], total=r["total"], failed=r["failed"],
                          not_found=r["not_found"], error=r["error"], created=bool(r["created"]))
 
-    def create(self, req: ImportRequest) -> ImportJob:
-        job = ImportJob(id=uuid.uuid4().hex[:12], request=req)
+    def create(self, req: ImportRequest, phase: str = "queued", message: str = "Waiting to start",
+               found: int = 0, total: int = 0) -> ImportJob:
+        job = ImportJob(id=uuid.uuid4().hex[:12], request=req, phase=phase, message=message, found=found, total=total)
         conn = connect(self.db_path)
         try:
-            conn.execute("INSERT INTO import_jobs (id, slug, request, phase, message) VALUES (?, ?, ?, ?, ?)",
-                         (job.id, req.slug, json.dumps(asdict(req)), job.phase, job.message))
+            conn.execute("INSERT INTO import_jobs (id, slug, request, phase, message, found, total, origin) "
+                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                         (job.id, req.slug, json.dumps(asdict(req)), phase, message, found, total, req.origin))
             conn.commit()
         finally:
             conn.close()
@@ -120,11 +127,12 @@ class JobStore:
             conn.close()
 
     def running(self, slug: str | None = None) -> ImportJob | None:
-        """An unfinished, recently active job (optionally for one slug)."""
+        """An unfinished, recently active job (optionally for one slug). Scheduled jobs (update / discovery) are driven by
+        a timer that may be hours apart, so they never go stale the way a visitor's abandoned import does."""
         conn = connect(self.db_path)
         try:
             q = ("SELECT * FROM import_jobs WHERE phase NOT IN ('done', 'error') "
-                 "AND (julianday('now') - julianday(updated_at)) * 86400 < ?")
+                 "AND (origin != 'import' OR (julianday('now') - julianday(updated_at)) * 86400 < ?)")
             args: list = [STALE_AFTER]
             if slug:
                 q += " AND slug = ?"
@@ -134,18 +142,31 @@ class JobStore:
         finally:
             conn.close()
 
+    def resumable(self, idle_for: float = 30.0) -> list[ImportJob]:
+        """Unfinished scheduled jobs nobody is working on right now (oldest first). A job touched within `idle_for`
+        seconds is being driven by someone else, so it is skipped rather than fetched twice."""
+        conn = connect(self.db_path)
+        try:
+            rows = conn.execute(
+                "SELECT * FROM import_jobs WHERE phase NOT IN ('done', 'error') AND origin != 'import' "
+                "AND (julianday('now') - julianday(updated_at)) * 86400 >= ? ORDER BY created_at", (idle_for,)).fetchall()
+            return [self._row_to_job(r) for r in rows]
+        finally:
+            conn.close()
+
 
 def purge_abandoned(db_path) -> list[str]:
     """Delete tournaments left half-imported by a web import that died: matches still waiting to be fetched, and the
-    latest import job for the slug is unfinished and either errored or has gone quiet. Tournaments made with the
-    command line (no web job) are never touched."""
+    latest import job for the slug is unfinished and either errored or has gone quiet. Only tournaments a visitor's web
+    import created are ever candidates: command-line tournaments, scheduled updates and approved candidates are
+    driven by a timer and are left alone."""
     conn = connect(db_path)
     removed: list[str] = []
     try:
         rows = conn.execute(
             """SELECT t.slug FROM tournaments t
                WHERE EXISTS (SELECT 1 FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'pending')
-                 AND EXISTS (SELECT 1 FROM import_jobs j WHERE j.slug = t.slug)
+                 AND EXISTS (SELECT 1 FROM import_jobs j WHERE j.slug = t.slug AND j.created = 1 AND j.origin = 'import')
                  AND NOT EXISTS (SELECT 1 FROM import_jobs j WHERE j.slug = t.slug AND (
                        j.phase = 'done'
                        OR (j.phase != 'error' AND (julianday('now') - julianday(j.updated_at)) * 86400 < ?)))""",
@@ -197,6 +218,7 @@ def step(store: JobStore, job_id: str, client_factory: Callable | None = None, b
                 tid = repo.upsert_tournament(conn, req.slug, req.name, req.acronym or None, req.warmups, req.format,
                                              req.client)
             found, _new = ingest.discover(conn, tid, req.sheet_url, kind="google_sheet")
+            repo.set_source(conn, tid, req.sheet_url, "google_sheet", overwrite=not req.keep_metadata)
             if found == 0:
                 raise ValueError("No osu! multiplayer links were found in that sheet. "
                                  "Is it shared as 'anyone with the link can view'?")
@@ -227,7 +249,7 @@ def step(store: JobStore, job_id: str, client_factory: Callable | None = None, b
                 elif status == "not_found":
                     job.not_found += 1
                 job.done += 1
-                job.message = f"Importing matches... {job.done} / {job.total}"
+                job.message = f"{'Importing new matches' if req.origin == 'update' else 'Importing matches'}... {job.done} / {job.total}"
                 store.save(job)
                 if time.monotonic() > deadline:      # always finishes at least one lobby per step, so it can't stall
                     break
@@ -249,6 +271,9 @@ def step(store: JobStore, job_id: str, client_factory: Callable | None = None, b
         job.phase, job.error, job.message = "error", str(e), "Import failed"
         try:
             _cleanup_ghost(conn, job)
+            t = repo.get_tournament(conn, req.slug)
+            if t is not None and req.origin == "update":
+                repo.record_check(conn, t["id"], error=str(e))
         finally:
             store.save(job)
         return job
@@ -280,6 +305,9 @@ class JobRegistry:
             job = step(self.store, job_id, client_factory, budget=float("inf"))
             if job.phase in FINISHED:
                 return
+
+    def drive_in_background(self, job_id: str, client_factory: Callable | None = None) -> None:
+        threading.Thread(target=self._drive, args=(job_id, client_factory), daemon=True).start()
 
     def step(self, job_id: str, client_factory: Callable | None = None) -> ImportJob:
         return step(self.store, job_id, client_factory)

@@ -8,6 +8,8 @@ from __future__ import annotations
 import dataclasses
 import hmac
 import sqlite3
+import threading
+import time
 from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Query, Request
@@ -20,7 +22,7 @@ from .analytics.draft import DraftConfig, draft_advice, list_sides, round_pools
 from .analytics.ratings import RatingConfig, config_for_client
 from .rounds import ROUNDS
 from .config import settings
-from . import limits
+from . import discovery, limits, updater
 from .db import connect, repo, writable_copy
 from .clients import CLIENTS
 from .formats import FORMATS
@@ -45,6 +47,34 @@ class ImportBody(BaseModel):
     sheet_url: str
     format: str
     client: str = "stable"
+
+
+class TrackingBody(BaseModel):
+    auto_update: bool
+    source_url: str | None = None
+
+
+class SourceBody(BaseModel):
+    name: str
+    kind: str = "page"
+    url: str
+    scan_interval_min: int = 360
+
+
+class EnabledBody(BaseModel):
+    enabled: bool
+
+
+class ScanBody(BaseModel):
+    source_id: int | None = None
+
+
+class ApproveBody(BaseModel):
+    name: str | None = None
+    acronym: str | None = None
+    slug: str | None = None
+    format: str | None = None
+    client: str | None = None
 
 
 def import_policy(admin_token: str, mode: str) -> str:
@@ -87,6 +117,42 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
 
     def db() -> sqlite3.Connection:
         return connect(db_path)
+
+    writable = not (settings.readonly and not settings.turso_url)       # a bundled snapshot cannot be updated
+
+    def require_admin(x_admin_token: str | None) -> None:
+        """Owner-only features (discovery queue, forcing a check). Needs the admin token; without one configured they are
+        only open on a local, unprotected server."""
+        if token:
+            if not is_admin(x_admin_token):
+                raise HTTPException(401, "This needs the admin token.")
+        elif policy != "open":
+            raise HTTPException(403, "Set SCOUT_ADMIN_TOKEN on the server to use admin features.")
+        if not writable:
+            raise HTTPException(403, "This deployment is a read-only snapshot.")
+
+    def require_cron(authorization: str | None, x_admin_token: str | None) -> None:
+        """The scheduled run: Vercel Cron (Authorization: Bearer $CRON_SECRET), or the admin token."""
+        secret = settings.cron_secret
+        if secret and authorization and hmac.compare_digest(authorization.encode(), f"Bearer {secret}".encode()):
+            if not writable:
+                raise HTTPException(403, "This deployment is a read-only snapshot.")
+            return
+        require_admin(x_admin_token)
+
+    def scheduled_run() -> dict:
+        return updater.tick(db_path, client_factory)
+
+    if settings.auto_update_minutes > 0 and writable and not settings.turso_url:
+        def loop() -> None:                  # long-running server: do what the cron endpoint does, on a timer
+            while True:
+                time.sleep(settings.auto_update_minutes * 60)
+                try:
+                    scheduled_run()
+                except Exception:  # noqa: BLE001 - never kill the timer
+                    import logging
+                    logging.getLogger("scout.scheduler").exception("scheduled run failed")
+        threading.Thread(target=loop, daemon=True, name="scout-scheduler").start()
 
     def analysis(conn: sqlite3.Connection, slug: str):
         try:
@@ -202,6 +268,147 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         service.invalidate(slug)
         return {"deleted": slug}
 
+    # ---- automatic updating -------------------------------------------------
+    @app.get("/api/tournaments/{slug}/tracking")
+    def tracking(slug: str):
+        status = updater.tracking_status(db_path, slug, writable)
+        if status is None:
+            raise HTTPException(404, f"Unknown tournament '{slug}'")
+        return status
+
+    @app.api_route("/api/cron/tick", methods=["GET", "POST"])
+    def cron_tick(authorization: str | None = Header(default=None), x_admin_token: str | None = Header(default=None)):
+        """Scheduled run (cron): rescan the tournaments that are due, download only their new lobbies, scan discovery
+        sources. Time-boxed, so what does not fit continues on the next run."""
+        require_cron(authorization, x_admin_token)
+        if not client_factory and not (settings.osu_client_id and settings.osu_client_secret):
+            raise HTTPException(500, "Server is missing OSU_CLIENT_ID / OSU_CLIENT_SECRET.")
+        return scheduled_run()
+
+    @app.post("/api/admin/tournaments/{slug}/check")
+    def admin_check(slug: str, x_admin_token: str | None = Header(default=None)):
+        """Rescan one tournament's source now. In step mode the returned job is continued with POST /api/imports/{id}/step."""
+        require_admin(x_admin_token)
+        res = updater.check_tournament(db_path, slug)
+        if res["state"] == "no_source":
+            raise HTTPException(404, f"'{slug}' has no source to check")
+        service.invalidate(slug)
+        if res.get("job") and mode == "thread":
+            jobs.drive_in_background(res["job"], client_factory)
+        return {**res, "mode": mode}
+
+    @app.post("/api/admin/tournaments/{slug}/tracking")
+    def admin_tracking(slug: str, body: TrackingBody, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        if body.source_url and "docs.google.com/spreadsheets" not in body.source_url:
+            raise HTTPException(422, "Paste a Google Sheets link (docs.google.com/spreadsheets/...)")
+        conn = db()
+        try:
+            if not repo.set_auto_update(conn, slug, body.auto_update, body.source_url):
+                raise HTTPException(404, f"Unknown tournament '{slug}'")
+        finally:
+            conn.close()
+        return updater.tracking_status(db_path, slug, writable)
+
+    # ---- discovery (owner only) -----------------------------------------------
+    @app.get("/api/admin/discovery/sources")
+    def discovery_sources(x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            return discovery.list_sources(conn)
+        finally:
+            conn.close()
+
+    @app.post("/api/admin/discovery/sources", status_code=201)
+    def discovery_add_source(body: SourceBody, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            sid = discovery.add_source(conn, body.name, body.kind, body.url, body.scan_interval_min)
+        except ValueError as e:
+            raise HTTPException(422, str(e)) from None
+        finally:
+            conn.close()
+        return {"id": sid}
+
+    @app.post("/api/admin/discovery/sources/{source_id}/enabled")
+    def discovery_enable_source(source_id: int, body: EnabledBody, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            if not discovery.set_source_enabled(conn, source_id, body.enabled):
+                raise HTTPException(404, "Unknown source")
+        finally:
+            conn.close()
+        return {"id": source_id, "enabled": body.enabled}
+
+    @app.post("/api/admin/discovery/scan")
+    def discovery_scan(body: ScanBody, x_admin_token: str | None = Header(default=None)):
+        """Scan one source (or every enabled one) now. Finds candidates; publishes nothing."""
+        require_admin(x_admin_token)
+        deadline = time.monotonic() + settings.tick_budget
+        conn = db()
+        try:
+            ids = [body.source_id] if body.source_id else [r["id"] for r in conn.execute("SELECT id FROM discovery_sources WHERE enabled = 1")]
+        finally:
+            conn.close()
+        out = []
+        for sid in ids:
+            try:
+                out.append(discovery.scan_source(db_path, sid, deadline=deadline))
+            except KeyError:
+                raise HTTPException(404, "Unknown source") from None
+        return {"scanned": out}
+
+    @app.get("/api/admin/discovery/candidates")
+    def discovery_candidates(status: str = "pending", x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        if status not in ("pending", "approved", "ignored", "duplicate", "all"):
+            raise HTTPException(422, "status must be pending, approved, ignored, duplicate or all")
+        conn = db()
+        try:
+            return discovery.list_candidates(conn, status)
+        finally:
+            conn.close()
+
+    @app.post("/api/admin/discovery/candidates/{candidate_id}/approve", status_code=202)
+    def discovery_approve(candidate_id: int, body: ApproveBody, x_admin_token: str | None = Header(default=None)):
+        """Approve = start the normal import job for the candidate. The job is then driven exactly like an import."""
+        require_admin(x_admin_token)
+        if not client_factory and not (settings.osu_client_id and settings.osu_client_secret):
+            raise HTTPException(500, "Server is missing OSU_CLIENT_ID / OSU_CLIENT_SECRET (set them in .env).")
+        try:
+            res = discovery.approve_candidate(db_path, candidate_id, jobs, client_factory, mode=mode,
+                                              overrides=body.model_dump(exclude_none=True))
+        except KeyError:
+            raise HTTPException(404, "Unknown candidate") from None
+        except ValueError as e:
+            raise HTTPException(422, str(e)) from None
+        return {"candidate": res["candidate"], "job": {**res["job"].public(), "mode": mode} if res["job"] else None}
+
+    @app.post("/api/admin/discovery/candidates/{candidate_id}/ignore")
+    def discovery_ignore(candidate_id: int, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            if not discovery.set_candidate_status(conn, candidate_id, "ignored"):
+                raise HTTPException(404, "No pending candidate with that id")
+        finally:
+            conn.close()
+        return {"id": candidate_id, "status": "ignored"}
+
+    @app.post("/api/admin/discovery/candidates/{candidate_id}/restore")
+    def discovery_restore(candidate_id: int, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            if not discovery.set_candidate_status(conn, candidate_id, "pending"):
+                raise HTTPException(404, "No ignored candidate with that id")
+        finally:
+            conn.close()
+        return {"id": candidate_id, "status": "pending"}
+
     @app.get("/api/imports/{job_id}")
     def import_status(job_id: str):
         job = jobs.get(job_id)
@@ -233,6 +440,7 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
             "awards": rep["awards"],
             "recent_matches": recent,
             "modes": list(LEADERBOARD_MODES),
+            "tracking": updater.tracking_status(db_path, slug, writable),
         }
 
     @app.get("/api/tournaments/{slug}/leaderboard")

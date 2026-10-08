@@ -54,6 +54,16 @@ class Settings:
     # 0 = unlimited (the default); set a number to cap imports per visitor / per site per 24 h
     public_imports_per_visitor: int = int(os.environ.get("SCOUT_IMPORTS_PER_VISITOR", "0"))
     public_imports_per_day: int = int(os.environ.get("SCOUT_IMPORTS_PER_DAY", "0"))
+    # --- automatic updating + discovery -------------------------------------
+    # The scheduled endpoint (/api/cron/tick) accepts the admin token or this secret (Vercel Cron sends it as a bearer token).
+    cron_secret: str = os.environ.get("CRON_SECRET", "")
+    # Seconds of work one scheduled run may do (a serverless function lives ~60 s); what does not fit continues next run.
+    tick_budget: float = float(os.environ.get("SCOUT_TICK_BUDGET", "45"))
+    max_checks_per_tick: int = int(os.environ.get("SCOUT_MAX_CHECKS", "4"))          # sheets rescanned per run
+    # Long-running servers (local machine, VPS): run the scheduler in a background thread every N minutes. 0 = off.
+    auto_update_minutes: float = float(os.environ.get("SCOUT_AUTO_UPDATE_MINUTES", "0"))
+    # Candidates at or above this confidence are approved without review. 0 = never (everything waits in the queue).
+    discovery_auto_approve: float = float(os.environ.get("SCOUT_DISCOVERY_AUTO_APPROVE", "0"))
     host: str = os.environ.get("SCOUT_HOST", "127.0.0.1")
     port: int = int(os.environ.get("SCOUT_PORT", "8001"))
     allowed_origins: str = os.environ.get("SCOUT_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")

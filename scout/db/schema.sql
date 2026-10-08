@@ -200,3 +200,57 @@ CREATE TABLE IF NOT EXISTS pool_slots (
 
 CREATE INDEX IF NOT EXISTS ix_teams_tournament ON tournament_teams(tournament_id);
 CREATE INDEX IF NOT EXISTS ix_members_team ON team_memberships(team_id);
+
+-- ---- v8: tournament discovery ---------------------------------------------------------------------
+-- Public places that often list tournaments (a forum thread, a wiki page, an index spreadsheet). A scan reads them,
+-- finds the Google Sheets they link to and turns the ones that look like tournaments into candidates.
+CREATE TABLE IF NOT EXISTS discovery_sources (
+    id                INTEGER PRIMARY KEY,
+    name              TEXT NOT NULL,
+    kind              TEXT NOT NULL,                -- page | sheet
+    url               TEXT NOT NULL UNIQUE,
+    enabled           INTEGER NOT NULL DEFAULT 1,
+    scan_interval_min INTEGER NOT NULL DEFAULT 360,
+    last_scanned_at   TEXT,
+    last_status       TEXT,                         -- ok | error
+    last_error        TEXT,
+    last_found        INTEGER NOT NULL DEFAULT 0,   -- tournament references seen on the last scan
+    created_at        TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Everything a scan has looked at, so nothing is downloaded twice in a row. outcome: candidate | known | no_links | error
+CREATE TABLE IF NOT EXISTS discovery_seen (
+    key             TEXT PRIMARY KEY,               -- gsheet:<id>
+    source_id       INTEGER REFERENCES discovery_sources(id) ON DELETE SET NULL,
+    url             TEXT NOT NULL,
+    hint            TEXT,
+    outcome         TEXT NOT NULL,
+    detail          TEXT,
+    first_seen_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    last_checked_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- The review queue. Discovery only ever writes here; publishing goes through the normal import job.
+CREATE TABLE IF NOT EXISTS discovery_candidates (
+    id              INTEGER PRIMARY KEY,
+    source_id       INTEGER REFERENCES discovery_sources(id) ON DELETE SET NULL,
+    key             TEXT NOT NULL UNIQUE,
+    source_url      TEXT NOT NULL,
+    source_type     TEXT NOT NULL DEFAULT 'google_sheet',
+    name            TEXT NOT NULL,
+    acronym         TEXT,
+    suggested_slug  TEXT NOT NULL,
+    detected_format TEXT NOT NULL,
+    detected_client TEXT NOT NULL,
+    match_count     INTEGER NOT NULL,
+    room_count      INTEGER NOT NULL DEFAULT 0,
+    confidence      REAL NOT NULL,
+    reasons         TEXT NOT NULL DEFAULT '[]',     -- JSON: why this confidence
+    status          TEXT NOT NULL DEFAULT 'pending',-- pending | approved | ignored | duplicate
+    duplicate_of    TEXT,                           -- slug of the tournament it repeats
+    job_id          TEXT,
+    tournament_slug TEXT,
+    discovered_at   TEXT NOT NULL DEFAULT (datetime('now')),
+    decided_at      TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_candidates_status ON discovery_candidates(status, confidence);

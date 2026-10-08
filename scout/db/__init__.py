@@ -4,7 +4,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 7
+SCHEMA_VERSION = 8
 _SCHEMA = Path(__file__).with_name("schema.sql")
 
 
@@ -85,6 +85,26 @@ def _migrate(conn: sqlite3.Connection) -> None:
     # v7: lazer support: which client a tournament used, and whether a lobby is a stable match or a lazer room
     _add_column(conn, "tournaments", "client", "TEXT NOT NULL DEFAULT 'stable'")
     _add_column(conn, "tournament_matches", "kind", "TEXT NOT NULL DEFAULT 'match'")
+    # v8: automatic updating. Where a tournament came from, whether to keep re-checking it, and what the last check saw.
+    fresh_tracking = "source_url" not in _columns(conn, "tournaments")
+    _add_column(conn, "tournaments", "source_url", "TEXT")
+    _add_column(conn, "tournaments", "source_type", "TEXT")
+    _add_column(conn, "tournaments", "auto_update", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "tournaments", "last_checked_at", "TEXT")
+    _add_column(conn, "tournaments", "last_source_hash", "TEXT")
+    _add_column(conn, "tournaments", "last_changed_at", "TEXT")
+    _add_column(conn, "tournaments", "last_new_matches", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "tournaments", "last_check_error", "TEXT")
+    _add_column(conn, "tournaments", "check_failures", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "import_jobs", "origin", "TEXT NOT NULL DEFAULT 'import'")      # import | update | discovery
+    _add_column(conn, "tournament_matches", "attempts", "INTEGER NOT NULL DEFAULT 0")  # failed/not-found fetches so far
+    if fresh_tracking:      # tournaments imported before v8 get the source they were scanned from, once
+        conn.execute(
+            """UPDATE tournaments SET
+                 source_url = (SELECT s.location FROM tournament_sources s
+                               WHERE s.tournament_id = tournaments.id AND s.kind = 'google_sheet' ORDER BY s.id LIMIT 1),
+                 source_type = 'google_sheet', auto_update = 1
+               WHERE EXISTS (SELECT 1 FROM tournament_sources s WHERE s.tournament_id = tournaments.id AND s.kind = 'google_sheet')""")
     # v4: sheet text for pool slots (maps nobody has played yet)
     if _columns(conn, "pool_slots"):
         _add_column(conn, "pool_slots", "label", "TEXT")
