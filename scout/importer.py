@@ -40,6 +40,7 @@ class ImportRequest:
     sheet_url: str
     format: str
     warmups: int | None = None
+    keep_metadata: bool = False       # re-import of an existing tournament: leave its name/format/acronym alone
 
     def validate(self) -> None:
         if not self.name.strip():
@@ -131,6 +132,30 @@ class JobStore:
             conn.close()
 
 
+def purge_abandoned(db_path) -> list[str]:
+    """Delete tournaments left half-imported by a web import that died: matches still waiting to be fetched, and the
+    latest import job for the slug is unfinished and either errored or has gone quiet. Tournaments made with the
+    command line (no web job) are never touched."""
+    conn = connect(db_path)
+    removed: list[str] = []
+    try:
+        rows = conn.execute(
+            """SELECT t.slug FROM tournaments t
+               WHERE EXISTS (SELECT 1 FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'pending')
+                 AND EXISTS (SELECT 1 FROM import_jobs j WHERE j.slug = t.slug)
+                 AND NOT EXISTS (SELECT 1 FROM import_jobs j WHERE j.slug = t.slug AND (
+                       j.phase = 'done'
+                       OR (j.phase != 'error' AND (julianday('now') - julianday(j.updated_at)) * 86400 < ?)))""",
+            (STALE_AFTER,)).fetchall()
+        for r in rows:
+            if repo.delete_tournament(conn, r["slug"]):
+                removed.append(r["slug"])
+                service.invalidate(r["slug"])
+    finally:
+        conn.close()
+    return removed
+
+
 def _default_client():
     from .osu import OsuClient
     return OsuClient(settings.osu_client_id, settings.osu_client_secret, settings.osu_min_interval)
@@ -163,7 +188,10 @@ def step(store: JobStore, job_id: str, client_factory: Callable | None = None, b
             store.save(job)
             (client_factory or _default_client)()               # fails fast if credentials are missing
             job.created = repo.get_tournament(conn, req.slug) is None
-            tid = repo.upsert_tournament(conn, req.slug, req.name, req.acronym or None, req.warmups, req.format)
+            if req.keep_metadata and not job.created:
+                tid = repo.upsert_tournament(conn, req.slug)
+            else:
+                tid = repo.upsert_tournament(conn, req.slug, req.name, req.acronym or None, req.warmups, req.format)
             found, _new = ingest.discover(conn, tid, req.sheet_url, kind="google_sheet")
             if found == 0:
                 raise ValueError("No osu! multiplayer links were found in that sheet. "

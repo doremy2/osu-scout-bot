@@ -576,7 +576,7 @@ def test_public_visitors_cannot_overwrite_existing_tournaments(tmp_path, monkeyp
     repo.upsert_tournament(conn, "taken", "Taken", fmt="1v1")
     conn.close()
     r = c.post("/api/imports", json={**IMPORT_BODY, "slug": "taken"})
-    assert r.status_code == 409 and "already taken" in r.json()["detail"]
+    assert r.status_code == 409 and "different tournament" in r.json()["detail"]
     owner = c.post("/api/imports", json={**IMPORT_BODY, "slug": "taken"}, headers={"X-Admin-Token": "owner"})
     assert owner.status_code == 202 and owner.json()["existing"] is True       # the owner may update it
 
@@ -609,3 +609,54 @@ def test_public_imports_are_unlimited_by_default(tmp_path):
     for i in range(6):                       # no per-visitor or per-day cap unless one is configured
         r = c.post("/api/imports", json={**IMPORT_BODY, "slug": f"free-{i}"}, headers={"x-forwarded-for": "203.0.113.7"})
         assert r.status_code == 202, r.text
+
+
+def test_anyone_can_refresh_a_tournament_from_the_same_sheet(tmp_path, monkeypatch):
+    """Resuming a stuck import or syncing new matches only needs the same sheet; the metadata stays as it was."""
+    c = _public(tmp_path, monkeypatch, admin_token="owner")
+    conn = connect(tmp_path / "pub.db")
+    tid = repo.upsert_tournament(conn, "coe", "COE 2026", "COE", fmt="team")
+    repo.record_source(conn, tid, "google_sheet", "https://docs.google.com/spreadsheets/d/SHEETID123/edit?gid=5", 3)
+    conn.close()
+    body = {"name": "Hijacked name", "acronym": "X", "slug": "coe", "format": "1v1"}
+    other_tab = c.post("/api/imports", json={**body, "sheet_url": "https://docs.google.com/spreadsheets/d/SHEETID123/edit#gid=0"})
+    assert other_tab.status_code == 202 and other_tab.json()["existing"] is True       # same spreadsheet, another tab/link
+    c.app.state.jobs.store.save(dataclasses_replace_phase(c, other_tab.json()["id"], "done"))
+    wrong = c.post("/api/imports", json={**body, "sheet_url": "https://docs.google.com/spreadsheets/d/SOMETHINGELSE/edit"})
+    assert wrong.status_code == 409
+    job = c.app.state.jobs.store.get(other_tab.json()["id"])
+    assert job.request.keep_metadata is True                                           # name/format are not rewritten
+
+
+def test_abandoned_web_imports_are_removed_but_cli_tournaments_are_not(tmp_path):
+    from scout.importer import JobStore, purge_abandoned
+    db = tmp_path / "purge.db"
+    conn = connect(db)
+
+    def tournament(slug, pending=1):
+        tid = repo.upsert_tournament(conn, slug, slug, fmt="1v1")
+        conn.execute("INSERT INTO tournament_matches (tournament_id, osu_match_id, status) VALUES (?, ?, 'imported')", (tid, abs(hash(slug)) % 10**6))
+        for i in range(pending):
+            conn.execute("INSERT INTO tournament_matches (tournament_id, osu_match_id, status) VALUES (?, ?, 'pending')", (tid, 900000 + i + abs(hash(slug)) % 1000))
+        conn.commit()
+
+    store = JobStore(db)
+
+    def job(slug, phase, minutes_ago):
+        j = store.create(ImportRequest(name=slug, acronym="", slug=slug, sheet_url="https://docs.google.com/spreadsheets/d/a/edit", format="1v1"))
+        j.phase = phase
+        store.save(j)
+        conn.execute("UPDATE import_jobs SET updated_at = datetime('now', ?) WHERE id = ?", (f"-{minutes_ago} minutes", j.id))
+        conn.commit()
+
+    tournament("stuck"); job("stuck", "importing", 60)             # died an hour ago, matches still pending -> removed
+    tournament("busy"); job("busy", "importing", 1)                # still working -> kept
+    tournament("failed"); job("failed", "error", 1)                # errored with matches pending -> removed
+    tournament("cli")                                              # no web job at all (command-line import) -> kept
+    tournament("finished", pending=0); job("finished", "done", 60)  # complete -> kept
+    tournament("partial"); job("partial", "done", 60)              # a finished job never counts as abandoned
+    removed = sorted(purge_abandoned(db))
+    assert removed == ["failed", "stuck"]
+    left = {r["slug"] for r in conn.execute("SELECT slug FROM tournaments")}
+    assert left == {"busy", "cli", "finished", "partial"}
+    assert conn.execute("SELECT COUNT(*) FROM tournament_matches WHERE tournament_id NOT IN (SELECT id FROM tournaments)").fetchone()[0] == 0

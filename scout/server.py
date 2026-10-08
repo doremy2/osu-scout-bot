@@ -23,7 +23,7 @@ from .config import settings
 from . import limits
 from .db import connect, repo, writable_copy
 from .formats import FORMATS
-from .importer import ImportRequest, JobRegistry
+from .importer import ImportRequest, JobRegistry, purge_abandoned
 
 
 class DraftBody(BaseModel):
@@ -105,6 +105,10 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
 
     @app.get("/api/tournaments")
     def tournaments():
+        try:
+            purge_abandoned(db_path)       # half-imported leftovers from dead web imports
+        except Exception:  # noqa: BLE001 - never let housekeeping break the list
+            pass
         conn = db()
         try:
             return service.list_tournaments(conn)
@@ -145,8 +149,12 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
             existing = conn.execute("SELECT 1 FROM tournaments WHERE slug = ?", (req.slug,)).fetchone() is not None
             visitor = None
             if policy == "public" and not admin:
-                if existing:     # strangers may add tournaments, not rewrite existing ones
-                    raise HTTPException(409, "That slug is already taken. Choose a different one.")
+                if existing:
+                    # strangers may refresh or finish a tournament from the SAME sheet (it only fetches what is missing),
+                    # but may not point an existing slug at a different tournament
+                    if not repo.tournament_uses_sheet(conn, req.slug, req.sheet_url):
+                        raise HTTPException(409, "That slug belongs to a different tournament. Choose another slug.")
+                    req.keep_metadata = True
                 visitor = limits.client_key((request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
                                             or (request.client.host if request.client else None))
                 reason = limits.check(conn, visitor)

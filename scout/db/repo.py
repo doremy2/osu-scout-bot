@@ -42,6 +42,24 @@ def upsert_tournament(conn: sqlite3.Connection, slug: str, name: str | None = No
     return cur.lastrowid
 
 
+_SHEET_ID = re.compile(r"/spreadsheets/d/([A-Za-z0-9_-]+)")
+
+
+def sheet_id(url: str | None) -> str | None:
+    m = _SHEET_ID.search(url or "")
+    return m.group(1) if m else None
+
+
+def tournament_uses_sheet(conn: sqlite3.Connection, slug: str, url: str) -> bool:
+    """True if this tournament was imported from the same Google spreadsheet (different tab/gid links count as the same)."""
+    want = sheet_id(url)
+    t = get_tournament(conn, slug)
+    if not want or t is None:
+        return False
+    return any(sheet_id(r[0]) == want for r in conn.execute(
+        "SELECT location FROM tournament_sources WHERE tournament_id = ?", (t["id"],)))
+
+
 def delete_tournament(conn: sqlite3.Connection, slug: str) -> bool:
     """Remove a tournament and everything that hangs off it (explicitly, so it works with or without FK enforcement)."""
     t = get_tournament(conn, slug)

@@ -53,7 +53,7 @@ def list_tournaments(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
         """SELECT t.id, t.slug, t.name, t.acronym, t.format, t.start_date, t.end_date,
                   (SELECT COUNT(*) FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'imported') AS matches,
-                  (SELECT COUNT(*) FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status IN ('pending','failed')) AS pending,
+                  (SELECT COUNT(*) FROM tournament_matches m WHERE m.tournament_id = t.id AND m.status = 'pending') AS pending,
                   (SELECT COUNT(*) FROM tournament_players p WHERE p.tournament_id = t.id) AS players,
                   (SELECT COUNT(*) FROM tournament_teams x WHERE x.tournament_id = t.id) AS teams
            FROM tournaments t ORDER BY COALESCE(t.end_date, t.created_at) DESC, t.id DESC""").fetchall()
