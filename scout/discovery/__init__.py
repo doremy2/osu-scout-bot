@@ -329,6 +329,18 @@ def check_slug(conn, slug: str) -> str | None:
     return None
 
 
+def reset_candidates_for(conn, slug: str) -> int:
+    """After a tournament is deleted: put the candidate that created it back in the review queue and forget that its sheet
+    was recently read, so the next scan analyses it again."""
+    rows = conn.execute("SELECT id, key FROM discovery_candidates WHERE tournament_slug = ?", (slug,)).fetchall()
+    for r in rows:
+        conn.execute("UPDATE discovery_candidates SET status = 'pending', job_id = NULL, tournament_slug = NULL, "
+                     "decided_at = NULL, duplicate_of = NULL WHERE id = ?", (r["id"],))
+        conn.execute("DELETE FROM discovery_seen WHERE key = ?", (r["key"],))
+    conn.commit()
+    return len(rows)
+
+
 def set_candidate_status(conn, candidate_id: int, status: str) -> bool:
     """ignore: pending -> ignored. restore: ignored (or duplicate) -> pending."""
     if status == "ignored":

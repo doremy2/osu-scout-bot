@@ -311,6 +311,23 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         return updater.tracking_status(db_path, slug, writable)
 
     # ---- discovery (owner only) -----------------------------------------------
+    @app.post("/api/admin/tournaments/{slug}/delete")
+    def admin_delete_tournament(slug: str, x_admin_token: str | None = Header(default=None)):
+        """Delete a tournament (POST so it works through the website proxy) and send the discovery candidate that created it
+        back to the review queue, so it can be rescanned and approved again."""
+        require_admin(x_admin_token)
+        if jobs.store.running(slug):
+            raise HTTPException(409, "An import or update is still running for this tournament. Try again when it has finished.")
+        conn = db()
+        try:
+            if not repo.delete_tournament(conn, slug):
+                raise HTTPException(404, f"Unknown tournament '{slug}'")
+            reset = discovery.reset_candidates_for(conn, slug)
+        finally:
+            conn.close()
+        service.invalidate(slug)
+        return {"deleted": slug, "candidates_reset": reset}
+
     @app.get("/api/admin/discovery/sources")
     def discovery_sources(x_admin_token: str | None = Header(default=None)):
         require_admin(x_admin_token)

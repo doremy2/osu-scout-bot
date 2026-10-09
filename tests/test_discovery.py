@@ -427,3 +427,37 @@ def test_slug_check_explains_why_a_slug_is_refused(queued, monkeypatch):
     assert api.get("/api/admin/discovery/slug-check?slug=fresh", headers={"x-admin-token": "owner"}).json()["available"] is True
     bad = api.post(f"/api/admin/discovery/candidates/{c['id']}/approve", json={"slug": "taken"}, headers={"x-admin-token": "owner"})
     assert bad.status_code == 422 and "already used" in bad.json()["detail"]
+
+
+def test_deleting_a_discovered_tournament_returns_its_candidate_to_the_queue(queued):
+    db, c, client = queued
+    res = discovery.approve_candidate(db, c["id"], JobRegistry(db), lambda: client, mode="inline")
+    slug = res["candidate"]["tournament_slug"]
+    api = TestClient(create_app(db, client_factory=lambda: client, admin_token="owner", imports_mode="public", import_mode="step"))
+    url = f"/api/admin/tournaments/{slug}/delete"
+    assert api.post(url).status_code == 401
+    assert api.post("/api/admin/tournaments/nope/delete", headers={"x-admin-token": "owner"}).status_code == 404
+    out = api.post(url, headers={"x-admin-token": "owner"}).json()
+    assert out == {"deleted": slug, "candidates_reset": 1}
+    conn = connect(db)
+    assert repo.get_tournament(conn, slug) is None
+    [row] = discovery.list_candidates(conn, "pending")
+    assert row["id"] == c["id"] and row["tournament_slug"] is None and row["job"] is None
+    assert conn.execute("SELECT COUNT(*) FROM discovery_seen WHERE key = ?", (c["key"],)).fetchone()[0] == 0
+    # the next scan reads the sheet again (not skipped as "recently seen") and the same slug can be approved again
+    f = FakeFetcher(pages={"https://forum.example/thread": [ref(1, "Test Open 2026")]}, sheets={ref(1).url: sheet(ids=IDS[:12])})
+    discovery.scan_source(db, 1, f)
+    assert len(f.downloads) == 1
+    again = discovery.approve_candidate(db, c["id"], JobRegistry(db), lambda: client, mode="inline")
+    assert again["job"].phase == "done" and again["candidate"]["tournament_slug"] == slug
+
+
+def test_a_tournament_with_a_running_job_is_not_deleted(queued):
+    db, c, client = queued
+    discovery.approve_candidate(db, c["id"], JobRegistry(db), lambda: client, mode="queue")       # job queued, not run
+    slug = discovery.list_candidates(connect(db), "approved")[0]["tournament_slug"]
+    conn = connect(db)
+    repo.upsert_tournament(conn, slug, "x")
+    api = TestClient(create_app(db, client_factory=lambda: client, admin_token="owner", imports_mode="public", import_mode="step"))
+    r = api.post(f"/api/admin/tournaments/{slug}/delete", headers={"x-admin-token": "owner"})
+    assert r.status_code == 409 and repo.get_tournament(conn, slug) is not None
