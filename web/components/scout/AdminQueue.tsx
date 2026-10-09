@@ -8,7 +8,11 @@ import type { DiscoveryCandidate, DiscoverySource, Format, ImportStatus, OsuClie
 import { timeAgo } from "./TrackingBadge";
 
 type Status = DiscoveryCandidate["status"];
-type Edit = { name?: string; format?: Format; client?: OsuClient };
+type Edit = { name?: string; slug?: string; slugTouched?: boolean; format?: Format; client?: OsuClient };
+
+function slugify(text: string): string {
+  return text.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48).replace(/-+$/, "");
+}
 const STATUSES: { key: Status; label: string }[] = [
   { key: "pending", label: "Review" },
   { key: "approved", label: "Approved" },
@@ -31,6 +35,7 @@ export function AdminQueue() {
   const [sources, setSources] = useState<DiscoverySource[]>([]);
   const [edits, setEdits] = useState<Record<number, Edit>>({});
   const [busy, setBusy] = useState<Record<number, string>>({});
+  const [slugErr, setSlugErr] = useState<Record<number, string | null>>({});
   const [note, setNote] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
@@ -82,6 +87,28 @@ export function AdminQueue() {
     setEdits((all) => ({ ...all, [id]: { ...all[id], ...patch } }));
   }
 
+  /** Editing the name keeps the slug in step with it, until the slug has been typed by hand. */
+  function rename(c: DiscoveryCandidate, name: string) {
+    const e = edits[c.id] ?? {};
+    edit(c.id, { name, ...(e.slugTouched ? {} : { slug: slugify(name) || c.suggested_slug }) });
+  }
+
+  // Ask the server whether each pending candidate's slug is usable (valid characters, not taken by another tournament).
+  const slugKey = rows.filter((c) => c.status === "pending").map((c) => `${c.id}:${edits[c.id]?.slug ?? c.suggested_slug}`).join("|");
+  useEffect(() => {
+    if (auth !== "yes" || !slugKey) return;
+    const timer = setTimeout(async () => {
+      for (const item of slugKey.split("|")) {
+        const [id, slug] = [Number(item.slice(0, item.indexOf(":"))), item.slice(item.indexOf(":") + 1)];
+        try {
+          const r = await call<{ available: boolean; reason: string | null }>(`/admin/discovery/slug-check?slug=${encodeURIComponent(slug)}`);
+          if (!cancelled.current) setSlugErr((m) => ({ ...m, [id]: r.available ? null : r.reason }));
+        } catch { /* keep the previous answer; approving re-checks on the server anyway */ }
+      }
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [slugKey, auth, call]);
+
   async function approve(c: DiscoveryCandidate) {
     setError(null);
     setBusy((b) => ({ ...b, [c.id]: "Starting import…" }));
@@ -89,7 +116,7 @@ export function AdminQueue() {
       const e = edits[c.id] ?? {};
       const res = await call<{ job: ImportStatus }>(`/admin/discovery/candidates/${c.id}/approve`, {
         method: "POST",
-        body: JSON.stringify({ name: e.name, format: e.format, client: e.client })
+        body: JSON.stringify({ name: e.name, slug: e.slug, format: e.format, client: e.client })
       });
       let job = res.job;
       let failures = 0;
@@ -215,11 +242,20 @@ export function AdminQueue() {
                     <tr key={c.id}>
                       <td>
                         {c.status === "pending" ? (
-                          <input className="sc-input sc-admin-name" value={e.name ?? c.name} onChange={(ev) => edit(c.id, { name: ev.target.value })} aria-label="Tournament name" />
+                          <>
+                            <input className="sc-input sc-admin-name" value={e.name ?? c.name} onChange={(ev) => rename(c, ev.target.value)} aria-label="Tournament name" />
+                            <label className="sc-admin-slug">
+                              <span>URL slug</span>
+                              <input className={`sc-input${slugErr[c.id] ? " bad" : ""}`} value={e.slug ?? c.suggested_slug} spellCheck={false}
+                                     onChange={(ev) => edit(c.id, { slug: ev.target.value.toLowerCase(), slugTouched: true })}
+                                     aria-label="URL slug" aria-invalid={!!slugErr[c.id]} />
+                            </label>
+                            {slugErr[c.id] && <p className="sc-admin-slugerr" role="alert">{slugErr[c.id]}</p>}
+                          </>
                         ) : <b>{c.name}</b>}
                         <div className="sc-admin-sub">
                           <a className="sc-link" href={c.source_url} target="_blank" rel="noreferrer">source ↗</a>
-                          <span> · slug <code>{c.suggested_slug}</code></span>
+                          {c.status !== "pending" && <span> · slug <code>{c.tournament_slug ?? c.suggested_slug}</code></span>}
                           {c.duplicate_of && <span> · duplicate of <Link className="sc-link" href={tournamentHref(c.duplicate_of)}>{c.duplicate_of}</Link></span>}
                           {c.tournament_slug && <span> · <Link className="sc-link" href={tournamentHref(c.tournament_slug)}>{c.tournament_slug}</Link></span>}
                         </div>
@@ -251,7 +287,7 @@ export function AdminQueue() {
                       <td className="sc-admin-actions">
                         {c.status === "pending" && (
                           <>
-                            <button className="sc-btn sc-btn-sm sc-btn-primary" disabled={!!working} onClick={() => void approve(c)}>{working ?? "Approve"}</button>
+                            <button className="sc-btn sc-btn-sm sc-btn-primary" disabled={!!working || !!slugErr[c.id]} onClick={() => void approve(c)}>{working ?? "Approve"}</button>
                             <button className="sc-btn sc-btn-sm" disabled={!!working} onClick={() => void decide(c, "ignore")}>Ignore</button>
                           </>
                         )}

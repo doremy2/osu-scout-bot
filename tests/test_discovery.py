@@ -368,3 +368,62 @@ def test_admin_queue_api(queued, monkeypatch):
     assert api.get("/api/tournaments/" + r.json()["candidate"]["tournament_slug"]).json()["tracking"]["matches_tracked"] == 12
     assert api.post("/api/admin/discovery/candidates/9999/approve", json={}, headers=owner).status_code == 404
     assert api.post(f"/api/admin/discovery/candidates/{c['id']}/ignore", headers=owner).status_code == 404       # already approved
+
+
+# ---------- name fallback, slug regeneration, slug check ----------------------------------------------------
+NO_TITLE = [Table("Schedule", schedule(IDS))]
+
+
+def test_the_source_page_title_names_an_untitled_sheet():
+    one = refs_from_html('<html><title>North America Tournament 2026 · osu!</title><a href="https://docs.google.com/spreadsheets/d/AAA/edit">Spreadsheet</a>')
+    assert one[0].fallback == "North America Tournament 2026"
+    a = analysis.analyze_tables(NO_TITLE, one[0].hint, one[0].fallback)
+    assert a.name == "North America Tournament 2026" and a.name_from == "source page title"
+    assert any("source page title" in r for r in a.reasons)
+    # a sheet's own name wins; a generic page title is ignored; several sheets on one page get no shared title
+    assert analysis.analyze_tables(sheet(), "", "Some Page Title").name_from == "title cell"
+    assert refs_from_html('<title>Forum</title><a href="https://docs.google.com/spreadsheets/d/AAA/edit">x</a>')[0].fallback == ""
+    two = refs_from_html('<title>Tournament Hub 2026</title><a href="https://docs.google.com/spreadsheets/d/AAA/edit">x</a>'
+                         '<a href="https://docs.google.com/spreadsheets/d/BBB/edit">y</a>')
+    assert [r.fallback for r in two] == ["", ""]
+    assert analysis.analyze_tables(NO_TITLE, "", "").name == "Untitled tournament"
+
+
+def test_scan_uses_the_page_title_and_a_rescan_refreshes_only_pending_slugs(env):
+    db, sid = env
+    r = ref(1)
+    f = FakeFetcher(pages={"https://forum.example/thread": [r]}, sheets={r.url: NO_TITLE})
+    discovery.scan_source(db, sid, f)
+    conn = connect(db)
+    [c] = discovery.list_candidates(conn)
+    assert c["name"] == "Untitled tournament" and c["suggested_slug"] == "untitled-tournament"
+    named = SheetRef(r.url, "", r.key, fallback="North America Tournament 2026")
+    f.pages["https://forum.example/thread"] = [named]
+    later = repo.utcnow() + discovery.timedelta(days=2)
+    discovery.scan_source(db, sid, f, now=later)
+    [c] = discovery.list_candidates(conn)
+    assert c["name"] == "North America Tournament 2026" and c["suggested_slug"] == "north-america-tournament-2026"
+    conn.execute("UPDATE discovery_candidates SET status = 'approved', tournament_slug = suggested_slug")
+    conn.commit()
+    f.pages["https://forum.example/thread"] = [SheetRef(r.url, "Renamed Cup 2026", r.key)]
+    discovery.scan_source(db, sid, f, now=later + discovery.timedelta(days=2))
+    [c] = discovery.list_candidates(conn, "approved")
+    assert c["suggested_slug"] == "north-america-tournament-2026"         # an approved candidate's slug is never touched
+
+
+def test_slug_check_explains_why_a_slug_is_refused(queued, monkeypatch):
+    db, c, client = queued
+    conn = connect(db)
+    repo.upsert_tournament(conn, "taken", "Other")
+    assert discovery.check_slug(conn, "free-slug") is None
+    assert "already used" in discovery.check_slug(conn, "taken")
+    assert "lowercase" in discovery.check_slug(conn, "Not Valid")
+    assert discovery.check_slug(conn, "") == "Enter a slug."
+    app = create_app(db, client_factory=lambda: client, admin_token="owner", imports_mode="public", import_mode="step")
+    api = TestClient(app)
+    assert api.get("/api/admin/discovery/slug-check?slug=taken").status_code == 401
+    r = api.get("/api/admin/discovery/slug-check?slug=taken", headers={"x-admin-token": "owner"}).json()
+    assert r["available"] is False and "already used" in r["reason"]
+    assert api.get("/api/admin/discovery/slug-check?slug=fresh", headers={"x-admin-token": "owner"}).json()["available"] is True
+    bad = api.post(f"/api/admin/discovery/candidates/{c['id']}/approve", json={"slug": "taken"}, headers={"x-admin-token": "owner"})
+    assert bad.status_code == 422 and "already used" in bad.json()["detail"]

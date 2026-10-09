@@ -471,3 +471,9 @@
 .sc-admin-sources li.off { opacity: 0.55; }
 .sc-admin-add { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) 140px auto; gap: 8px; margin-top: 12px; }
 @media (max-width: 760px) { .sc-admin-add { grid-template-columns: 1fr; } .sc-admin-sources li { flex-direction: column; align-items: flex-start; } }
+
+.sc-admin-slug { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.sc-admin-slug span { font-family: var(--sc-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sc-dim); white-space: nowrap; }
+.sc-admin-slug .sc-input { padding: 6px 9px; font-family: var(--sc-mono); font-size: 0.8rem; }
+.sc-admin-slug .sc-input.bad { border-color: var(--sc-accent); }
+.sc-admin-slugerr { color: var(--sc-accent); font-size: 0.76rem; margin: 4px 0 0; }

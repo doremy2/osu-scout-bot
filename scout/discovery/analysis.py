@@ -110,7 +110,7 @@ def detect_format(name: str, tables: list[Table]) -> tuple[str, str]:
     return "1v1", "no team signals, assumed 1v1"
 
 
-def analyze_tables(tables: list[Table], hint: str | None = None) -> SheetAnalysis:
+def analyze_tables(tables: list[Table], hint: str | None = None, fallback_name: str | None = None) -> SheetAnalysis:
     links = extract_links(tables)
     rooms = sum(1 for l in links if l.kind == "room")
     tabs = [t.name for t in tables]
@@ -121,8 +121,11 @@ def analyze_tables(tables: list[Table], hint: str | None = None) -> SheetAnalysi
         name, name_from = h, "hint"
     else:
         title = _title_from_cells(tables)
+        fb = clean_name(fallback_name)
         if title:
             name, name_from = title, "title cell"
+        elif fb and is_informative(fb):
+            name, name_from = fb, "source page title"      # the page that linked the sheet names the tournament
     year_m = YEAR_RE.search(name) if name else None
     year = int(year_m.group(1)) if year_m else None
     fmt, fmt_why = detect_format(name, tables)
@@ -170,7 +173,7 @@ def score(a: SheetAnalysis, fmt_why: str = "") -> tuple[float, list[str]]:
         add(0.07, f"tournament-style tab: {useful[0]}")
 
     if a.name_from != "fallback":
-        add(0.10, f"name read from the {a.name_from}")
+        add(0.05 if a.name_from == "source page title" else 0.10, f"name read from the {a.name_from}")
         if a.year:
             add(0.05, f"year {a.year}")
         if a.acronym:

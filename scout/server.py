@@ -372,6 +372,16 @@ def create_app(db_path: str | Path | None = None, client_factory=None, threaded_
         finally:
             conn.close()
 
+    @app.get("/api/admin/discovery/slug-check")
+    def discovery_slug_check(slug: str, x_admin_token: str | None = Header(default=None)):
+        require_admin(x_admin_token)
+        conn = db()
+        try:
+            reason = discovery.check_slug(conn, slug)
+        finally:
+            conn.close()
+        return {"slug": slug, "available": reason is None, "reason": reason}
+
     @app.post("/api/admin/discovery/candidates/{candidate_id}/approve", status_code=202)
     def discovery_approve(candidate_id: int, body: ApproveBody, x_admin_token: str | None = Header(default=None)):
         """Approve = start the normal import job for the candidate. The job is then driven exactly like an import."""

@@ -134,12 +134,16 @@ def _save_candidate(conn, ref: SheetRef, source_id: int | None, a: SheetAnalysis
         reasons.append(f"{best_n} of {len(ids)} lobbies are already in “{best_slug}”")
     elif best_slug:
         reasons.append(f"shares {best_n} lobbies with “{best_slug}”")
-    row = conn.execute("SELECT id, status FROM discovery_candidates WHERE key = ?", (ref.key,)).fetchone()
+    row = conn.execute("SELECT id, status, name, suggested_slug FROM discovery_candidates WHERE key = ?", (ref.key,)).fetchone()
     fields = (a.name, a.acronym or None, a.format, a.client, a.match_count, a.rooms, a.confidence, json.dumps(reasons))
     if row is not None:
+        # only a pending candidate is touched; once approved its slug (and the tournament URL) never changes
+        slug = row["suggested_slug"]
+        if row["status"] == "pending" and a.name != row["name"]:
+            slug = suggest_slug(a, _taken_slugs(conn) - {row["suggested_slug"]})
         conn.execute("UPDATE discovery_candidates SET name = ?, acronym = ?, detected_format = ?, detected_client = ?, "
-                     "match_count = ?, room_count = ?, confidence = ?, reasons = ? WHERE id = ? AND status = 'pending'",
-                     (*fields, row["id"]))
+                     "match_count = ?, room_count = ?, confidence = ?, reasons = ?, suggested_slug = ? "
+                     "WHERE id = ? AND status = 'pending'", (*fields, slug, row["id"]))
         return "updated", row["id"]
     status = "duplicate" if duplicate_of else "pending"
     cur = conn.execute(
@@ -187,7 +191,7 @@ def scan_source(db_path: str | Path, source_id: int, fetcher: Fetcher | None = N
                 continue
             analysed += 1
             try:
-                a = analyze_tables(fetcher.sheet_tables(ref.url), ref.hint)
+                a = analyze_tables(fetcher.sheet_tables(ref.url), ref.hint, ref.fallback)
             except Exception as e:  # noqa: BLE001 - private sheet, Google error, broken workbook
                 _remember(conn, ref, source_id, "error", f"{type(e).__name__}: {e}"[:300], now)
                 stats["errors"] += 1
@@ -310,6 +314,19 @@ def approve_candidate(db_path: str | Path, candidate_id: int, registry: JobRegis
         return {"candidate": _candidate_dict(row), "job": job}
     finally:
         conn.close()
+
+
+def check_slug(conn, slug: str) -> str | None:
+    """None if the slug can be used for a new tournament, otherwise a plain-language reason."""
+    from ..importer import SLUG_RE
+    slug = (slug or "").strip()
+    if not slug:
+        return "Enter a slug."
+    if len(slug) > 48 or not SLUG_RE.match(slug):
+        return "Use lowercase letters, numbers and single dashes only (max 48 characters), e.g. na-2026."
+    if conn.execute("SELECT 1 FROM tournaments WHERE slug = ?", (slug,)).fetchone():
+        return f"The slug “{slug}” is already used by another tournament."
+    return None
 
 
 def set_candidate_status(conn, candidate_id: int, status: str) -> bool:

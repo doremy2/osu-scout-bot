@@ -29,6 +29,7 @@ class SheetRef:
     url: str
     hint: str
     key: str
+    fallback: str = ""        # the linking page's title, used as the name when neither the link text nor the sheet has one
 
 
 def sheet_key(url: str) -> str | None:
@@ -71,7 +72,7 @@ class _Anchors(HTMLParser):
         self._skip = 0
 
     def handle_starttag(self, tag, attrs):
-        if tag in ("script", "style"):
+        if tag in ("script", "style", "title"):
             self._skip += 1
         elif tag == "a":
             self._href = dict(attrs).get("href")
@@ -80,7 +81,7 @@ class _Anchors(HTMLParser):
             self._before = ""
 
     def handle_endtag(self, tag):
-        if tag in ("script", "style") and self._skip:
+        if tag in ("script", "style", "title") and self._skip:
             self._skip -= 1
         elif tag == "a" and self._href is not None:
             self.found.append((self._href, "".join(self._text).strip(), self._before.strip()))
@@ -93,6 +94,21 @@ class _Anchors(HTMLParser):
             self._text.append(data)
         else:
             self._before = (self._before + " " + data)[-160:]
+
+
+_TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.I | re.S)
+_SITE_SUFFIX = re.compile(r"\s+[|·—–]\s+.*$|\s+-\s+osu!.*$", re.I)
+_GENERIC_TITLE = re.compile(r"^(osu!?|forum|home|tournaments?|google (sheets|docs)|untitled)$", re.I)
+
+
+def page_title(html: str) -> str:
+    """The page's own title without the site suffix ("North America Tournament 2026 · osu!" -> the first part)."""
+    m = _TITLE_RE.search(html)
+    if not m:
+        return ""
+    import html as htmllib
+    t = clean_name(_SITE_SUFFIX.sub("", htmllib.unescape(re.sub(r"<[^>]+>", "", m.group(1)))))
+    return t if is_informative(t) and not _GENERIC_TITLE.match(t) else ""
 
 
 def refs_from_html(html: str) -> list[SheetRef]:
@@ -111,7 +127,10 @@ def refs_from_html(html: str) -> list[SheetRef]:
         key = sheet_key(url)
         if key and key not in refs:
             refs[key] = SheetRef(normalize_sheet_url(url), "", key)
-    return list(refs.values())
+    out = list(refs.values())
+    if len(out) == 1:                      # one sheet on the page: the page title is that tournament's name.
+        out[0].fallback = page_title(html)  # (with several sheets the same title would label them all alike)
+    return out
 
 
 def refs_from_tables(tables: list[Table]) -> list[SheetRef]:
